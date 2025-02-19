@@ -1,0 +1,35 @@
+.menu{
+    @apply absolute top-0 left-10 
+    flex flex-col items-center gap-4
+}
+.menuContainer{
+    @apply relative w-32 h-32
+}
+@keyframes is-rotating {
+    to {
+        transform: rotate(1turn);
+    }    
+}
+.menuBorderOpen{
+    @apply absolute w-52 h-52 -left-32 -top-20 
+    border-2 border-gray-900 border-t-2 border-t-gray-300
+    rounded-full
+    animate-item-1;
+    animation: is-rotating 1s infinite;
+}
+.menuBorderClose{
+    @apply animate-item-1-reverse;
+    animation: is-rotating 1s reverse;
+}
+.menuItems {
+    @apply absolute
+    p-2 text-white rounded-full shadow-md
+    transform translate-x-1/2 opacity-0 scale-0
+    dark:bg-gray-300
+}
+.homeOpen .aboutOpen .projectsOpen .contactOpen {
+    @apply transition-all duration-300 ease-in-out
+}
+.homeClose .aboutClose .projectsClose .contactClose{
+    @apply transition-all duration-300 ease-in-out
+}
