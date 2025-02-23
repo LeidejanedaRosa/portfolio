@@ -1,0 +1,6 @@
+.menuButton{
+    @apply relative w-12 h-12 flex items-center justify-center text-white dark:bg-gray-700 rounded-full shadow-md z-20
+}
+.overlay{
+    @apply fixed inset-0 bg-black/50
+}
