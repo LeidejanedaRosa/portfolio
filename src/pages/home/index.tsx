@@ -1,40 +1,30 @@
-import { useEffect, useState } from "react";
+// import { useState } from "react";
 import bgHome from "@assets/images/bg-home.png";
-import profilePhoto from "@assets/images/LeidejanedaRosaProfile.png";
 import { HamburgerMenu } from "../../components/molecules/general/hamburger-menu";
+// import profilePhoto from "@assets/images/LeidejanedaRosaProfile.png";
+// import { DarkModeButton } from "../../components/molecules/general/dark-mode";
 
 
 export const HomePage = () => {
-  const [lastScrollY, setLastScrollY] = useState(0);
-   
-  const handleScroll = () => {
-    setLastScrollY(window.scrollY);
-  };
 
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
+  // const [darkMode, setDarkMode] = useState(false);
   return (
     <>
       <HamburgerMenu />
+      {/* <DarkModeButton darkMode={darkMode} setDarkMode={setDarkMode} /> */}
       <div className="relative">
-        <div className="relative h-screen z-10">
+        <div className="relative h-screen">
           <div 
-            className="absolute inset-0 bg-cover bg-center opacity-30 z-10"
+            className="absolute inset-0 bg-cover bg-center"
             style={{ backgroundImage: `url(${bgHome})` }}
           ></div>
-          <div className="flex flex-col items-center justify-end h-full relative z-10">
-            <h1 className="text-4xl font-bold text-blue-950 font-sacramento">Leidejane da Rosa</h1>
-            <p className="w-[18.75rem] text-gray-700 text-center mb-28">Aqui você encontra meus projetos e informações sobre mim.</p>
+          <div className="flex flex-col items-center justify-end h-full relative">
+            <h1 className="text-4xl bg-white/50 w-screen text-center text-blue-900 text-shadow-xl font-sacramento">Leidejane da Rosa</h1>
+            <p className="w-[18.75rem]  text-white text-center text-shadow-xl mb-28">Aqui você encontra meus projetos e informações sobre mim.</p>
           </div>
         </div>
 
-        <div
+        {/* <div
           id="photo-section"
           className="z-30 w-full h-full transition-all duration-300 ease-in-out"
           style={{
@@ -45,7 +35,7 @@ export const HomePage = () => {
             transform: `translateY(-${lastScrollY}px)`,
             opacity: 100
           }}
-        />
+        /> */}
       </div>
     </>
   );

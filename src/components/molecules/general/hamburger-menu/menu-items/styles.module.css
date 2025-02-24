@@ -1,6 +1,6 @@
 .menu{
     @apply absolute top-0 left-10 
-    flex flex-col items-center gap-4
+    flex flex-col items-center gap-4 z-40
 }
 .menuContainer{
     @apply relative w-32 h-32
@@ -12,7 +12,7 @@
 }
 .menuBorderOpen{
     @apply absolute w-52 h-52 -left-32 -top-20 
-    border-2 border-gray-900 border-t-2 border-t-gray-300
+    border-2 border-gray-500 border-t-2 border-t-gray-300
     rounded-full
     animate-item-1;
     animation: is-rotating 1s infinite;
@@ -23,9 +23,10 @@
 }
 .menuItems {
     @apply absolute
-    p-2 text-white rounded-full shadow-md
-    transform translate-x-1/2 opacity-0 scale-0
-    dark:bg-gray-300
+    transform translate-x-1/2 opacity-0 scale-0    
+}
+.heroicons{
+    @apply w-10 h-10 fixed top-3 left-3 z-50 bg-gray-400 text-white shadow-2xl rounded-full p-3 cursor-pointer
 }
 .homeOpen .aboutOpen .projectsOpen .contactOpen {
     @apply transition-all duration-300 ease-in-out

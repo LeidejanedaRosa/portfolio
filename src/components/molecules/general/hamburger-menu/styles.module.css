@@ -1,6 +1,18 @@
-.nav{
-    @apply fixed top-0 left-0 w-full p-4 z-50 
+.menuContainer{
+    @apply absolute     
+    z-50 rounded-full        
+    transition-transform duration-300 cursor-pointer
 }
-.navContainer{
-    @apply flex justify-between items-center max-w-6xl mx-auto
+.menuButton{
+    @apply absolute
+    flex items-center justify-center 
+    z-50 rounded-full 
+    transition-transform duration-300    
 }
+
+.heroicons{
+    @apply absolute w-7 h-7
+    flex items-center justify-center text-white
+    transition-transform duration-300 cursor-pointer
+}
+

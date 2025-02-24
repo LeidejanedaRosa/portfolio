@@ -1,4 +1,4 @@
-import { Home, User, Briefcase, Mail } from "lucide-react";
+import { HomeIcon, UserIcon, BriefcaseIcon, EnvelopeIcon } from "@heroicons/react/24/solid";
 import styles from "./styles.module.css";
 
 interface MenuItemsProps {
@@ -36,7 +36,7 @@ export const MenuItems = ({ isOpen }: MenuItemsProps) => {
         
         <MenuItem 
           href="#home" 
-          icon={<Home size={20} />} 
+          icon={<HomeIcon className={styles.heroicons}/>} 
           position="top-2 left-[3.75rem]" 
           isOpen={isOpen} 
           openStyle={styles.homeOpen} 
@@ -45,7 +45,7 @@ export const MenuItems = ({ isOpen }: MenuItemsProps) => {
         />
         <MenuItem 
           href="#about" 
-          icon={<User size={20} />} 
+          icon={<UserIcon className={styles.heroicons}/>} 
           position="top-[3.4375rem] left-[2.8125rem]" 
           isOpen={isOpen} 
           openStyle={styles.aboutOpen} 
@@ -54,7 +54,7 @@ export const MenuItems = ({ isOpen }: MenuItemsProps) => {
         />
         <MenuItem 
           href="#projects" 
-          icon={<Briefcase size={20} />} 
+          icon={<BriefcaseIcon className={styles.heroicons}/>} 
           position="top-[5.625rem] left-4" 
           isOpen={isOpen} 
           openStyle={styles.projectsOpen} 
@@ -63,7 +63,7 @@ export const MenuItems = ({ isOpen }: MenuItemsProps) => {
         />
         <MenuItem 
           href="#contact" 
-          icon={<Mail size={20} />} 
+          icon={<EnvelopeIcon className={styles.heroicons}/>} 
           position="top-[6.5625rem] -left-8" 
           isOpen={isOpen} 
           openStyle={styles.contactOpen} 
