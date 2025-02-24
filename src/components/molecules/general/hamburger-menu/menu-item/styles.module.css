@@ -1,0 +1,6 @@
+.heroicons{
+    @apply absolute w-7 h-7
+    flex items-center justify-center text-white
+    transition-transform duration-300 cursor-pointer
+    pointer-events-auto opacity-100
+}

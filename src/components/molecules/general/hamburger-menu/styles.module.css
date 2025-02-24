@@ -7,12 +7,7 @@
     @apply absolute
     flex items-center justify-center 
     z-50 rounded-full 
-    transition-transform duration-300    
+    transition-transform duration-300 
 }
 
-.heroicons{
-    @apply absolute w-7 h-7
-    flex items-center justify-center text-white
-    transition-transform duration-300 cursor-pointer
-}
 

@@ -1,5 +1,7 @@
 // import { useState } from "react";
-import bgHome from "@assets/images/bg-home.png";
+// import bgHome from "@assets/images/bg-home.png";
+import bgHome from "@assets/images/sem-bg.png";
+
 import { HamburgerMenu } from "../../components/molecules/general/hamburger-menu";
 // import profilePhoto from "@assets/images/LeidejanedaRosaProfile.png";
 // import { DarkModeButton } from "../../components/molecules/general/dark-mode";
