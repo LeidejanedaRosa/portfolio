@@ -1,40 +1,34 @@
-// import { useState } from "react";
-import bgHome from "../../assets/images/bg-home.jpeg";
-import { NavBar } from "../../components/molecules/general/navbar";
+import bgHome from '../../assets/images/bg-home.jpeg';
 
-// import { HamburgerMenu } from "../../components/molecules/general/hamburger-menu";
 // import profilePhoto from "@assets/images/LeidejanedaRosaProfile.png";
-// import { DarkModeButton } from "../../components/molecules/general/dark-mode";
-
 
 export const HomePage = () => {
+    return (
+        <>
+            <div className="relative">
+                <div className="relative h-screen">
+                    <div
+                        className="absolute inset-0 bg-cover bg-center bg-blue-950"
+                        style={{
+                            backgroundImage: `url(${bgHome})`,
+                            filter: 'brightness(70%)',
+                        }}
+                    ></div>
+                    <div className="flex flex-col justify-end h-full relative">
+                        <h1 className="text-4xl bg-white/70 w-screen text-center text-blue-900 text-shadow-xl font-sacramento font-extrabold leading-loose">
+                            {' '}
+                            Leidejane da Rosa
+                        </h1>
+                        <div className="flex items-center justify-center w-screen bg-blue-950 h-20 ">
+                            <p className=" text-white text-center text-shadow-black w-[300px] mx-auto">
+                                Aqui você encontra meus projetos e informações
+                                sobre mim.
+                            </p>
+                        </div>
+                    </div>
+                </div>
 
-  // const [darkMode, setDarkMode] = useState(false);
-  return (
-    <>
-      {/* <HamburgerMenu /> */}
-      <NavBar />
-      {/* <DarkModeButton darkMode={darkMode} setDarkMode={setDarkMode} /> */}
-      <div className="relative">
-        <div className="relative h-screen">
-          <div 
-            className="absolute inset-0 bg-cover lg:bg-no-repeat lg:bg-auto bg-center bg-blue-950"
-            style={{ backgroundImage: `url(${bgHome})`, filter: 'brightness(70%)'}}
-          ></div>
-          <div className="flex flex-col justify-end h-full relative">           
-            <h1 className="text-4xl bg-white/70 w-screen text-center text-blue-900 text-shadow-xl font-sacramento font-extrabold leading-loose"  
-            > Leidejane da Rosa 
-            </h1>
-            <div className="flex items-center justify-center w-screen bg-blue-950 h-20 ">
-              <p className=" text-white text-center text-shadow-black w-[300px] mx-auto">
-                Aqui você encontra meus projetos e informações sobre mim.
-              </p>
-            </div>
-
-          </div>
-        </div>
-
-        {/* <div
+                {/* <div
           id="photo-section"
           className="z-30 w-full h-full transition-all duration-300 ease-in-out"
           style={{
@@ -46,7 +40,7 @@ export const HomePage = () => {
             opacity: 100
           }}
         /> */}
-      </div>
-    </>
-  );
+            </div>
+        </>
+    );
 };
