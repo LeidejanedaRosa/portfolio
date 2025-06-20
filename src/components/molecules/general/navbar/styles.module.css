@@ -9,9 +9,12 @@
     transition-all duration-300 ease-in-out transform -translate-y-1
     focus:outline-none
     hover:-translate-y-5 hover:scale-110 hover:border-2 hover:border-white
+    z-20 relative
+    
 }
 .navbarSpan{
     @apply absolute bottom-0 left-1/2 -translate-x-1/2
     text-white text-xs text-nowrap opacity-0 
     transform transition-opacity duration-300 
+    z-10
 }

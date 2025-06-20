@@ -1,6 +1,12 @@
-.heroicons{
+.heroicons {
     @apply absolute w-7 h-7
-    flex items-center justify-center text-white
+    flex items-center justify-center text-gray-500
     transition-transform duration-300 cursor-pointer
-    pointer-events-auto opacity-100
+    pointer-events-auto opacity-100;
+}
+
+.menuItemLabel {
+    @apply absolute z-10 w-screen bg-white/20
+    text-gray-500 text-xs
+    transition-all duration-300;
 }

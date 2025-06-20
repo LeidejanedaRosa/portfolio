@@ -1,13 +1,17 @@
-.menuContainer{
+.menuContainer {
     @apply absolute     
-    z-50 rounded-full        
-    transition-transform duration-300 cursor-pointer
+    z-20 rounded-full     
+    transition-transform duration-300 cursor-pointer;
 }
-.menuButton{
+.menuButton {
     @apply absolute
     flex items-center justify-center 
     z-50 rounded-full 
-    transition-transform duration-300 
+    transition-transform duration-300;
 }
 
-
+.blurOverlay {
+    @apply fixed inset-0 z-10;
+    backdrop-filter: blur(0.5rem);
+    background: rgba(0, 0, 0, 0.2);
+}
