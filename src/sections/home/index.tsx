@@ -1,20 +1,26 @@
+import { motion, useScroll, useTransform } from 'framer-motion';
+
 import bgHome from '../../assets/images/bg-home.jpeg';
 
-// import profilePhoto from "@assets/images/LeidejanedaRosaProfile.png";
+import profilePhoto from '@assets/images/LeidejanedaRosaProfile.png';
 
 export const HomePage = () => {
+    const { scrollY } = useScroll();
+
+    const y = useTransform(scrollY, [0, 800], [700, 0]);
+
     return (
         <>
-            <div className="relative">
-                <div className="relative h-screen">
+            <div className="relative h-screen w-screen">
+                <div className="relative h-screen ">
                     <div
-                        className="absolute inset-0 bg-cover bg-center bg-blue-950"
+                        className="fixed inset-0 bg-cover bg-center bg-blue-950 opacity-30 "
                         style={{
                             backgroundImage: `url(${bgHome})`,
                             filter: 'brightness(70%)',
                         }}
                     ></div>
-                    <div className="flex flex-col justify-end h-full relative">
+                    <div className="fixed flex flex-col justify-end h-full z-10">
                         <h1 className="text-4xl bg-white/70 w-screen text-center text-blue-900 text-shadow-xl font-sacramento font-extrabold leading-loose">
                             {' '}
                             Leidejane da Rosa
@@ -27,19 +33,26 @@ export const HomePage = () => {
                         </div>
                     </div>
                 </div>
-
-                {/* <div
-          id="photo-section"
-          className="z-30 w-full h-full transition-all duration-300 ease-in-out"
-          style={{
-            backgroundImage: `url(${profilePhoto})`,
-            height: '100vh',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            transform: `translateY(-${lastScrollY}px)`,
-            opacity: 100
-          }}
-        /> */}
+                <motion.div
+                    id="photo-section"
+                    style={{
+                        backgroundImage: `url(${profilePhoto})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        y,
+                        width: '500px',
+                        height: '100vh',
+                        marginLeft: 'auto',
+                        marginRight: 'auto',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}
+                />
             </div>
         </>
     );
