@@ -17,16 +17,32 @@ export function useActiveSection(ids: readonly string[]): string {
 
         if (elements.length === 0) return;
 
+        // O IntersectionObserver só reporta as seções que MUDARAM de estado.
+        // Guardamos a última razão de visibilidade de cada uma e escolhemos a
+        // ativa olhando o quadro completo — senão uma seção pouco visível que
+        // aparece no callback substituiria outra mais visível que não mudou.
+        const visibility = new Map<string, number>();
+
         const observer = new IntersectionObserver(
             (entries) => {
-                const mostVisible = entries
-                    .filter((entry) => entry.isIntersecting)
-                    .sort(
-                        (a, b) => b.intersectionRatio - a.intersectionRatio,
-                    )[0];
+                for (const entry of entries) {
+                    visibility.set(
+                        entry.target.id,
+                        entry.isIntersecting ? entry.intersectionRatio : 0,
+                    );
+                }
 
-                if (mostVisible) {
-                    setActive(mostVisible.target.id);
+                let bestId = '';
+                let bestRatio = 0;
+                for (const [id, ratio] of visibility) {
+                    if (ratio > bestRatio) {
+                        bestRatio = ratio;
+                        bestId = id;
+                    }
+                }
+
+                if (bestId) {
+                    setActive(bestId);
                 }
             },
             // Banda estreita no terço superior: a seção fica "ativa" quando
