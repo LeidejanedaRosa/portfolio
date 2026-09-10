@@ -49,10 +49,11 @@
 | 4.5  | ~~`HamburgerMenu` com `<div onClick>`~~ ✅ `feat/navbar-scroll` — `<button aria-expanded aria-controls>`, painel `hidden`, fecha no `ESC` e ao clicar num link                                                            | ✅   | feito                                            |
 | 4.6  | ~~`font-sacramento` / tokens na Home~~ ✅ resolvido em `refactor/design-system` + `feat/home-section`                                                                                                                     | ✅   | feito                                            |
 | 4.7  | Seções `about-me`, `projects`, `contact` — stubs com `<h2>` + "Em construção" (estrutura ok, falta conteúdo)                                                                                                              | 🔴   | `feat/about-me`, `feat/projects`, `feat/contact` |
-| 4.8  | Foto de perfil do hero é **placeholder** — Leidejane vai trocar (avisar no início de `feat/about-me`)                                                                                                                     | 🟡   | `feat/about-me`                                  |
+| 4.8  | ~~Foto de perfil placeholder~~ ✅ `feat/profile-photo` — foto real (Leidejane), fundo bokeh, marca de IA removida                                                                                                         | ✅   | feito                                            |
 | 4.9  | `<h1>` da Home quebra no meio do nome em ~390px (`Leidejane da / Rosa`). Ajustar com `text-balance` ou tamanho responsivo                                                                                                 | 🟢   | polimento da Home                                |
 | 4.10 | ~~Auditoria `axe` só do `<main>`~~ ✅ `feat/navbar-scroll` — `app.test.tsx` audita a **página inteira**                                                                                                                   | ✅   | feito                                            |
-| 4.11 | Foto de perfil: PNG 427×585 (~212 KB) para exibir a ~320px. Otimizar (WebP + `srcset`/`<picture>`, ~40–60 KB). Há um `Leidejane_da_Rosa.png` 864×1184 (~940 KB) não usado no repo                                         | 🟡   | branch de foto / `feat/about-me`                 |
+| 4.11 | ~~Foto pesada (PNG ~212 KB / fonte 940 KB)~~ ✅ `feat/profile-photo` — `profile.webp` 800×1096, **24 KB**; PNGs antigos apagados                                                                                          | ✅   | feito                                            |
+| 4.12 | Foto tem só 1 tamanho (`profile.webp` 800px). `srcset`/`<picture>` com um WebP menor (~400px) p/ mobile — ganho pequeno                                                                                                   | 🟢   | polimento                                        |
 
 ## 5. SEO / conteúdo / privacidade
 
@@ -88,3 +89,4 @@
 - ✅ `feat/dark-mode` — `ThemeProvider`/`useTheme`, botão acessível, persistência + preferência do SO, anti-flash, aliases alinhados (23 testes)
 - ✅ `feat/navbar-scroll` — `<nav>` responsivo (wordmark + ícone/texto + hambúrguer), scroll spy com `IntersectionObserver`, `axe` da página inteira (36 testes)
 - ✅ `fix/scroll-spy-visibility` — scroll spy guardava só o callback parcial do `IntersectionObserver`; agora mantém a visibilidade de todas as seções (achado do CodeRabbit no PR #8)
+- ✅ `feat/profile-photo` — foto real otimizada (`profile.webp`, 24 KB), `object-position` ajustado, placeholders PNG removidos
