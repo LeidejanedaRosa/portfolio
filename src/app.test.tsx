@@ -5,8 +5,8 @@ import { describe, expect, it } from 'vitest';
 import { App } from './app';
 
 /**
- * Smoke test do pipeline real (aliases @assets, framer-motion, tokens) +
- * garantia de que a página tem os landmarks e as 4 seções montadas.
+ * Smoke test do pipeline real (aliases, framer-motion, tokens) + garantia de
+ * que a página tem os landmarks, as 4 seções montadas e zero violação de a11y.
  */
 describe('<App />', () => {
     it('monta as quatro seções com seus títulos', () => {
@@ -29,21 +29,21 @@ describe('<App />', () => {
         ).toBeInTheDocument();
     });
 
-    it('tem landmark <main> e o skip link para ele', () => {
+    it('tem os landmarks <nav> e <main> e o skip link', () => {
         render(<App />);
 
+        expect(
+            screen.getByRole('navigation', { name: /principal/i }),
+        ).toBeInTheDocument();
         expect(screen.getByRole('main')).toHaveAttribute('id', 'main');
         expect(
             screen.getByRole('link', { name: /pular para o conteúdo/i }),
         ).toHaveAttribute('href', '#main');
     });
 
-    // A11y do <main> (o que esta branch construiu). A página inteira só passa a
-    // ser auditada quando a navegação antiga (NavBar/HamburgerMenu, com <div onClick>
-    // e botões sem nome) for reescrita — ver docs/BACKLOG.md §4.4/§4.5.
-    it('não tem violações de acessibilidade no conteúdo principal', async () => {
-        render(<App />);
+    it('não tem violações de acessibilidade na página inteira', async () => {
+        const { container } = render(<App />);
 
-        expect(await axe(screen.getByRole('main'))).toHaveNoViolations();
+        expect(await axe(container)).toHaveNoViolations();
     });
 });
