@@ -45,13 +45,14 @@
 | 4.1  | ~~`src/app.tsx` — resquício `<div className="App">`; só a Home montada~~ ✅ `feat/home-section` — casca `<Layout>` + 4 seções montadas com landmarks                                                                      | ✅   | feito                                            |
 | 4.2  | ~~**Home** — `w-screen`, `position: fixed`, `<h1>` solto, foto `background-image`, sem landmarks~~ ✅ `feat/home-section` — hero novo, `<section>`, `<img alt>`, tokens, parallax com reduced-motion                      | ✅   | feito                                            |
 | 4.3  | ~~`DarkModeButton` — sem `aria-label`; estado não aplica `.dark` nem persiste~~ ✅ `feat/dark-mode` — `ThemeProvider` + `useTheme`, `aria-label`/`aria-pressed`, localStorage + `prefers-color-scheme`, script anti-flash | ✅   | feito                                            |
-| 4.4  | `NavBar` — não é `<nav>`; botões só com ícone (**sem nome acessível**); `activeTab` não é lido; tooltip só em `group-hover` (sem foco de teclado)                                                                         | 🔴   | `feat/navbar-scroll`                             |
-| 4.5  | `HamburgerMenu` — usa `<div onClick>` (**não é `<button>`, sem teclado**); `MenuItem` são `<div onMouseEnter>` (não são links); sem focus trap / `ESC` / `aria-expanded`                                                  | 🔴   | `feat/navbar-scroll`                             |
+| 4.4  | ~~`NavBar` sem semântica/nome/foco~~ ✅ `feat/navbar-scroll` — `<nav>` único, links `<a>` (ícone+texto), `aria-current` via `IntersectionObserver`                                                                        | ✅   | feito                                            |
+| 4.5  | ~~`HamburgerMenu` com `<div onClick>`~~ ✅ `feat/navbar-scroll` — `<button aria-expanded aria-controls>`, painel `hidden`, fecha no `ESC` e ao clicar num link                                                            | ✅   | feito                                            |
 | 4.6  | ~~`font-sacramento` / tokens na Home~~ ✅ resolvido em `refactor/design-system` + `feat/home-section`                                                                                                                     | ✅   | feito                                            |
 | 4.7  | Seções `about-me`, `projects`, `contact` — stubs com `<h2>` + "Em construção" (estrutura ok, falta conteúdo)                                                                                                              | 🔴   | `feat/about-me`, `feat/projects`, `feat/contact` |
 | 4.8  | Foto de perfil do hero é **placeholder** — Leidejane vai trocar (avisar no início de `feat/about-me`)                                                                                                                     | 🟡   | `feat/about-me`                                  |
 | 4.9  | `<h1>` da Home quebra no meio do nome em ~390px (`Leidejane da / Rosa`). Ajustar com `text-balance` ou tamanho responsivo                                                                                                 | 🟢   | polimento da Home                                |
-| 4.10 | Auditoria `axe` da **página inteira** (hoje só o `<main>`) só depois que a nav for reescrita (4.4/4.5)                                                                                                                    | 🟡   | após `feat/navbar-scroll`                        |
+| 4.10 | ~~Auditoria `axe` só do `<main>`~~ ✅ `feat/navbar-scroll` — `app.test.tsx` audita a **página inteira**                                                                                                                   | ✅   | feito                                            |
+| 4.11 | Foto de perfil: PNG 427×585 (~212 KB) para exibir a ~320px. Otimizar (WebP + `srcset`/`<picture>`, ~40–60 KB). Há um `Leidejane_da_Rosa.png` 864×1184 (~940 KB) não usado no repo                                         | 🟡   | branch de foto / `feat/about-me`                 |
 
 ## 5. SEO / conteúdo / privacidade
 
@@ -85,3 +86,4 @@
 - ✅ `refactor/design-system` — tokens semânticos + fontes self-hosted (PR #5, merge em `main`)
 - ✅ `feat/home-section` — hero novo, casca `<Layout>` semântica, 4 seções montadas, testes + axe
 - ✅ `feat/dark-mode` — `ThemeProvider`/`useTheme`, botão acessível, persistência + preferência do SO, anti-flash, aliases alinhados (23 testes)
+- ✅ `feat/navbar-scroll` — `<nav>` responsivo (wordmark + ícone/texto + hambúrguer), scroll spy com `IntersectionObserver`, `axe` da página inteira (36 testes)

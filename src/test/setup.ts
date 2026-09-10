@@ -7,6 +7,27 @@ import * as axeMatchers from 'vitest-axe/matchers';
 // vitest-axe 0.1 não registra o matcher sozinho — fazemos manualmente.
 expect.extend(axeMatchers);
 
+// jsdom não implementa IntersectionObserver — stub no-op para componentes que o
+// usam (scroll spy, lazy load) montarem sem quebrar. Testes que precisam do
+// callback substituem este stub localmente (ex.: use-active-section.test).
+if (typeof window.IntersectionObserver === 'undefined') {
+    class IntersectionObserverStub {
+        readonly root = null;
+        readonly rootMargin = '';
+        readonly thresholds: ReadonlyArray<number> = [];
+        observe() {}
+        unobserve() {}
+        disconnect() {}
+        takeRecords(): IntersectionObserverEntry[] {
+            return [];
+        }
+    }
+    const stub =
+        IntersectionObserverStub as unknown as typeof IntersectionObserver;
+    window.IntersectionObserver = stub;
+    globalThis.IntersectionObserver = stub;
+}
+
 // jsdom não implementa matchMedia — stub para hooks de media query
 // (framer-motion useReducedMotion, etc.). Padrão: nenhuma media query casa.
 if (!window.matchMedia) {

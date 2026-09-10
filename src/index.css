@@ -62,6 +62,9 @@
 
     html {
         scroll-behavior: smooth;
+        /* Nav fixa: py-3 (1.5rem) + controles h-11 (2.75rem) + borda ≈ 4.3rem.
+           Folga acima disso para o título da seção não encostar na barra. */
+        scroll-padding-top: 4.5rem;
     }
 
     /* Respeita quem pediu menos movimento no sistema operacional */
