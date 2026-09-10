@@ -25,7 +25,11 @@ if (!window.matchMedia) {
     });
 }
 
-// Cada teste começa com um DOM limpo — sem vazamento de estado entre casos.
+// Cada teste começa com um DOM limpo e sem estado persistido — sem vazamento
+// entre casos (localStorage e a classe .dark do <html> sobrevivem ao cleanup).
 afterEach(() => {
     cleanup();
+    localStorage.clear();
+    document.documentElement.classList.remove('dark');
+    document.documentElement.style.colorScheme = '';
 });
