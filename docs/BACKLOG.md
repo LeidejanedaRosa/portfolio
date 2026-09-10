@@ -38,15 +38,18 @@
 
 ## 4. Código existente a corrigir (durante a reconstrução de cada parte)
 
-| #   | Item                                                                                                                                                                                              | Prio | Onde resolver                                    |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- | ------------------------------------------------ |
-| 4.1 | `src/app.tsx` — resquício `<div className="App">` (CRA); só monta `<HomePage/>`, as outras seções nem entram na árvore                                                                            | 🔴   | `feat/home-section`                              |
-| 4.2 | **Home** — `w-screen` gera scroll horizontal; `position: fixed` em tudo; `<h1>` solto em `<div>` (sem `<section>`/`<main>`); foto de perfil é `background-image` (sem `<img alt>`); sem landmarks | 🔴   | `feat/home-section`                              |
-| 4.3 | `DarkModeButton` — botão só com ícone, **sem `aria-label`** (axe reprova) + estado local não aplica `.dark` no `<html>` nem persiste                                                              | 🔴   | `feat/dark-mode`                                 |
-| 4.4 | `NavBar` — `activeTab` não é lido por ninguém; não é navegação real; tooltip só em `group-hover` (sem foco de teclado)                                                                            | 🔴   | `feat/navbar-scroll`                             |
-| 4.5 | `HamburgerMenu` — verificar focus trap, fechar no `ESC`, `aria-expanded`, ordem de foco                                                                                                           | 🟡   | `feat/navbar-scroll` ou branch própria           |
-| 4.6 | ~~`font-sacramento` em `home/index.tsx`~~ ✅ trocado por `font-mono` e removido do config em `refactor/design-system`. Falta a Home consumir os tokens de verdade                                 | 🟡   | `feat/home-section`                              |
-| 4.7 | Seções `about-me`, `projects`, `contact` são stubs (`<div>Texto</div>`)                                                                                                                           | 🔴   | `feat/about-me`, `feat/projects`, `feat/contact` |
+| #    | Item                                                                                                                                                                                                 | Prio | Onde resolver                                    |
+| ---- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- | ------------------------------------------------ |
+| 4.1  | ~~`src/app.tsx` — resquício `<div className="App">`; só a Home montada~~ ✅ `feat/home-section` — casca `<Layout>` + 4 seções montadas com landmarks                                                 | ✅   | feito                                            |
+| 4.2  | ~~**Home** — `w-screen`, `position: fixed`, `<h1>` solto, foto `background-image`, sem landmarks~~ ✅ `feat/home-section` — hero novo, `<section>`, `<img alt>`, tokens, parallax com reduced-motion | ✅   | feito                                            |
+| 4.3  | `DarkModeButton` — botão só com ícone, **sem `aria-label`** (axe reprova) + estado local não aplica `.dark` no `<html>` nem persiste                                                                 | 🔴   | `feat/dark-mode`                                 |
+| 4.4  | `NavBar` — não é `<nav>`; botões só com ícone (**sem nome acessível**); `activeTab` não é lido; tooltip só em `group-hover` (sem foco de teclado)                                                    | 🔴   | `feat/navbar-scroll`                             |
+| 4.5  | `HamburgerMenu` — usa `<div onClick>` (**não é `<button>`, sem teclado**); `MenuItem` são `<div onMouseEnter>` (não são links); sem focus trap / `ESC` / `aria-expanded`                             | 🔴   | `feat/navbar-scroll`                             |
+| 4.6  | ~~`font-sacramento` / tokens na Home~~ ✅ resolvido em `refactor/design-system` + `feat/home-section`                                                                                                | ✅   | feito                                            |
+| 4.7  | Seções `about-me`, `projects`, `contact` — stubs com `<h2>` + "Em construção" (estrutura ok, falta conteúdo)                                                                                         | 🔴   | `feat/about-me`, `feat/projects`, `feat/contact` |
+| 4.8  | Foto de perfil do hero é **placeholder** — Leidejane vai trocar (avisar no início de `feat/about-me`)                                                                                                | 🟡   | `feat/about-me`                                  |
+| 4.9  | `<h1>` da Home quebra no meio do nome em ~390px (`Leidejane da / Rosa`). Ajustar com `text-balance` ou tamanho responsivo                                                                            | 🟢   | polimento da Home                                |
+| 4.10 | Auditoria `axe` da **página inteira** (hoje só o `<main>`) só depois que a nav for reescrita (4.4/4.5)                                                                                               | 🟡   | após `feat/navbar-scroll`                        |
 
 ## 5. SEO / conteúdo / privacidade
 
@@ -77,3 +80,5 @@
 - ✅ `chore/testing-setup` — Vitest 3 + Testing Library + vitest-axe (PR #3, merge em `main`)
 - ✅ `chore/husky` — hooks pre-commit / pre-push + lint-staged (PR #2 → dev-tooling → PR #3)
 - ✅ `ci/github-actions` — pipeline lint · types · test · build (PR #4, merge em `main`)
+- ✅ `refactor/design-system` — tokens semânticos + fontes self-hosted (PR #5, merge em `main`)
+- ✅ `feat/home-section` — hero novo, casca `<Layout>` semântica, 4 seções montadas, testes + axe

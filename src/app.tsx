@@ -1,12 +1,16 @@
-import { Layout } from "./components/organisms/general/layout";
-import { HomePage } from "./sections/home";
+import { Layout } from './components/organisms/general/layout';
+import { AboutMe } from './sections/about-me';
+import { Contact } from './sections/contact';
+import { HomePage } from './sections/home';
+import { Projects } from './sections/projects';
 
 export const App = () => {
-  return (
-    <div className="App">
-      <Layout/>
-      <HomePage/>
-    </div>
-  );
-}
-
+    return (
+        <Layout>
+            <HomePage />
+            <AboutMe />
+            <Projects />
+            <Contact />
+        </Layout>
+    );
+};
