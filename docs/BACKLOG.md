@@ -87,3 +87,4 @@
 - ✅ `feat/home-section` — hero novo, casca `<Layout>` semântica, 4 seções montadas, testes + axe
 - ✅ `feat/dark-mode` — `ThemeProvider`/`useTheme`, botão acessível, persistência + preferência do SO, anti-flash, aliases alinhados (23 testes)
 - ✅ `feat/navbar-scroll` — `<nav>` responsivo (wordmark + ícone/texto + hambúrguer), scroll spy com `IntersectionObserver`, `axe` da página inteira (36 testes)
+- ✅ `fix/scroll-spy-visibility` — scroll spy guardava só o callback parcial do `IntersectionObserver`; agora mantém a visibilidade de todas as seções (achado do CodeRabbit no PR #8)
