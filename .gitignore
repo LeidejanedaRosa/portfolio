@@ -16,6 +16,12 @@ dist-ssr
 .vscode/*
 !.vscode/extensions.json
 .idea
+
+# Local AI tooling (ui-ux-pro-max skill, personal Claude config)
+.claude/
+
+# Test coverage
+coverage
 .DS_Store
 *.suo
 *.ntvs*
