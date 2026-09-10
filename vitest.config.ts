@@ -13,6 +13,7 @@ export default mergeConfig(
             globals: true, // describe/it/expect sem precisar importar em todo arquivo
             setupFiles: ['./src/test/setup.ts'],
             css: true, // processa CSS Modules nos testes (não quebra em import de styles)
+            restoreMocks: true, // cada teste começa com spies/mocks originais restaurados
             coverage: {
                 provider: 'v8',
                 reporter: ['text', 'html', 'lcov'],

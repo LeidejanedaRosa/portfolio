@@ -3,6 +3,35 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <!--
+          Anti-flash: aplica o tema ANTES do primeiro paint, síncrono.
+          Precisa espelhar a lógica de getInitialTheme() em src/theme/index.tsx.
+        -->
+        <script>
+            (function () {
+                try {
+                    var stored = null;
+                    try {
+                        stored = localStorage.getItem('theme');
+                    } catch (e) {
+                        /* localStorage bloqueado — cai no prefers-color-scheme */
+                    }
+                    var dark =
+                        stored === 'light' || stored === 'dark'
+                            ? stored === 'dark'
+                            : window.matchMedia('(prefers-color-scheme: dark)')
+                                  .matches;
+                    if (dark) {
+                        document.documentElement.classList.add('dark');
+                        document.documentElement.style.colorScheme = 'dark';
+                    }
+                } catch (e) {
+                    /* sem matchMedia — mantém tema claro */
+                }
+            })();
+        </script>
+
         <meta
             name="theme-color"
             content="#f8fafc"
