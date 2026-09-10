@@ -29,8 +29,8 @@ describe('<HomePage />', () => {
         render(<HomePage />);
 
         const img = screen.getByRole('img', { name: /leidejane da rosa/i });
-        expect(img).toHaveAttribute('width', '320');
-        expect(img).toHaveAttribute('height', '320');
+        expect(img).toHaveAttribute('width', '640');
+        expect(img).toHaveAttribute('height', '640');
     });
 
     it('não tem violações de acessibilidade', async () => {

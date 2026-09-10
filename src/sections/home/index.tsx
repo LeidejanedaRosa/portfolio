@@ -6,7 +6,7 @@ import {
     useTransform,
 } from 'framer-motion';
 
-import profilePhoto from '@assets/images/LeidejanedaRosaProfile.png';
+import profilePhoto from '@assets/images/profile.webp';
 
 /**
  * Hero da Home — padrão "Hero-Centric": domina a primeira tela, um CTA
@@ -73,14 +73,13 @@ export const HomePage = () => {
                 style={{ y }}
                 className="mx-auto w-56 shrink-0 sm:w-64 md:mx-0 md:w-80"
             >
-                {/* TODO(feat/about-me): foto é placeholder — Leidejane vai trocar */}
                 <img
                     src={profilePhoto}
                     alt="Leidejane da Rosa"
-                    width={320}
-                    height={320}
+                    width={640}
+                    height={640}
                     fetchPriority="high"
-                    className="aspect-square w-full rounded-2xl border border-border object-cover"
+                    className="aspect-square w-full rounded-2xl border border-border object-cover object-[50%_30%]"
                 />
             </motion.div>
         </section>
