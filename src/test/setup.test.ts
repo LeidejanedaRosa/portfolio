@@ -7,8 +7,10 @@ import { axe } from 'vitest-axe';
  * matchers do jest-dom e do axe (a11y) todos carregados.
  */
 describe('infraestrutura de testes', () => {
-    it('roda o Vitest com globals habilitados', () => {
-        expect(true).toBe(true);
+    it('injeta os globals do Vitest (globals: true em vitest.config.ts)', () => {
+        // `vi` não é importado neste arquivo — só existe aqui se o global
+        // estiver de fato habilitado pela config.
+        expect(typeof vi.fn).toBe('function');
     });
 
     it('tem os matchers do @testing-library/jest-dom', () => {
