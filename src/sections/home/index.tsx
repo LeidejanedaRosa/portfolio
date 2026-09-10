@@ -21,7 +21,7 @@ export const HomePage = () => {
                         }}
                     ></div>
                     <div className="fixed flex flex-col justify-end h-full z-10">
-                        <h1 className="text-4xl bg-white/70 w-screen text-center text-blue-900 text-shadow-xl font-sacramento font-extrabold leading-loose">
+                        <h1 className="text-4xl bg-white/70 w-screen text-center text-blue-900 text-shadow-xl font-mono font-extrabold leading-loose">
                             {' '}
                             Leidejane da Rosa
                         </h1>
