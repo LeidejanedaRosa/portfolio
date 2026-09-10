@@ -31,9 +31,14 @@
 
         --color-danger: 220 38 38; /* red-600    */
         --color-danger-foreground: 255 255 255;
+
+        /* Ajusta chrome nativo (scrollbar, form controls, bg antes do CSS pintar) */
+        color-scheme: light;
     }
 
     .dark {
+        color-scheme: dark;
+
         --color-background: 15 23 42; /* slate-900  */
         --color-foreground: 241 245 249; /* slate-100  */
 

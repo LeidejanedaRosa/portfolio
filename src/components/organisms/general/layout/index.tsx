@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react';
+import { type ReactNode } from 'react';
 
 import { NavBar } from '../../../molecules/general/navbar';
 import { HamburgerMenu } from '../../../molecules/general/hamburger-menu';
@@ -10,12 +10,10 @@ interface LayoutProps {
 
 /**
  * Casca da aplicação: landmarks semânticos (<header>, <main>) + skip link.
- * A navegação (NavBar / HamburgerMenu) e o dark mode ainda são os componentes
- * antigos — serão reescritos em feat/navbar-scroll e feat/dark-mode.
+ * A navegação (NavBar / HamburgerMenu) ainda são os componentes antigos —
+ * serão reescritos em feat/navbar-scroll.
  */
 export function Layout({ children }: LayoutProps) {
-    const [darkMode, setDarkMode] = useState(false);
-
     return (
         <>
             {/* Primeiro elemento focável: pula a navegação e vai pro conteúdo */}
@@ -34,10 +32,7 @@ export function Layout({ children }: LayoutProps) {
                     <HamburgerMenu />
                 </div>
                 <div className="fixed right-0 top-0 z-50 p-4">
-                    <DarkModeButton
-                        darkMode={darkMode}
-                        setDarkMode={setDarkMode}
-                    />
+                    <DarkModeButton />
                 </div>
             </header>
 
