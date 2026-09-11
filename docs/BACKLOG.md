@@ -51,7 +51,8 @@
 | 4.7  | ~~`about-me` stub~~ ✅ `feat/about-me` — bio + grade de logos de tecnologia (`simple-icons`, mono → cor no hover) + 1ª aplicação do "blueprint frame"                                                                                                                               | ✅   | feito                                               |
 | 4.13 | `simple-icons` adiciona ~31 KB ao bundle (19 ícones em `about`, +8 em `projects`). OK, mas revisitar se a lista crescer muito                                                                                                                                                       | 🟢   | —                                                   |
 | 4.14 | "Sobre mim" poderia ter uma foto candid (a #1, camiseta Cubos) — polimento opcional                                                                                                                                                                                                 | 🟢   | polimento                                           |
-| 4.15 | ~~`projects` stub~~ ✅ `feat/projects` — 4 cards curados (Faladoria, FCR Certificados, EMR International, Espaço Saúde Bem-Estar), 3 privados (case study) + 1 público (código+demo). Falta `contact`                                                                               | 🟡   | `feat/contact`                                      |
+| 4.15 | ~~`projects` stub~~ ✅ `feat/projects` — 4 cards curados (Faladoria, FCR Certificados, EMR International, Espaço Saúde Bem-Estar), 3 privados (case study) + 1 público (código+demo)                                                                                                | ✅   | feito                                               |
+| 4.18 | ~~`contact` stub~~ ✅ `feat/contact` — 4 canais (e-mail, LinkedIn, GitHub, WhatsApp), sem formulário (decisão da Leidejane — zero terceiro/spam)                                                                                                                                    | ✅   | feito                                               |
 | 4.16 | Cards de projeto usam o tratamento blueprint (sem screenshot) — trocar por prints reais quando a Leidejane tiver (decisão dela, 2026-09-11)                                                                                                                                         | 🟢   | polimento                                           |
 | 4.17 | "Ver site" só no Espaço Saúde Bem-Estar. Faladoria (`.vercel.app`) e Verify Certificate (`.vercel.app`) já respondem 200 mas mostram só um placeholder; EMR (`emr.international`) nem resolve. Leidejane vai ajustar os deploys — religar o botão quando a URL estiver apresentável | 🟡   | Leidejane resolve, depois `feat/projects` follow-up |
 | 4.8  | ~~Foto de perfil placeholder~~ ✅ `feat/profile-photo` — foto real (Leidejane), fundo bokeh, marca de IA removida                                                                                                                                                                   | ✅   | feito                                               |
@@ -74,13 +75,13 @@
 
 ## 6. Decisões pendentes (precisam da Leidejane)
 
-| #   | Decisão                                                                                                           | Impacto                                   |
-| --- | ----------------------------------------------------------------------------------------------------------------- | ----------------------------------------- |
-| 6.1 | Onde hospedar (GitHub Pages / Vercel / Netlify)                                                                   | Define a branch de CD e config de build   |
-| 6.2 | Domínio próprio?                                                                                                  | DNS + config do host + `og:url`           |
-| 6.3 | Manter o Google Tag Manager / analytics?                                                                          | Precisa de banner de consentimento se sim |
-| 6.4 | Seção Contato: formulário real (precisa de backend/serviço tipo Formspree/EmailJS) **ou** links `mailto:` + redes | Escopo da branch `feat/contact`           |
-| 6.5 | Migrar para Tailwind v4 agora ou depois?                                                                          | Ver §1.2                                  |
+| #   | Decisão                                                                                                                          | Impacto                                   |
+| --- | -------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- |
+| 6.1 | Onde hospedar (GitHub Pages / Vercel / Netlify)                                                                                  | Define a branch de CD e config de build   |
+| 6.2 | Domínio próprio?                                                                                                                 | DNS + config do host + `og:url`           |
+| 6.3 | Manter o Google Tag Manager / analytics?                                                                                         | Precisa de banner de consentimento se sim |
+| 6.4 | ~~Contato: formulário ou links diretos?~~ ✅ decidido — links diretos (e-mail/LinkedIn/GitHub/WhatsApp), sem formulário/terceiro | `feat/contact`                            |
+| 6.5 | Migrar para Tailwind v4 agora ou depois?                                                                                         | Ver §1.2                                  |
 
 ---
 
@@ -96,11 +97,16 @@
 - ✅ `fix/scroll-spy-visibility` — scroll spy guardava só o callback parcial do `IntersectionObserver`; agora mantém a visibilidade de todas as seções (achado do CodeRabbit no PR #8)
 - ✅ `feat/profile-photo` — foto real otimizada (`profile.webp`, 24 KB), `object-position` ajustado, placeholders PNG removidos
 - ✅ `feat/about-me` — bio (revisada pela Leidejane), grade de logos de tecnologia, atoms `BlueprintFrame` + `TechIcon`, utilitário `.blueprint-grid`
+- ✅ `feat/projects` — 4 cards curados, trechos de código reais (sem segredo) nos privados, `CodeSnippet` acessível por teclado (58 testes)
+- ✅ `feat/contact` — 4 canais diretos (e-mail/LinkedIn/GitHub/WhatsApp), sem formulário; util `brandHoverColor` extraído do `TechIcon` (66 testes)
 
 ## Camada visual ("dar vida" — direção Swiss + craft, decidido 2026-09-10)
 
 - [x] Grade de logos de tecnologia (mono → cor no hover) — feito em `feat/about-me`
+- [x] Vitrine de projetos reais — feito em `feat/projects`
 - [ ] `feat/blueprint` — levar o "blueprint" pra página toda: grade sutil no hero, conectores hairline entre cards, numeração de seções (01/02/03), linhas de cota
 - [ ] `feat/motion` — scroll-reveal nas seções (framer-motion `whileInView`, stagger), hover trabalhado, respeitando `prefers-reduced-motion`
-- [ ] `feat/projects` — a vitrine: cards dos projetos reais com stack + mockup + links (é onde mais "vida" mora)
 - [ ] `feat/hero-polish` — parallax perceptível + pista de scroll + fundo com grade
+
+**As 4 seções de conteúdo estão completas** (Home, Sobre, Projetos, Contato). Daqui para
+frente é todo polimento: camada visual acima + itens §1/§2/§5 (SEO, deploy, npm audit).
