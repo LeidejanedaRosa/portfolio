@@ -84,3 +84,21 @@
         @apply outline-none ring-2 ring-accent ring-offset-2 ring-offset-background;
     }
 }
+
+@layer components {
+    /* Textura de planta técnica — grade de papel milimetrado bem sutil.
+       Decorativa: sempre atrás do conteúdo. */
+    .blueprint-grid {
+        background-image:
+            linear-gradient(
+                rgb(var(--color-border) / 0.5) 1px,
+                transparent 1px
+            ),
+            linear-gradient(
+                90deg,
+                rgb(var(--color-border) / 0.5) 1px,
+                transparent 1px
+            );
+        background-size: 1.75rem 1.75rem;
+    }
+}
