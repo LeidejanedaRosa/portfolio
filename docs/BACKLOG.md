@@ -40,20 +40,22 @@
 
 ## 4. Código existente a corrigir (durante a reconstrução de cada parte)
 
-| #    | Item                                                                                                                                                                                                                      | Prio | Onde resolver                                    |
-| ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- | ------------------------------------------------ |
-| 4.1  | ~~`src/app.tsx` — resquício `<div className="App">`; só a Home montada~~ ✅ `feat/home-section` — casca `<Layout>` + 4 seções montadas com landmarks                                                                      | ✅   | feito                                            |
-| 4.2  | ~~**Home** — `w-screen`, `position: fixed`, `<h1>` solto, foto `background-image`, sem landmarks~~ ✅ `feat/home-section` — hero novo, `<section>`, `<img alt>`, tokens, parallax com reduced-motion                      | ✅   | feito                                            |
-| 4.3  | ~~`DarkModeButton` — sem `aria-label`; estado não aplica `.dark` nem persiste~~ ✅ `feat/dark-mode` — `ThemeProvider` + `useTheme`, `aria-label`/`aria-pressed`, localStorage + `prefers-color-scheme`, script anti-flash | ✅   | feito                                            |
-| 4.4  | ~~`NavBar` sem semântica/nome/foco~~ ✅ `feat/navbar-scroll` — `<nav>` único, links `<a>` (ícone+texto), `aria-current` via `IntersectionObserver`                                                                        | ✅   | feito                                            |
-| 4.5  | ~~`HamburgerMenu` com `<div onClick>`~~ ✅ `feat/navbar-scroll` — `<button aria-expanded aria-controls>`, painel `hidden`, fecha no `ESC` e ao clicar num link                                                            | ✅   | feito                                            |
-| 4.6  | ~~`font-sacramento` / tokens na Home~~ ✅ resolvido em `refactor/design-system` + `feat/home-section`                                                                                                                     | ✅   | feito                                            |
-| 4.7  | Seções `about-me`, `projects`, `contact` — stubs com `<h2>` + "Em construção" (estrutura ok, falta conteúdo)                                                                                                              | 🔴   | `feat/about-me`, `feat/projects`, `feat/contact` |
-| 4.8  | ~~Foto de perfil placeholder~~ ✅ `feat/profile-photo` — foto real (Leidejane), fundo bokeh, marca de IA removida                                                                                                         | ✅   | feito                                            |
-| 4.9  | `<h1>` da Home quebra no meio do nome em ~390px (`Leidejane da / Rosa`). Ajustar com `text-balance` ou tamanho responsivo                                                                                                 | 🟢   | polimento da Home                                |
-| 4.10 | ~~Auditoria `axe` só do `<main>`~~ ✅ `feat/navbar-scroll` — `app.test.tsx` audita a **página inteira**                                                                                                                   | ✅   | feito                                            |
-| 4.11 | ~~Foto pesada (PNG ~212 KB / fonte 940 KB)~~ ✅ `feat/profile-photo` — `profile.webp` 800×1096, **24 KB**; PNGs antigos apagados                                                                                          | ✅   | feito                                            |
-| 4.12 | Foto tem só 1 tamanho (`profile.webp` 800px). `srcset`/`<picture>` com um WebP menor (~400px) p/ mobile — ganho pequeno                                                                                                   | 🟢   | polimento                                        |
+| #    | Item                                                                                                                                                                                                                      | Prio | Onde resolver                   |
+| ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- | ------------------------------- |
+| 4.1  | ~~`src/app.tsx` — resquício `<div className="App">`; só a Home montada~~ ✅ `feat/home-section` — casca `<Layout>` + 4 seções montadas com landmarks                                                                      | ✅   | feito                           |
+| 4.2  | ~~**Home** — `w-screen`, `position: fixed`, `<h1>` solto, foto `background-image`, sem landmarks~~ ✅ `feat/home-section` — hero novo, `<section>`, `<img alt>`, tokens, parallax com reduced-motion                      | ✅   | feito                           |
+| 4.3  | ~~`DarkModeButton` — sem `aria-label`; estado não aplica `.dark` nem persiste~~ ✅ `feat/dark-mode` — `ThemeProvider` + `useTheme`, `aria-label`/`aria-pressed`, localStorage + `prefers-color-scheme`, script anti-flash | ✅   | feito                           |
+| 4.4  | ~~`NavBar` sem semântica/nome/foco~~ ✅ `feat/navbar-scroll` — `<nav>` único, links `<a>` (ícone+texto), `aria-current` via `IntersectionObserver`                                                                        | ✅   | feito                           |
+| 4.5  | ~~`HamburgerMenu` com `<div onClick>`~~ ✅ `feat/navbar-scroll` — `<button aria-expanded aria-controls>`, painel `hidden`, fecha no `ESC` e ao clicar num link                                                            | ✅   | feito                           |
+| 4.6  | ~~`font-sacramento` / tokens na Home~~ ✅ resolvido em `refactor/design-system` + `feat/home-section`                                                                                                                     | ✅   | feito                           |
+| 4.7  | ~~`about-me` stub~~ ✅ `feat/about-me` — bio + grade de logos de tecnologia (`simple-icons`, mono → cor no hover) + 1ª aplicação do "blueprint frame". Faltam `projects` e `contact`                                      | 🟡   | `feat/projects`, `feat/contact` |
+| 4.13 | `simple-icons` adiciona ~31 KB ao bundle (19 ícones). OK, mas revisitar se a lista crescer muito                                                                                                                          | 🟢   | —                               |
+| 4.14 | "Sobre mim" poderia ter uma foto candid (a #1, camiseta Cubos) — polimento opcional                                                                                                                                       | 🟢   | polimento                       |
+| 4.8  | ~~Foto de perfil placeholder~~ ✅ `feat/profile-photo` — foto real (Leidejane), fundo bokeh, marca de IA removida                                                                                                         | ✅   | feito                           |
+| 4.9  | `<h1>` da Home quebra no meio do nome em ~390px (`Leidejane da / Rosa`). Ajustar com `text-balance` ou tamanho responsivo                                                                                                 | 🟢   | polimento da Home               |
+| 4.10 | ~~Auditoria `axe` só do `<main>`~~ ✅ `feat/navbar-scroll` — `app.test.tsx` audita a **página inteira**                                                                                                                   | ✅   | feito                           |
+| 4.11 | ~~Foto pesada (PNG ~212 KB / fonte 940 KB)~~ ✅ `feat/profile-photo` — `profile.webp` 800×1096, **24 KB**; PNGs antigos apagados                                                                                          | ✅   | feito                           |
+| 4.12 | Foto tem só 1 tamanho (`profile.webp` 800px). `srcset`/`<picture>` com um WebP menor (~400px) p/ mobile — ganho pequeno                                                                                                   | 🟢   | polimento                       |
 
 ## 5. SEO / conteúdo / privacidade
 
@@ -90,3 +92,12 @@
 - ✅ `feat/navbar-scroll` — `<nav>` responsivo (wordmark + ícone/texto + hambúrguer), scroll spy com `IntersectionObserver`, `axe` da página inteira (36 testes)
 - ✅ `fix/scroll-spy-visibility` — scroll spy guardava só o callback parcial do `IntersectionObserver`; agora mantém a visibilidade de todas as seções (achado do CodeRabbit no PR #8)
 - ✅ `feat/profile-photo` — foto real otimizada (`profile.webp`, 24 KB), `object-position` ajustado, placeholders PNG removidos
+- ✅ `feat/about-me` — bio (revisada pela Leidejane), grade de logos de tecnologia, atoms `BlueprintFrame` + `TechIcon`, utilitário `.blueprint-grid`
+
+## Camada visual ("dar vida" — direção Swiss + craft, decidido 2026-09-10)
+
+- [x] Grade de logos de tecnologia (mono → cor no hover) — feito em `feat/about-me`
+- [ ] `feat/blueprint` — levar o "blueprint" pra página toda: grade sutil no hero, conectores hairline entre cards, numeração de seções (01/02/03), linhas de cota
+- [ ] `feat/motion` — scroll-reveal nas seções (framer-motion `whileInView`, stagger), hover trabalhado, respeitando `prefers-reduced-motion`
+- [ ] `feat/projects` — a vitrine: cards dos projetos reais com stack + mockup + links (é onde mais "vida" mora)
+- [ ] `feat/hero-polish` — parallax perceptível + pista de scroll + fundo com grade
