@@ -106,3 +106,14 @@
         background-size: 1.75rem 1.75rem;
     }
 }
+
+@layer utilities {
+    /* `justify-[safe_center]` (sintaxe de valor arbitrário do Tailwind) não
+       gera `justify-content: safe center` de forma confiável — o JIT não
+       reconhece "safe" como parte do valor e descarta a regra em silêncio,
+       caindo no `normal` do navegador (visualmente igual a `flex-start`).
+       Utilitário escrito à mão, sem depender do parser de valor arbitrário. */
+    .justify-safe-center {
+        justify-content: safe center;
+    }
+}
