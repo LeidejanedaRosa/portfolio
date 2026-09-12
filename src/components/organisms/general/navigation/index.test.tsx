@@ -1,7 +1,7 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'vitest-axe';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { ThemeProvider } from '@src/theme';
 
@@ -103,4 +103,19 @@ describe('<Navigation />', () => {
         const { container } = renderNav();
         expect(await axe(container)).toHaveNoViolations();
     });
+
+    it('sem ResizeObserver no browser, ainda mede a altura uma vez e monta sem quebrar', () => {
+        vi.stubGlobal('ResizeObserver', undefined);
+
+        renderNav();
+
+        expect(
+            document.documentElement.style.getPropertyValue('--nav-height'),
+        ).not.toBe('');
+    });
+});
+
+afterEach(() => {
+    vi.unstubAllGlobals();
+    document.documentElement.style.removeProperty('--nav-height');
 });
