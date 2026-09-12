@@ -25,12 +25,68 @@ describe('<HomePage />', () => {
         ).toHaveAttribute('href', '#projects');
     });
 
-    it('a foto de perfil tem texto alternativo e dimensões declaradas (evita CLS)', () => {
+    it('em telas pequenas, renderiza só a cena mobile e a foto, com dimensões declaradas (evita baixar 2x e evita CLS)', () => {
         render(<HomePage />);
 
-        const img = screen.getByRole('img', { name: /leidejane da rosa/i });
-        expect(img).toHaveAttribute('width', '640');
-        expect(img).toHaveAttribute('height', '640');
+        const scenes = screen.getAllByRole('img', {
+            name: /decisões de arquitetura/i,
+        });
+        expect(scenes).toHaveLength(1);
+        expect(scenes[0]).toHaveAttribute('width', '1300');
+        expect(scenes[0]).toHaveAttribute('height', '1758');
+
+        const photo = screen.getByRole('img', {
+            name: /retrato de leidejane/i,
+        });
+        expect(photo).toHaveAttribute('width', '800');
+        expect(photo).toHaveAttribute('height', '1096');
+    });
+
+    it('em telas grandes, renderiza só a cena desktop e a foto, com dimensões declaradas (evita CLS)', () => {
+        vi.spyOn(window, 'matchMedia').mockImplementation(
+            (query) =>
+                ({
+                    matches: query.includes('1024px'),
+                    media: query,
+                    onchange: null,
+                    addListener: () => {},
+                    removeListener: () => {},
+                    addEventListener: () => {},
+                    removeEventListener: () => {},
+                    dispatchEvent: () => false,
+                }) as MediaQueryList,
+        );
+
+        render(<HomePage />);
+
+        const scenes = screen.getAllByRole('img', {
+            name: /decisões de arquitetura/i,
+        });
+        expect(scenes).toHaveLength(1);
+        expect(scenes[0]).toHaveAttribute('width', '1300');
+        expect(scenes[0]).toHaveAttribute('height', '1758');
+
+        const photo = screen.getByRole('img', {
+            name: /retrato de leidejane/i,
+        });
+        expect(photo).toHaveAttribute('width', '800');
+        expect(photo).toHaveAttribute('height', '1096');
+    });
+
+    it('em coluna única, a foto vem visualmente antes do texto, mas o <h1> continua primeiro no DOM (leitor de tela/teclado)', () => {
+        const { container } = render(<HomePage />);
+
+        const heading = screen.getByRole('heading', { level: 1 });
+        const textBlock = heading.closest('.order-2');
+        const imageBlock = container.querySelector('.order-1');
+
+        expect(textBlock).toBeInTheDocument();
+        expect(imageBlock).toBeInTheDocument();
+        // DOM: texto antes da imagem (ordem de leitura/semântica preservada).
+        expect(
+            textBlock!.compareDocumentPosition(imageBlock!) &
+                Node.DOCUMENT_POSITION_FOLLOWING,
+        ).toBeTruthy();
     });
 
     it('não tem violações de acessibilidade', async () => {
