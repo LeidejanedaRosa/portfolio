@@ -2,6 +2,7 @@ import { type CSSProperties } from 'react';
 import { siGithub, siGmail, siWhatsapp, type SimpleIcon } from 'simple-icons';
 
 import { BlueprintFrame } from '@components/atoms/blueprint-frame';
+import { useConsent } from '@src/consent';
 import { brandHoverColor } from '@src/lib/brand-hover-color';
 
 // simple-icons removeu o logo do LinkedIn do pacote (política de marca da
@@ -86,6 +87,8 @@ function ContactLink({ channel }: { channel: Channel }) {
 }
 
 export const Contact = () => {
+    const { reset } = useConsent();
+
     return (
         // h- (não min-h) + flex centering: o conteúdo já cabe com folga numa
         // tela comum, então centralizar verticalmente faz a seção "dominar a
@@ -124,6 +127,14 @@ export const Contact = () => {
                     ))}
                 </ul>
             </BlueprintFrame>
+
+            <button
+                type="button"
+                onClick={reset}
+                className="mt-6 self-start text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground"
+            >
+                Preferências de cookies
+            </button>
         </section>
     );
 };

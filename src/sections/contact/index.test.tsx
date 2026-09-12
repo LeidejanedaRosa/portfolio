@@ -1,12 +1,22 @@
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { axe } from 'vitest-axe';
 import { describe, expect, it } from 'vitest';
 
+import { ConsentProvider } from '@src/consent';
+
 import { Contact } from './index';
+
+const renderContact = () =>
+    render(
+        <ConsentProvider>
+            <Contact />
+        </ConsentProvider>,
+    );
 
 describe('<Contact />', () => {
     it('é uma seção com título e id de âncora', () => {
-        render(<Contact />);
+        renderContact();
 
         const heading = screen.getByRole('heading', {
             level: 2,
@@ -16,7 +26,7 @@ describe('<Contact />', () => {
     });
 
     it('tem os 4 canais com o link certo', () => {
-        render(<Contact />);
+        renderContact();
 
         expect(screen.getByRole('link', { name: /e-mail/i })).toHaveAttribute(
             'href',
@@ -37,7 +47,7 @@ describe('<Contact />', () => {
     });
 
     it('o link de e-mail não abre em nova aba (não é externo)', () => {
-        render(<Contact />);
+        renderContact();
 
         const email = screen.getByRole('link', { name: /e-mail/i });
         expect(email).not.toHaveAttribute('target');
@@ -45,7 +55,7 @@ describe('<Contact />', () => {
     });
 
     it('os links externos abrem em nova aba com rel seguro', () => {
-        render(<Contact />);
+        renderContact();
 
         for (const name of [/linkedin/i, /github/i, /whatsapp/i]) {
             const link = screen.getByRole('link', { name });
@@ -57,8 +67,20 @@ describe('<Contact />', () => {
         }
     });
 
+    it('"Preferências de cookies" limpa a escolha salva', async () => {
+        localStorage.setItem('cookie-consent', 'accepted');
+        const user = userEvent.setup();
+        renderContact();
+
+        await user.click(
+            screen.getByRole('button', { name: 'Preferências de cookies' }),
+        );
+
+        expect(localStorage.getItem('cookie-consent')).toBeNull();
+    });
+
     it('não tem violações de acessibilidade', async () => {
-        const { container } = render(<Contact />);
+        const { container } = renderContact();
 
         expect(await axe(container)).toHaveNoViolations();
     });

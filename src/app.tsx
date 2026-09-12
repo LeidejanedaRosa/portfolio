@@ -1,4 +1,6 @@
+import { CookieConsentBanner } from './components/molecules/general/cookie-consent';
 import { Layout } from './components/organisms/general/layout';
+import { ConsentProvider } from './consent';
 import { AboutMe } from './sections/about-me';
 import { Contact } from './sections/contact';
 import { HomePage } from './sections/home';
@@ -8,12 +10,15 @@ import { ThemeProvider } from './theme';
 export const App = () => {
     return (
         <ThemeProvider>
-            <Layout>
-                <HomePage />
-                <AboutMe />
-                <Projects />
-                <Contact />
-            </Layout>
+            <ConsentProvider>
+                <Layout>
+                    <HomePage />
+                    <AboutMe />
+                    <Projects />
+                    <Contact />
+                </Layout>
+                <CookieConsentBanner />
+            </ConsentProvider>
         </ThemeProvider>
     );
 };
