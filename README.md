@@ -30,6 +30,12 @@ src/
 
 Cada componente/seção tem seu teste colocado ao lado (`index.test.tsx`).
 
+## Requisitos locais
+
+- Node (versão em `.nvmrc`)
+- [`gitleaks`](https://github.com/gitleaks/gitleaks#installing) instalado e no `PATH` — o
+  pre-commit do Husky bloqueia o commit se não encontrar o binário.
+
 ## Como rodar
 
 ```bash
@@ -57,10 +63,11 @@ npm run preview # serve o build de /dist localmente
 
 ## Qualidade
 
-- Pre-commit (Husky): lint + testes afetados via `lint-staged`.
+- Pre-commit (Husky): scan de segredos (`gitleaks protect --staged`) + lint + testes afetados
+  via `lint-staged`.
 - Pre-push (Husky): checagem de tipos + suite completa de testes.
-- CI (GitHub Actions, `.github/workflows/ci.yml`): lint, type-check, testes e build em todo
-  push/PR pra `main`.
+- CI (GitHub Actions, `.github/workflows/ci.yml`): scan de segredos (`gitleaks`), lint,
+  type-check, testes e build em todo push/PR pra `main`.
 - Padrão de engenharia completo (arquitetura por tier, Definition of Done, PR template,
   auditoria) segue o padrão pessoal da autora. Um `CLAUDE.md` específico deste projeto,
   versionado no repositório, está planejado (ver `docs/BACKLOG.md`).
