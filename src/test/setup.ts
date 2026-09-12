@@ -59,6 +59,32 @@ if (!window.matchMedia) {
     });
 }
 
+// jsdom não implementa showModal()/close() do <dialog> nativo (usado pelo
+// PrivacyDialog pra focus trap + inert de fundo grátis do navegador).
+// Polyfill mínimo: reflete `.open` e dispara "close" (mesmo evento nativo
+// que o componente escuta, cobrindo tanto ESC quanto o botão Fechar).
+if (!HTMLDialogElement.prototype.showModal) {
+    HTMLDialogElement.prototype.showModal = function (this: HTMLDialogElement) {
+        this.open = true;
+    };
+}
+if (!HTMLDialogElement.prototype.close) {
+    HTMLDialogElement.prototype.close = function (this: HTMLDialogElement) {
+        if (!this.open) return;
+        this.open = false;
+        this.dispatchEvent(new Event('close'));
+    };
+}
+// Browsers fecham o <dialog> modal aberto sozinhos ao apertar ESC — jsdom não
+// simula isso, então replicamos aqui pra quem testar via teclado.
+document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    const openDialog =
+        document.querySelector<HTMLDialogElement>('dialog[open]');
+    openDialog?.dispatchEvent(new Event('cancel'));
+    openDialog?.close();
+});
+
 // Cada teste começa com um DOM limpo e sem estado persistido — sem vazamento
 // entre casos (localStorage e a classe .dark do <html> sobrevivem ao cleanup).
 afterEach(() => {
