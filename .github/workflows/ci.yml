@@ -27,6 +27,14 @@ jobs:
         steps:
             - name: Checkout do código
               uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0 # histórico completo, o gitleaks precisa pra varrer todos os commits
+
+            # Ordem: checagem baratas primeiro, para falhar rápido.
+            - name: Scan de segredos (gitleaks)
+              uses: gitleaks/gitleaks-action@v2
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Configurar Node
               uses: actions/setup-node@v4
@@ -37,7 +45,6 @@ jobs:
             - name: Instalar dependências
               run: npm ci # 'ci' = instala EXATAMENTE o package-lock, sem alterá-lo
 
-            # Ordem: checagem baratas primeiro, para falhar rápido.
             - name: Lint (ESLint)
               run: npm run lint
 
