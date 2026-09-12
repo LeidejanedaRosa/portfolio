@@ -57,6 +57,35 @@ export const Navigation = () => {
     const active = useActiveSection(ITEM_IDS);
     const [menuOpen, setMenuOpen] = useState(false);
     const menuButtonRef = useRef<HTMLButtonElement>(null);
+    const navRef = useRef<HTMLElement>(null);
+
+    // Publica a altura real da nav como variável CSS (--nav-height). A Home
+    // usa isso pra fazer a hero ocupar "100% da tela menos a nav" sem scroll,
+    // sem cravar um número mágico que quebraria se a nav mudasse de altura
+    // (ex.: menu mobile aberto, ajuste de padding, zoom do navegador).
+    useEffect(() => {
+        const nav = navRef.current;
+        if (!nav) return;
+
+        const updateHeight = () => {
+            document.documentElement.style.setProperty(
+                '--nav-height',
+                `${nav.getBoundingClientRect().height}px`,
+            );
+        };
+
+        updateHeight();
+
+        if (typeof ResizeObserver === 'undefined') {
+            // Navegador sem suporte (raro hoje): mede uma vez no mount e
+            // segue sem observar — melhor que quebrar o componente inteiro.
+            return;
+        }
+
+        const observer = new ResizeObserver(updateHeight);
+        observer.observe(nav);
+        return () => observer.disconnect();
+    }, []);
 
     // Fecha o menu e devolve o foco ao botão (WAI-ARIA APG): sem isso, o foco
     // ficaria "preso" num link do painel que acabou de virar hidden → cai no body.
@@ -77,6 +106,7 @@ export const Navigation = () => {
 
     return (
         <nav
+            ref={navRef}
             aria-label="Principal"
             className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur"
         >

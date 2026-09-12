@@ -5,7 +5,7 @@
 >
 > Legenda de prioridade: 🔴 alta · 🟡 média · 🟢 baixa
 
-Última atualização: 2026-09-10
+Última atualização: 2026-09-12
 
 ---
 
@@ -60,6 +60,7 @@
 | 4.10 | ~~Auditoria `axe` só do `<main>`~~ ✅ `feat/navbar-scroll` — `app.test.tsx` audita a **página inteira**                                                                                                                                                                             | ✅   | feito                                               |
 | 4.11 | ~~Foto pesada (PNG ~212 KB / fonte 940 KB)~~ ✅ `feat/profile-photo` — `profile.webp` 800×1096, **24 KB**; PNGs antigos apagados                                                                                                                                                    | ✅   | feito                                               |
 | 4.12 | Foto tem só 1 tamanho (`profile.webp` 800px). `srcset`/`<picture>` com um WebP menor (~400px) p/ mobile — ganho pequeno                                                                                                                                                             | 🟢   | polimento                                           |
+| 4.19 | Hero em telas muito antigas/pequenas (~320×568, ex. iPhone 5, fora de linha desde 2016) ainda tem um scroll residual pequeno — dar mais espaço à cena nesse tamanho exigiria encolhê-la nos tamanhos comuns também. Decisão consciente: não vale o trade-off (<0,5% do tráfego web) | 🟢   | revisitar só se aparecer tráfego real nesse tamanho |
 
 ## 5. SEO / conteúdo / privacidade
 
@@ -99,6 +100,7 @@
 - ✅ `feat/about-me` — bio (revisada pela Leidejane), grade de logos de tecnologia, atoms `BlueprintFrame` + `TechIcon`, utilitário `.blueprint-grid`
 - ✅ `feat/projects` — 4 cards curados, trechos de código reais (sem segredo) nos privados, `CodeSnippet` acessível por teclado (58 testes)
 - ✅ `feat/contact` — 4 canais diretos (e-mail/LinkedIn/GitHub/WhatsApp), sem formulário; util `brandHoverColor` extraído do `TechIcon` (66 testes)
+- ✅ `feat/hero-blueprint-motif` — hero da Home reconstruída: cena de papéis (`desk-scene.webp`) full-bleed atrás da foto de perfil emoldurada, coluna única com foto antes do texto até 1024px, lado a lado a partir daí, `--nav-height` (CSS var publicada pela `Navigation` via `ResizeObserver`, com guarda para browsers sem suporte) define a altura **mínima** da hero como a tela menos a nav — nos tamanhos testados ela cabe numa tela só, mas sem `overflow-hidden`: se o conteúdo precisar de mais espaço (zoom de fonte do navegador, texto maior no futuro), a seção cresce e a página rola normalmente, em vez de cortar conteúdo em silêncio (ver 4.19 para o caso residual em telas muito pequenas) (69 testes)
 
 ## Camada visual ("dar vida" — direção Swiss + craft, decidido 2026-09-10)
 
@@ -106,7 +108,8 @@
 - [x] Vitrine de projetos reais — feito em `feat/projects`
 - [ ] `feat/blueprint` — levar o "blueprint" pra página toda: grade sutil no hero, conectores hairline entre cards, numeração de seções (01/02/03), linhas de cota
 - [ ] `feat/motion` — scroll-reveal nas seções (framer-motion `whileInView`, stagger), hover trabalhado, respeitando `prefers-reduced-motion`
-- [ ] `feat/hero-polish` — parallax perceptível + pista de scroll + fundo com grade
+- [x] `feat/hero-polish` — parallax perceptível: feito em `feat/hero-blueprint-motif` (cena + foto reagem ao scroll, `prefers-reduced-motion` desliga). "Pista de scroll" e "fundo com grade" **não** entraram nesse escopo — a direção do hero mudou (composição foto+papéis em vez de grade) — viram itens novos abaixo se ainda fizerem sentido
+- [ ] `feat/hero-polish` (sobras) — pista de scroll indicando "role para baixo"; textura de grade de fundo, se ainda fizer sentido com a composição atual do hero
 
 **As 4 seções de conteúdo estão completas** (Home, Sobre, Projetos, Contato). Daqui para
 frente é todo polimento: camada visual acima + itens §1/§2/§5 (SEO, deploy, npm audit).

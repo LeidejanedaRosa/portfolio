@@ -28,6 +28,19 @@ if (typeof window.IntersectionObserver === 'undefined') {
     globalThis.IntersectionObserver = stub;
 }
 
+// jsdom não implementa ResizeObserver — stub no-op para componentes que o
+// usam para medir elementos (ex.: Navigation publicando --nav-height).
+if (typeof window.ResizeObserver === 'undefined') {
+    class ResizeObserverStub {
+        observe() {}
+        unobserve() {}
+        disconnect() {}
+    }
+    const stub = ResizeObserverStub as unknown as typeof ResizeObserver;
+    window.ResizeObserver = stub;
+    globalThis.ResizeObserver = stub;
+}
+
 // jsdom não implementa matchMedia — stub para hooks de media query
 // (framer-motion useReducedMotion, etc.). Padrão: nenhuma media query casa.
 if (!window.matchMedia) {
