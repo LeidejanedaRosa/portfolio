@@ -100,7 +100,7 @@
 - ✅ `feat/about-me` — bio (revisada pela Leidejane), grade de logos de tecnologia, atoms `BlueprintFrame` + `TechIcon`, utilitário `.blueprint-grid`
 - ✅ `feat/projects` — 4 cards curados, trechos de código reais (sem segredo) nos privados, `CodeSnippet` acessível por teclado (58 testes)
 - ✅ `feat/contact` — 4 canais diretos (e-mail/LinkedIn/GitHub/WhatsApp), sem formulário; util `brandHoverColor` extraído do `TechIcon` (66 testes)
-- ✅ `feat/hero-blueprint-motif` — hero da Home reconstruída: cena de papéis (`desk-scene.webp`) full-bleed atrás da foto de perfil emoldurada, coluna única com foto antes do texto até 1024px, lado a lado a partir daí, `--nav-height` (CSS var publicada pela `Navigation` via `ResizeObserver`, com guarda para browsers sem suporte) faz a hero caber em 100% da tela sem scroll, centralização própria em telas extra-grandes (69 testes)
+- ✅ `feat/hero-blueprint-motif` — hero da Home reconstruída: cena de papéis (`desk-scene.webp`) full-bleed atrás da foto de perfil emoldurada, coluna única com foto antes do texto até 1024px, lado a lado a partir daí, `--nav-height` (CSS var publicada pela `Navigation` via `ResizeObserver`, com guarda para browsers sem suporte) define a altura **mínima** da hero como a tela menos a nav — nos tamanhos testados ela cabe numa tela só, mas sem `overflow-hidden`: se o conteúdo precisar de mais espaço (zoom de fonte do navegador, texto maior no futuro), a seção cresce e a página rola normalmente, em vez de cortar conteúdo em silêncio (ver 4.19 para o caso residual em telas muito pequenas) (69 testes)
 
 ## Camada visual ("dar vida" — direção Swiss + craft, decidido 2026-09-10)
 

@@ -70,7 +70,15 @@ export const HomePage = () => {
             id="home"
             ref={sectionRef}
             aria-labelledby="home-title"
-            className="relative h-[calc(100svh-var(--nav-height,4.5rem))] overflow-hidden"
+            // min-h, não h-, e sem overflow-hidden: o conteúdo já está
+            // ajustado pra caber exatamente em "tela menos nav" nos tamanhos
+            // testados, então na prática já não sobra nem falta espaço. Mas
+            // com h- fixo + overflow-hidden, qualquer coisa que não
+            // previmos — zoom de fonte do navegador, um texto maior no
+            // futuro, um idioma com palavras mais longas — cortaria conteúdo
+            // em silêncio, sem nem uma barra de rolagem avisando. Com min-h,
+            // nesses casos a seção só cresce e a página rola normalmente.
+            className="relative min-h-[calc(100svh-var(--nav-height,4.5rem))]"
         >
             {/* Texto: o MESMO padrão `mx-auto max-w-6xl px-6` que Sobre,
                 Projetos e Contato usam — por isso alinha com elas em
