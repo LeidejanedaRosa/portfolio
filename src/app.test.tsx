@@ -45,5 +45,9 @@ describe('<App />', () => {
         const { container } = render(<App />);
 
         expect(await axe(container)).toHaveNoViolations();
-    });
+    }, // Timeout maior que o padrão (5s): a página inteira ficou mais rica
+    // (fluxo de tecnologias com 13 nós + SVG animado), e o axe-core
+    // escaneando a árvore toda pode passar de 5s quando a suíte inteira
+    // roda em paralelo e disputa CPU.
+    15000);
 });

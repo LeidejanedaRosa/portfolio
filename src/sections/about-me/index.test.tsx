@@ -25,23 +25,22 @@ describe('<AboutMe />', () => {
         ).toBeInTheDocument();
     });
 
-    it('mostra a stack agrupada com os nomes das tecnologias', () => {
+    it('mostra o fluxo de tecnologias com as 3 colunas', () => {
         render(<AboutMe />);
 
         expect(screen.getByText('Front-end')).toBeInTheDocument();
-        expect(screen.getByText('Testes & fluxo')).toBeInTheDocument();
+        expect(screen.getByText('Back-end')).toBeInTheDocument();
+        expect(screen.getByText('Dados')).toBeInTheDocument();
 
-        // nomes visíveis (a <svg> é decorativa, aria-hidden)
-        expect(screen.getByText('React')).toBeInTheDocument();
-        expect(screen.getByText('PostgreSQL')).toBeInTheDocument();
-        expect(screen.getByText('GitHub Actions')).toBeInTheDocument();
+        // 13 nós no diagrama
+        expect(screen.getAllByRole('button')).toHaveLength(13);
     });
 
-    it('cita as práticas que não têm logo', () => {
+    it('cita as tecnologias que não têm nó no diagrama', () => {
         render(<AboutMe />);
 
         expect(
-            screen.getByText(/playwright, testes e2e, ci\/cd/i),
+            screen.getByText(/express, celery, cypress, pytest/i),
         ).toBeInTheDocument();
     });
 
