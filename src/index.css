@@ -62,9 +62,13 @@
 
     html {
         scroll-behavior: smooth;
-        /* Nav fixa: py-3 (1.5rem) + controles h-11 (2.75rem) + borda ≈ 4.3rem.
-           Folga acima disso para o título da seção não encostar na barra. */
-        scroll-padding-top: 4.5rem;
+        /* var(--nav-height), não um valor fixo: tem que bater exatamente com
+           a altura real da barra (publicada em Layout). Um valor cravado
+           (ex.: 4.5rem) que ficasse MAIOR que a barra de verdade deixava uma
+           fresta onde a seção anterior ainda aparecia por baixo da barra ao
+           navegar por âncora — não precisa de folga extra, cada seção já tem
+           py-24 (96px) de respiro próprio antes do título. */
+        scroll-padding-top: var(--nav-height, 4.5rem);
     }
 
     /* Respeita quem pediu menos movimento no sistema operacional */
