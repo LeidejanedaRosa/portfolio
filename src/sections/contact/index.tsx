@@ -87,10 +87,22 @@ function ContactLink({ channel }: { channel: Channel }) {
 
 export const Contact = () => {
     return (
+        // h- (não min-h) + flex centering: o conteúdo já cabe com folga numa
+        // tela comum, então centralizar verticalmente faz a seção "dominar a
+        // tela" como a Home, em vez de ficar presa no topo com um vão vazio
+        // embaixo. Sem overflow-hidden: se algum dia não couber (zoom de
+        // fonte, mais um canal), a seção só cresce e a página rola — não
+        // corta nada.
+        //
+        // .justify-safe-center (utilitário em index.css): se um dia não
+        // couber, cai pro alinhamento no topo sozinho, em vez de centralizar
+        // o excesso pros dois lados e esconder o título "Contato" atrás da
+        // barra (mesmo raciocínio do Sobre Mim — ver o comentário lá e em
+        // index.css).
         <section
             id="contact"
             aria-labelledby="contact-title"
-            className="mx-auto max-w-6xl px-6 py-24"
+            className="justify-safe-center mx-auto flex h-[calc(100svh-var(--nav-height,4.5rem))] max-w-6xl flex-col px-6"
         >
             <h2
                 id="contact-title"

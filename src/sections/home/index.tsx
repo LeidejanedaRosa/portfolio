@@ -70,15 +70,21 @@ export const HomePage = () => {
             id="home"
             ref={sectionRef}
             aria-labelledby="home-title"
-            // min-h, não h-, e sem overflow-hidden: o conteúdo já está
-            // ajustado pra caber exatamente em "tela menos nav" nos tamanhos
-            // testados, então na prática já não sobra nem falta espaço. Mas
-            // com h- fixo + overflow-hidden, qualquer coisa que não
-            // previmos — zoom de fonte do navegador, um texto maior no
-            // futuro, um idioma com palavras mais longas — cortaria conteúdo
-            // em silêncio, sem nem uma barra de rolagem avisando. Com min-h,
-            // nesses casos a seção só cresce e a página rola normalmente.
-            className="relative min-h-[calc(100svh-var(--nav-height,4.5rem))]"
+            // h- (altura DEFINIDA), não min-h: os filhos abaixo usam h-full
+            // e inset-0 (a foto/cena do desktop, a centralização do texto) —
+            // isso só funciona em CSS se o ancestral tiver uma altura
+            // definida. min-height NÃO conta como definida pra esse cálculo,
+            // mesmo quando o resultado visual acaba do mesmo tamanho — os
+            // filhos com % colapsam pro tamanho do próprio conteúdo (foi
+            // exatamente isso que tirou a centralização do texto quando
+            // testei min-h aqui antes).
+            //
+            // Sem overflow-hidden: se o conteúdo algum dia precisar de mais
+            // espaço que essa altura (zoom de fonte, texto maior no futuro),
+            // ele só transborda visualmente pro rodapé — sem cortar nada —
+            // e a página rola mais um pouco pra mostrar. overflow:visible é
+            // o padrão, então isso já acontece sem precisar de mais nada.
+            className="relative h-[calc(100svh-var(--nav-height,4.5rem))]"
         >
             {/* Texto: o MESMO padrão `mx-auto max-w-6xl px-6` que Sobre,
                 Projetos e Contato usam — por isso alinha com elas em
@@ -154,18 +160,27 @@ export const HomePage = () => {
                                 667px e numa de 1024px, mas sobra MUITO mais
                                 altura de verdade na de 1024 — a conta abaixo
                                 usa essa sobra de verdade, em vez de um teto
-                                achatado igual pras duas. O `max(380px, …)` é
-                                só uma rede de segurança pra celular deitado
-                                (bem baixo) não zerar a imagem. Largura/altura
-                                em `auto`: o navegador usa o que for mais
-                                apertado dos dois e encolhe mantendo a
-                                proporção. */}
+                                achatado igual pras duas.
+
+                                O `max(160px, …)` é só uma rede de segurança
+                                pra celular deitado (bem baixo) não zerar a
+                                imagem — tem que ficar ABAIXO do que a conta já
+                                dá numa tela normal (ex.: ~214px numa tela de
+                                667px de altura), senão vira o valor que
+                                sempre "ganha" e o cálculo dinâmico é
+                                ignorado na prática (foi o que aconteceu com
+                                380px: maior que o orçamento real de qualquer
+                                celular comum, forçando a imagem além do
+                                espaço disponível e estourando a seção).
+                                Largura/altura em `auto`: o navegador usa o
+                                que for mais apertado dos dois e encolhe
+                                mantendo a proporção. */}
                             <img
                                 src={deskScene}
                                 alt="Anotações e esboços manuscritos de decisões de arquitetura de software: opções, trade-offs, custos estimados e princípios, com régua e esquadro ao lado"
                                 width={1300}
                                 height={1758}
-                                className="h-auto w-auto max-h-[max(380px,calc(100svh-var(--nav-height,4.5rem)-24rem))] max-w-[calc(100vw-3rem)]"
+                                className="h-auto w-auto max-h-[max(160px,calc(100svh-var(--nav-height,4.5rem)-24rem))] max-w-[calc(100vw-3rem)]"
                             />
                             <div className="absolute inset-x-0 top-1/2 mx-auto w-[54%] -translate-y-1/2 bg-background p-1.5 shadow-xl">
                                 <img
