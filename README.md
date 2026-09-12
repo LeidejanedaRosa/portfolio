@@ -1,50 +1,70 @@
-# React + TypeScript + Vite
+# Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Site pessoal de portfólio — single-page, minimalista/Swiss style, com dark mode, navegação por
+scroll-spy e diagrama animado de skills.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/index/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **React 19** + **TypeScript** + **Vite 6**
+- **Tailwind CSS 3** (tokens em `src/theme`)
+- **Framer Motion** para animação (respeitando `prefers-reduced-motion`)
+- **Vitest** + **Testing Library** + **vitest-axe** para testes unitários/componente e a11y
+- **ESLint** + **Prettier** + **Husky/lint-staged**
 
-## Expanding the ESLint configuration
+## Arquitetura
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Atomic Design para blocos de UI reutilizáveis, e uma pasta `sections` para o conteúdo de cada
+seção da página (não existe camada `templates`/`pages` separada — ver `docs/BACKLOG.md`):
 
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```
+src/
+  components/
+    atoms/        # blueprint-frame, code-snippet, skill-node, tech-icon
+    molecules/    # dark-mode, skills-flow
+    organisms/    # layout, navigation
+  sections/       # home, about-me, projects, contact
+  theme/          # ThemeProvider/useTheme (dark mode)
+  lib/            # utilitários (ex: brand-hover-color)
+  test/           # setup global de testes
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+Cada componente/seção tem seu teste colocado ao lado (`index.test.tsx`).
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## Como rodar
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+```bash
+npm install
+npm run dev       # http://localhost:5173
 ```
+
+## Como testar
+
+```bash
+npm test              # testes unitários/componente (vitest)
+npm run test:watch    # modo watch
+npm run test:coverage # com cobertura
+npm run test:types    # checagem de tipos dos testes
+npm run lint           # ESLint
+npm run format          # Prettier --write
+```
+
+## Build
+
+```bash
+npm run build   # tsc -b && vite build
+npm run preview # serve o build de /dist localmente
+```
+
+## Qualidade
+
+- Pre-commit (Husky): lint + testes afetados via `lint-staged`.
+- Pre-push (Husky): checagem de tipos + suite completa de testes.
+- CI (GitHub Actions, `.github/workflows/ci.yml`): lint, type-check, testes e build em todo
+  push/PR pra `main`.
+- Padrão de engenharia completo (arquitetura por tier, Definition of Done, PR template,
+  auditoria) em `~/.claude/CLAUDE.md`.
+
+## Backlog e decisões
+
+Ver [`docs/BACKLOG.md`](docs/BACKLOG.md) para o histórico de decisões de produto/design e
+pendências conhecidas.
