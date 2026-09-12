@@ -8,6 +8,7 @@ import {
     type ReactNode,
 } from 'react';
 
+import { gtag } from '@src/lib/gtag';
 import { loadGTM } from '@src/lib/load-gtm';
 
 export type ConsentStatus = 'accepted' | 'rejected' | null;
@@ -61,19 +62,24 @@ export function ConsentProvider({ children }: { children: ReactNode }) {
 
     const accept = useCallback(() => {
         persist('accepted');
+        gtag('consent', 'update', { analytics_storage: 'granted' });
         setStatus('accepted');
     }, []);
 
     const reject = useCallback(() => {
         persist('rejected');
+        gtag('consent', 'update', { analytics_storage: 'denied' });
         setStatus('rejected');
     }, []);
 
-    // Reabre o banner (usado pelo link "Preferências de cookies"). Não
-    // remove o GTM já carregado nesta sessão — recarregar a página aplica
-    // a nova escolha desde o início.
+    // Reabre o banner (usado pelo link "Preferências de cookies"). O
+    // gtag('update', denied) aqui É o que realmente para o rastreamento se
+    // o GTM já estava rodando nesta sessão (ex: aceitou antes, mudou de
+    // ideia agora) — sem ele, só limpar o localStorage não revoga nada até
+    // recarregar a página.
     const reset = useCallback(() => {
         persist(null);
+        gtag('consent', 'update', { analytics_storage: 'denied' });
         setStatus(null);
     }, []);
 
