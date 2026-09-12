@@ -62,7 +62,8 @@ npm run preview # serve o build de /dist localmente
 - CI (GitHub Actions, `.github/workflows/ci.yml`): lint, type-check, testes e build em todo
   push/PR pra `main`.
 - Padrão de engenharia completo (arquitetura por tier, Definition of Done, PR template,
-  auditoria) em `~/.claude/CLAUDE.md`.
+  auditoria) segue o padrão pessoal da autora. Um `CLAUDE.md` específico deste projeto,
+  versionado no repositório, está planejado (ver `docs/BACKLOG.md`).
 
 ## Backlog e decisões
 
