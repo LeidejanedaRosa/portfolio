@@ -29,6 +29,14 @@ describe('<App />', () => {
         ).toBeInTheDocument();
     });
 
+    it('mostra o aviso de cookies quando ainda não há escolha salva', () => {
+        render(<App />);
+
+        expect(
+            screen.getByRole('region', { name: /aviso de cookies/i }),
+        ).toBeInTheDocument();
+    });
+
     it('tem os landmarks <nav> e <main> e o skip link', () => {
         render(<App />);
 
@@ -45,8 +53,7 @@ describe('<App />', () => {
         const { container } = render(<App />);
 
         expect(await axe(container)).toHaveNoViolations();
-    }, // Timeout maior que o padrão (5s): a página inteira ficou mais rica
-    // (fluxo de tecnologias com 13 nós + SVG animado), e o axe-core
+    }, // (fluxo de tecnologias com 13 nós + SVG animado), e o axe-core // Timeout maior que o padrão (5s): a página inteira ficou mais rica
     // escaneando a árvore toda pode passar de 5s quando a suíte inteira
     // roda em paralelo e disputa CPU.
     15000);

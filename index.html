@@ -92,32 +92,15 @@
             }
         </script>
 
-        <script>
-            (function (w, d, s, l, i) {
-                w[l] = w[l] || [];
-                w[l].push({
-                    'gtm.start': new Date().getTime(),
-                    event: 'gtm.js',
-                });
-                var f = d.getElementsByTagName(s)[0],
-                    j = d.createElement(s),
-                    dl = l != 'dataLayer' ? '&l=' + l : '';
-                j.async = true;
-                j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-                f.parentNode.insertBefore(j, f);
-            })(window, document, 'script', 'dataLayer', 'GTM-KLCNXQQ');
-        </script>
+        <!--
+          O GTM NÃO carrega mais aqui. Ele só é injetado via JS depois do
+          aceite explícito no banner de cookies (ver src/consent e
+          src/lib/load-gtm) — exigência da LGPD. Por isso também não há mais
+          o <iframe> de fallback pra no-script: sem JS não tem como pedir
+          consentimento, então sem JS não há rastreamento nenhum.
+        -->
     </head>
     <body>
-        <noscript>
-            <iframe
-                title="google-tag-manager"
-                src="https://www.googletagmanager.com/ns.html?id=GTM-KLCNXQQ"
-                height="0"
-                width="0"
-                style="display: none; visibility: hidden"
-            ></iframe>
-        </noscript>
         <noscript>You need to enable JavaScript to run this app.</noscript>
         <div id="root"></div>
         <script type="module" src="/src/index.tsx"></script>
