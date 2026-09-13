@@ -21,9 +21,13 @@ export default defineConfig({
         { name: 'webkit', use: { ...devices['Desktop Safari'] } },
     ],
     // Builda e serve o bundle de PRODUÇÃO (não o dev server) — é o mais
-    // próximo do que realmente vai pro ar, e é o que o CI também roda.
+    // próximo do que realmente vai pro ar. No CI o build já rodou como step
+    // próprio antes deste job (ver ci.yml) — buildar de novo aqui seria
+    // repetir ~15s à toa; local não tem essa garantia, então builda sempre.
     webServer: {
-        command: `npm run build && npm run preview -- --port ${PORT}`,
+        command: process.env.CI
+            ? `npm run preview -- --port ${PORT}`
+            : `npm run build && npm run preview -- --port ${PORT}`,
         url: `http://localhost:${PORT}`,
         reuseExistingServer: !process.env.CI,
         timeout: 60_000,
