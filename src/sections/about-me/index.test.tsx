@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { axe } from 'vitest-axe';
 import { describe, expect, it } from 'vitest';
 
@@ -32,16 +32,33 @@ describe('<AboutMe />', () => {
         expect(screen.getByText('Back-end')).toBeInTheDocument();
         expect(screen.getByText('Dados')).toBeInTheDocument();
 
-        // 13 nós no diagrama
-        expect(screen.getAllByRole('button')).toHaveLength(13);
+        // 14 nós no diagrama (5 front-end + 6 back-end + 3 dados)
+        expect(screen.getAllByRole('button')).toHaveLength(14);
     });
 
-    it('cita as tecnologias que não têm nó no diagrama', () => {
+    it('mostra no carrossel tanto ferramentas com logo quanto práticas sem marca', () => {
         render(<AboutMe />);
 
+        const carousel = screen.getByRole('list', {
+            name: 'Outras ferramentas do dia a dia',
+        });
+        expect(carousel).toBeInTheDocument();
+
+        // O carrossel duplica a lista pro loop visual (a cópia é
+        // aria-hidden) — por isso a checagem fica restrita aos <li>
+        // acessíveis, em vez de um getByText solto no documento inteiro.
+        // 11 itens: 5 com logo (Cypress, Pytest, Git, GitHub Actions,
+        // Storybook) + 6 sem logo (Playwright, CI/CD, Clean Code, SOLID,
+        // Acessibilidade, Arquitetura — práticas/metodologias ou marca fora
+        // do pacote de ícones, ver comentário no arquivo).
+        const items = within(carousel).getAllByRole('listitem');
+        expect(items).toHaveLength(11);
+        expect(within(items[0]).getByText('Cypress')).toBeInTheDocument();
         expect(
-            screen.getByText(/express, celery, cypress, pytest/i),
+            within(items[3]).getByText('GitHub Actions'),
         ).toBeInTheDocument();
+        expect(within(items[4]).getByText('Storybook')).toBeInTheDocument();
+        expect(within(items[7]).getByText('Clean Code')).toBeInTheDocument();
     });
 
     it('não tem violações de acessibilidade', async () => {
