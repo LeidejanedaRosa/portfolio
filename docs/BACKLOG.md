@@ -125,10 +125,11 @@
 - [x] `feat/hero-polish` — parallax perceptível: feito em `feat/hero-blueprint-motif` (cena + foto reagem ao scroll, `prefers-reduced-motion` desliga). "Pista de scroll" e "fundo com grade" **não** entraram nesse escopo — a direção do hero mudou (composição foto+papéis em vez de grade) — viram itens novos abaixo se ainda fizerem sentido
 - [ ] `feat/hero-polish` (sobras) — pista de scroll indicando "role para baixo"; textura de grade de fundo, se ainda fizer sentido com a composição atual do hero
 
-**As 4 seções de conteúdo estão completas** (Home, Sobre, Projetos, Contato), e a esteira de
+**As 4 seções de conteúdo estão completas** (Home, Sobre, Projetos, Contato), a esteira de
 qualidade também: CI com branch protection, e2e (Playwright), Lighthouse CI, secret scan
-(gitleaks), consentimento de cookies (LGPD), SEO básico (OG válido, JSON-LD, robots.txt) e
-documentação (README, `CLAUDE.md`, template de PR). Sobre Mim segue em polimento ativo
+(gitleaks), consentimento de cookies (LGPD), SEO básico (OG válido, JSON-LD, robots.txt +
+sitemap.xml) e documentação (README, `CLAUDE.md`, template de PR) — e o site já está no ar
+(Vercel, `leidejanedarosa.vercel.app`, deploy automático). Sobre Mim segue em polimento ativo
 (`feat/about-tech-carousel`, mais o redesenho de duas partes combinado — ver conversa em
-andamento). Daqui pra frente: fechar esse polimento, decidir hospedagem (§6.1, destrava CD e
-`sitemap.xml`), e os itens de menor prioridade que sobraram em §1/§2/§3/§5.
+andamento). Daqui pra frente: fechar esse polimento, decidir domínio próprio (§6.2), e os
+itens de menor prioridade que sobraram em §1/§2/§3/§5.
