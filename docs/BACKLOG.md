@@ -27,7 +27,7 @@
 | #   | Item                                                                                                                                                                                                                                               | Prio | Onde resolver                | Motivo do adiamento                                                                |
 | --- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- | ---------------------------- | ---------------------------------------------------------------------------------- |
 | 2.1 | ~~**Branch protection no `main`**: exigir check da CI + exigir PR antes do merge~~ ✅ verificado via `gh api` — `required_status_checks` ("Lint · types · tests · build"), `enforce_admins`, `allow_force_pushes: false`, `allow_deletions: false` | ✅   | feito                        | Resolvido — configurado direto no GitHub (não é código)                            |
-| 2.2 | **CD (deploy automático)** — escolher host (GitHub Pages / Vercel / Netlify) e automatizar                                                                                                                                                         | 🟡   | branch `cd/deploy`           | Decisão de produto pendente (ver §6.1)                                             |
+| 2.2 | ~~**CD (deploy automático)**~~ ✅ Vercel conectado ao repo — deploy automático a cada push em `main`, preview automático por PR                                                                                                                    | ✅   | feito                        | Resolvido — confirmar que o auto-deploy do Git está ligado nas configs do projeto  |
 | 2.3 | Metas de cobertura por seção no `vitest.config.ts` (`coverage.thresholds`)                                                                                                                                                                         | 🟡   | ao construir cada `feat/*`   | 4 seções + Playwright já existem — ainda não configurado, mas já dá pra medir      |
 | 2.4 | Upload de cobertura (Codecov ou similar)                                                                                                                                                                                                           | 🟢   | branch `cd/deploy` ou depois | Precisa de conta/token externo                                                     |
 | 2.5 | Lighthouse CI (`lighthouserc.cjs`) roda a cada push — a11y/SEO/best-practices ≥ 90 falha o build; performance ainda só avisa (nota real ~60, bundle/fontes pesam)                                                                                  | 🟡   | branch de performance        | ✅ `chore/lighthouse-ci` — infra pronta; otimizar a métrica em si é tarefa própria |
@@ -68,9 +68,9 @@
 
 | #   | Item                                                                                                                                                                                                                                      | Prio | Onde resolver            | Motivo do adiamento                                                                               |
 | --- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- | ------------------------ | ------------------------------------------------------------------------------------------------- |
-| 5.1 | `index.html` — `og:url` duplicado ✅ consolidado (`fix/seo-meta`), mas o valor ainda é o placeholder `SEU-DOMINIO-AQUI` — OG segue não funcional até ter uma URL real                                                                     | 🟡   | branch SEO               | Bloqueado por 6.1 (URL de produção ainda não definida)                                            |
+| 5.1 | ~~`index.html` — `og:url` placeholder~~ ✅ `chore/production-url` — trocado pela URL real (`leidejanedarosa.vercel.app`) em `og:url`, `og:image` e no JSON-LD                                                                             | ✅   | feito                    | Resolvido                                                                                         |
 | 5.2 | ~~Google Tag Manager — confirmar se é desejado + banner de consentimento~~ ✅ `feat/cookie-consent` — decisão 6.3 tomada (manter, com consentimento); banner + diálogo de privacidade, Google Consent Mode v2, GTM só carrega após aceite | ✅   | feito                    | Resolvido                                                                                         |
-| 5.3 | `robots.txt` ✅ existe (`public/robots.txt`, via `chore/hygiene`) — **`sitemap.xml` ainda falta**                                                                                                                                         | 🟡   | branch SEO               | Sitemap só faz sentido quando a URL pública de produção estiver definida (6.1)                    |
+| 5.3 | ~~Sem `robots.txt` nem `sitemap.xml`~~ ✅ `chore/production-url` — `sitemap.xml` criado (1 URL — site de página única, âncoras não são páginas indexáveis à parte) e referenciado no `robots.txt`                                         | ✅   | feito                    | Resolvido                                                                                         |
 | 5.4 | ~~Structured data JSON-LD~~ ✅ `fix/seo-meta` — schema `Person` adicionado (`<script type="application/ld+json">`)                                                                                                                        | ✅   | feito                    | Resolvido — `WebSite` schema pode entrar depois se fizer sentido                                  |
 | 5.5 | Estratégia de `<h1>` único + meta description coerente numa SPA                                                                                                                                                                           | 🟡   | branch SEO               | Depende da estrutura final das seções — About ainda em polimento (ver `feat/about-tech-carousel`) |
 | 5.6 | ~~README ainda é o template do Vite~~ ✅ `chore/hygiene` — reescrito (stack, arquitetura, scripts, setup, quality gates)                                                                                                                  | ✅   | feito                    | Resolvido                                                                                         |
@@ -78,13 +78,13 @@
 
 ## 6. Decisões pendentes (precisam da Leidejane)
 
-| #   | Decisão                                                                                                                                      | Impacto                                 |
-| --- | -------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
-| 6.1 | Onde hospedar (GitHub Pages / Vercel / Netlify)                                                                                              | Define a branch de CD e config de build |
-| 6.2 | Domínio próprio?                                                                                                                             | DNS + config do host + `og:url`         |
-| 6.3 | ~~Manter o Google Tag Manager / analytics?~~ ✅ decidido — manter, com consentimento explícito (Consent Mode v2, GTM só carrega após aceite) | `feat/cookie-consent`                   |
-| 6.4 | ~~Contato: formulário ou links diretos?~~ ✅ decidido — links diretos (e-mail/LinkedIn/GitHub/WhatsApp), sem formulário/terceiro             | `feat/contact`                          |
-| 6.5 | Migrar para Tailwind v4 agora ou depois?                                                                                                     | Ver §1.2                                |
+| #   | Decisão                                                                                                                                      | Impacto                            |
+| --- | -------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| 6.1 | ~~Onde hospedar~~ ✅ decidido — Vercel, `leidejanedarosa.vercel.app`                                                                         | `chore/production-url`             |
+| 6.2 | Domínio próprio?                                                                                                                             | DNS + Settings → Domains no Vercel |
+| 6.3 | ~~Manter o Google Tag Manager / analytics?~~ ✅ decidido — manter, com consentimento explícito (Consent Mode v2, GTM só carrega após aceite) | `feat/cookie-consent`              |
+| 6.4 | ~~Contato: formulário ou links diretos?~~ ✅ decidido — links diretos (e-mail/LinkedIn/GitHub/WhatsApp), sem formulário/terceiro             | `feat/contact`                     |
+| 6.5 | Migrar para Tailwind v4 agora ou depois?                                                                                                     | Ver §1.2                           |
 
 ---
 
@@ -113,6 +113,8 @@
 - ✅ `docs/project-standard` (PR #22) — `CLAUDE.md` específico do projeto (tier, stack confirmada, arquitetura, design system, pendências conhecidas), README aponta pra ele em vez de "planejado"
 - ✅ `chore/pr-template` (PR #23) — `.github/pull_request_template.md` (descrição, tipo de alteração, checklist técnico, DoD, evidências, como testar, testes realizados, impacto/riscos), README menciona
 - ✅ `feat/about-tech-carousel` (PR #24) — Express/Celery na coluna Back-end do diagrama de skills (mesma categoria de Node.js/Python, sem edge documentado); Storybook sai do diagrama (ferramenta de dev, nunca vai pra produção) e entra no `TechCarousel` (componente novo: faixa horizontal com loop via CSS, itens com ou sem ícone — práticas sem marca como Clean Code/SOLID viram badge só com texto —, esmaecimento nas pontas via `mask-image`, pausa em hover **e** foco por teclado via `tabIndex`, WCAG 2.2.2). Corrigiu 4 bugs reais reportados com print/CodeRabbit: rótulos do diagrama colados na borda do quadro, tooltip sobrepondo o ícone da linha de baixo, pulo visível no loop do carrossel (matemática do `gap-3` no `translateX`), carrossel impossível de pausar só com teclado. `tsconfig` migrado de `baseUrl` (preterido, sai no TypeScript 7.0) pra `paths` relativos ao próprio arquivo (113 testes unitários + 24 e2e)
+- ✅ `docs/backlog-catchup` (PR #25) — backlog posto em dia com os 9 PRs (#16–#24) que nunca tinham entrada, cada afirmação de "resolvido" conferida contra o código real antes de marcar
+- ✅ `chore/production-url` — hospedagem decidida (§6.1: Vercel, `leidejanedarosa.vercel.app`, deploy automático por push + preview por PR); `og:url`/`og:image`/JSON-LD trocados do placeholder pra URL real; `sitemap.xml` criado (1 URL — página única, âncoras não são recursos indexáveis à parte) e referenciado no `robots.txt`
 
 ## Camada visual ("dar vida" — direção Swiss + craft, decidido 2026-09-10)
 
@@ -123,10 +125,11 @@
 - [x] `feat/hero-polish` — parallax perceptível: feito em `feat/hero-blueprint-motif` (cena + foto reagem ao scroll, `prefers-reduced-motion` desliga). "Pista de scroll" e "fundo com grade" **não** entraram nesse escopo — a direção do hero mudou (composição foto+papéis em vez de grade) — viram itens novos abaixo se ainda fizerem sentido
 - [ ] `feat/hero-polish` (sobras) — pista de scroll indicando "role para baixo"; textura de grade de fundo, se ainda fizer sentido com a composição atual do hero
 
-**As 4 seções de conteúdo estão completas** (Home, Sobre, Projetos, Contato), e a esteira de
+**As 4 seções de conteúdo estão completas** (Home, Sobre, Projetos, Contato), a esteira de
 qualidade também: CI com branch protection, e2e (Playwright), Lighthouse CI, secret scan
-(gitleaks), consentimento de cookies (LGPD), SEO básico (OG válido, JSON-LD, robots.txt) e
-documentação (README, `CLAUDE.md`, template de PR). Sobre Mim segue em polimento ativo
+(gitleaks), consentimento de cookies (LGPD), SEO básico (OG válido, JSON-LD, robots.txt +
+sitemap.xml) e documentação (README, `CLAUDE.md`, template de PR) — e o site já está no ar
+(Vercel, `leidejanedarosa.vercel.app`, deploy automático). Sobre Mim segue em polimento ativo
 (`feat/about-tech-carousel`, mais o redesenho de duas partes combinado — ver conversa em
-andamento). Daqui pra frente: fechar esse polimento, decidir hospedagem (§6.1, destrava CD e
-`sitemap.xml`), e os itens de menor prioridade que sobraram em §1/§2/§3/§5.
+andamento). Daqui pra frente: fechar esse polimento, decidir domínio próprio (§6.2), e os
+itens de menor prioridade que sobraram em §1/§2/§3/§5.

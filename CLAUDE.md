@@ -56,14 +56,15 @@ carregamento da página. Google Consent Mode v2 (`gtag('consent', 'default'/
 redefinir — inclusive revoga rastreamento no meio da sessão, não só depois de um
 reload.
 
+## Deploy
+
+Hospedado no Vercel: [leidejanedarosa.vercel.app](https://leidejanedarosa.vercel.app/).
+Deploy automático a cada push em `main`, preview automático por PR. Sem domínio
+próprio ainda (ver `docs/BACKLOG.md` §6.2).
+
 ## Pendências conhecidas
 
-- **URL de produção ainda não existe**: `og:url`/`og:image`/JSON-LD em
-  `index.html` usam placeholder (`https://SEU-DOMINIO-AQUI.exemplo/`) — trocar
-  quando o deploy for decidido.
 - **Performance do Lighthouse (~60) não otimizada ainda** — bundle JS (~365KB) e
   imagens (`desk-scene.webp`, 236KB) são os suspeitos mais prováveis.
-- **Branch protection na `main` do GitHub ainda não habilitada** — planejada pro
-  fim do ciclo de padronização em andamento.
 - Histórico completo de decisões de produto/design e outras pendências:
   [`docs/BACKLOG.md`](docs/BACKLOG.md).
