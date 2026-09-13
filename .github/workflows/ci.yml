@@ -62,3 +62,6 @@ jobs:
 
             - name: Testes e2e (Playwright — chromium, firefox, webkit)
               run: npm run test:e2e
+
+            - name: Lighthouse CI (perf/a11y/seo/best practices)
+              run: npm run test:lighthouse
