@@ -50,7 +50,7 @@ describe('<App />', () => {
     });
 
     // Timeout maior que o padrão (5s): a página inteira ficou mais rica
-    // (fluxo de tecnologias com 13 nós + SVG animado), e o axe-core
+    // (fluxo de tecnologias com 14 nós + SVG animado + carrossel), e o axe-core
     // escaneando a árvore toda pode passar de 5s quando a suíte inteira
     // roda em paralelo e disputa CPU.
     it('não tem violações de acessibilidade na página inteira', async () => {

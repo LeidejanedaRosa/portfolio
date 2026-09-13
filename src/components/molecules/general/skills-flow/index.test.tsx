@@ -16,8 +16,8 @@ describe('<SkillsFlow />', () => {
     it('tem um nó (botão) por skill, incluindo as conectadas e as que só aparecem no diagrama', () => {
         render(<SkillsFlow />);
 
-        // 13 nós ao todo: 6 front-end + 4 back-end + 3 dados
-        expect(screen.getAllByRole('button')).toHaveLength(13);
+        // 14 nós ao todo: 5 front-end + 6 back-end + 3 dados
+        expect(screen.getAllByRole('button')).toHaveLength(14);
     });
 
     it('descreve por texto as conexões reais, pra quem não vê as linhas do SVG', () => {
