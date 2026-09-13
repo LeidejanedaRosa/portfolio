@@ -54,6 +54,7 @@ npm run test:coverage # com cobertura
 npm run test:types    # checagem de tipos dos testes
 npm run test:e2e      # e2e (Playwright: chromium, firefox, webkit) — builda e serve sozinho,
                        # requer os browsers instalados (ver Requisitos locais)
+npm run test:lighthouse # Lighthouse CI contra o build (requer `npm run build` antes)
 npm run lint           # ESLint
 npm run format          # Prettier --write
 ```
@@ -71,7 +72,10 @@ npm run preview # serve o build de /dist localmente
   via `lint-staged`.
 - Pre-push (Husky): checagem de tipos + suite completa de testes.
 - CI (GitHub Actions, `.github/workflows/ci.yml`): scan de segredos (`gitleaks`), lint,
-  type-check, testes, build e e2e (Playwright, 3 browsers) em todo push/PR pra `main`.
+  type-check, testes, build, e2e (Playwright, 3 browsers) e Lighthouse CI em todo push/PR pra
+  `main`. Thresholds do Lighthouse (`lighthouserc.cjs`): a11y/SEO/best-practices ≥ 90 (falha o
+  build); performance ainda só avisa (nota real ~60 hoje — otimizar é trabalho futuro, travar o
+  build nisso agora só bloquearia PRs sem ninguém ter mexido em performance ainda).
 - Padrão de engenharia completo (arquitetura por tier, Definition of Done, PR template,
   auditoria) segue o padrão pessoal da autora. Um `CLAUDE.md` específico deste projeto,
   versionado no repositório, está planejado (ver `docs/BACKLOG.md`).
