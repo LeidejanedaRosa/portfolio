@@ -61,9 +61,14 @@ describe('<AboutMe />', () => {
         expect(within(items[7]).getByText('Clean Code')).toBeInTheDocument();
     });
 
+    // Timeout maior que o padrão (5s): a árvore cresceu (diagrama de 14 nós
+    // + carrossel com 22 <li>, 11 reais + 11 da cópia decorativa) e o
+    // axe-core escaneando tudo pode passar de 5s sob disputa de CPU (ex.:
+    // rodando junto de outros arquivos no hook do Husky) — isolado, roda em
+    // ~3.3s. Mesmo raciocínio já aplicado em app.test.tsx.
     it('não tem violações de acessibilidade', async () => {
         const { container } = render(<AboutMe />);
 
         expect(await axe(container)).toHaveNoViolations();
-    });
+    }, 15000);
 });
