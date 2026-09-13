@@ -56,3 +56,9 @@ jobs:
 
             - name: Build de produção
               run: npm run build # roda 'tsc -b' (type-check da app) + 'vite build'
+
+            - name: Instalar browsers do Playwright
+              run: npx playwright install --with-deps chromium firefox webkit
+
+            - name: Testes e2e (Playwright — chromium, firefox, webkit)
+              run: npm run test:e2e

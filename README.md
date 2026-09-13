@@ -35,6 +35,8 @@ Cada componente/seção tem seu teste colocado ao lado (`index.test.tsx`).
 - Node (versão em `.nvmrc`)
 - [`gitleaks`](https://github.com/gitleaks/gitleaks#installing) instalado e no `PATH` — o
   pre-commit do Husky bloqueia o commit se não encontrar o binário.
+- Browsers do Playwright: `npx playwright install chromium firefox webkit` (primeira vez, ou
+  de novo se a versão do `@playwright/test` em `package.json` mudar).
 
 ## Como rodar
 
@@ -50,6 +52,8 @@ npm test              # testes unitários/componente (vitest)
 npm run test:watch    # modo watch
 npm run test:coverage # com cobertura
 npm run test:types    # checagem de tipos dos testes
+npm run test:e2e      # e2e (Playwright: chromium, firefox, webkit) — builda e serve sozinho,
+                       # requer os browsers instalados (ver Requisitos locais)
 npm run lint           # ESLint
 npm run format          # Prettier --write
 ```
@@ -67,7 +71,7 @@ npm run preview # serve o build de /dist localmente
   via `lint-staged`.
 - Pre-push (Husky): checagem de tipos + suite completa de testes.
 - CI (GitHub Actions, `.github/workflows/ci.yml`): scan de segredos (`gitleaks`), lint,
-  type-check, testes e build em todo push/PR pra `main`.
+  type-check, testes, build e e2e (Playwright, 3 browsers) em todo push/PR pra `main`.
 - Padrão de engenharia completo (arquitetura por tier, Definition of Done, PR template,
   auditoria) segue o padrão pessoal da autora. Um `CLAUDE.md` específico deste projeto,
   versionado no repositório, está planejado (ver `docs/BACKLOG.md`).

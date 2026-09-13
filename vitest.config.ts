@@ -11,6 +11,10 @@ export default mergeConfig(
         test: {
             environment: 'jsdom', // DOM falso para rodar componentes React no Node
             globals: true, // describe/it/expect sem precisar importar em todo arquivo
+            // Sem isso, o glob padrão do Vitest (*.spec.ts) também pega os
+            // testes e2e do Playwright em e2e/ — dois test runners, dois
+            // "test"/"expect" incompatíveis, tentando rodar o mesmo arquivo.
+            include: ['src/**/*.test.{ts,tsx}'],
             setupFiles: ['./src/test/setup.ts'],
             css: true, // processa CSS Modules nos testes (não quebra em import de styles)
             restoreMocks: true, // cada teste começa com spies/mocks originais restaurados
