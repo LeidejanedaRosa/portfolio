@@ -71,6 +71,8 @@ npm run preview # serve o build de /dist localmente
 - Pre-commit (Husky): scan de segredos (`gitleaks protect --staged`) + lint + testes afetados
   via `lint-staged`.
 - Pre-push (Husky): checagem de tipos + suite completa de testes.
+- Todo PR usa o template em [`.github/pull_request_template.md`](.github/pull_request_template.md)
+  automaticamente — preencher, ou marcar `N/A` na seção que não se aplicar.
 - CI (GitHub Actions, `.github/workflows/ci.yml`): scan de segredos (`gitleaks`), lint,
   type-check, testes, build, e2e (Playwright, 3 browsers) e Lighthouse CI em todo push/PR pra
   `main`. Thresholds do Lighthouse (`lighthouserc.cjs`): a11y/SEO/best-practices ≥ 90 (falha o
