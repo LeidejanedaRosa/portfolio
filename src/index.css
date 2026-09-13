@@ -105,6 +105,62 @@
             );
         background-size: 1.75rem 1.75rem;
     }
+
+    /* Faixa de tecnologias rolando sozinha (<TechCarousel />). A lista é
+       duplicada no componente (2ª cópia com aria-hidden) só pra fechar o
+       loop visual.
+       -50% sozinho NÃO é a largura exata de uma cópia: o `gap-3` do
+       flex conta uma vez a mais do lado "de fora" (entre a última badge da
+       1ª cópia e a primeira da 2ª) do que a conta de "metade da largura
+       total" espera — a diferença é sempre exatamente MEIO gap (0.375rem,
+       metade de gap-3=0.75rem), não importa quantos itens tenham. Sem esse
+       ajuste, cada volta do loop dava um pulinho visível de 6px. */
+    @keyframes marquee {
+        from {
+            transform: translateX(0);
+        }
+        to {
+            transform: translateX(calc(-50% - 0.375rem));
+        }
+    }
+
+    .marquee-track {
+        animation: marquee 40s linear infinite;
+    }
+
+    /* WCAG 2.2.2 (Pause, Stop, Hide): conteúdo que se move sozinho por mais
+       de 5s precisa de um jeito de parar. Hover/foco pausa — cobre mouse e
+       teclado (Tab entra num item da lista, :focus-within pausa). */
+    .marquee-track:hover,
+    .marquee-track:focus-within {
+        animation-play-state: paused;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .marquee-track {
+            animation: none;
+        }
+    }
+
+    /* Esmaece as duas pontas da faixa (mask-image, não uma cor sólida por
+       cima) — funciona igual em qualquer fundo/tema, sem precisar cravar
+       uma cor que teria que ser trocada no dark mode. */
+    .marquee-fade {
+        mask-image: linear-gradient(
+            to right,
+            transparent,
+            black 8%,
+            black 92%,
+            transparent
+        );
+        -webkit-mask-image: linear-gradient(
+            to right,
+            transparent,
+            black 8%,
+            black 92%,
+            transparent
+        );
+    }
 }
 
 @layer utilities {

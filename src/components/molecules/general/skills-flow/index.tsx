@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import {
+    siCelery,
+    siExpress,
     siFastify,
     siFlask,
     siMongodb,
@@ -8,7 +10,6 @@ import {
     siPython,
     siReact,
     siRedis,
-    siStorybook,
     siStyledcomponents,
     siTailwindcss,
     siTypescript,
@@ -31,18 +32,27 @@ interface FlowNode {
 // demais aparecem no diagrama (ícone + tooltip) mas sem conexão, porque não
 // haveria uma combinação real de projeto pra representar.
 const NODES: readonly FlowNode[] = [
-    // Front-end
+    // Front-end (5 nós, não 6 — Storybook saiu daqui: é ferramenta de dev,
+    // nunca vai pro código de produção, mesma categoria de Git/Cypress/
+    // Pytest, que já estão no carrossel de about-me. Sobrou espaço: os 5
+    // usam o mesmo intervalo vertical de antes, só que com mais folga entre
+    // cada um — 20% de passo em vez de 16%.
     { id: 'react', icon: siReact, x: 12, y: 10 },
-    { id: 'typescript', icon: siTypescript, x: 12, y: 26 },
-    { id: 'tailwind', icon: siTailwindcss, x: 12, y: 42 },
-    { id: 'styled-components', icon: siStyledcomponents, x: 12, y: 58 },
-    { id: 'storybook', icon: siStorybook, x: 12, y: 74 },
+    { id: 'typescript', icon: siTypescript, x: 12, y: 30 },
+    { id: 'tailwind', icon: siTailwindcss, x: 12, y: 50 },
+    { id: 'styled-components', icon: siStyledcomponents, x: 12, y: 70 },
     { id: 'zod', icon: siZod, x: 12, y: 90 },
-    // Back-end
-    { id: 'nodejs', icon: siNodedotjs, x: 50, y: 8 },
-    { id: 'fastify', icon: siFastify, x: 50, y: 28 },
+    // Back-end (mesmo ritmo vertical do Front-end — 6 nós, mesmas 6 linhas —
+    // pra alinhar visualmente entre colunas). Express e Celery entraram
+    // aqui, e não só no texto, pelo mesmo motivo de Node.js/Python: são
+    // tecnologias de pipeline de verdade (backend), mesmo sem um projeto
+    // documentado conectando-as com linha.
+    { id: 'nodejs', icon: siNodedotjs, x: 50, y: 10 },
+    { id: 'express', icon: siExpress, x: 50, y: 26 },
+    { id: 'fastify', icon: siFastify, x: 50, y: 42 },
     { id: 'python', icon: siPython, x: 50, y: 58 },
-    { id: 'flask', icon: siFlask, x: 50, y: 78 },
+    { id: 'celery', icon: siCelery, x: 50, y: 74 },
+    { id: 'flask', icon: siFlask, x: 50, y: 90 },
     // Dados
     { id: 'mongodb', icon: siMongodb, x: 88, y: 30 },
     { id: 'postgresql', icon: siPostgresql, x: 88, y: 56 },
@@ -117,79 +127,95 @@ export const SkillsFlow = () => {
                 armazena em MongoDB — a stack do Sistema de Certificados (FCR).
             </p>
 
-            {/* Sem aria-hidden aqui: os nós dentro são botões reais e
-                focáveis (SkillNode) — escondê-los do wrapper inteiro os
-                tiraria da árvore de acessibilidade. Só o SVG dos conectores
-                (puramente decorativo) leva aria-hidden, abaixo. */}
-            <div className="relative mx-auto aspect-[9/10] w-full max-w-sm sm:aspect-[3/4]">
-                {/* Rótulos das colunas */}
-                {COLUMN_LABELS.map((col) => (
-                    <span
-                        key={col.label}
-                        className="absolute top-0 -translate-x-1/2 -translate-y-full pb-3 font-mono text-[10px] uppercase tracking-widest text-muted-foreground sm:text-xs"
-                        style={{ left: `${col.x}%` }}
+            {/* max-w-xs (não max-w-sm, como antes): diagrama menor pra
+                sobrar espaço na seção pro carrossel — a seção inteira
+                precisa caber numa tela só, sem scroll. */}
+            <div className="mx-auto w-full max-w-xs">
+                {/* Rótulos das colunas: linha própria, em fluxo normal — NÃO
+                    flutuando acima do diagrama via `-translate-y-full` (como
+                    era antes). Aquela versão "pedia emprestado" o padding do
+                    BlueprintFrame ao redor pra ter espaço, e se o padding do
+                    frame fosse menor que o rótulo + respiro precisava, o
+                    texto ficava colado (ou por cima) da borda do frame —
+                    exatamente o bug reportado. Uma altura própria (h-4/h-5)
+                    reserva o espaço de verdade, sem depender de quem estiver
+                    por fora. */}
+                <div className="relative mb-2 h-4 sm:h-5">
+                    {COLUMN_LABELS.map((col) => (
+                        <span
+                            key={col.label}
+                            className="absolute -translate-x-1/2 font-mono text-[10px] uppercase tracking-widest text-muted-foreground sm:text-xs"
+                            style={{ left: `${col.x}%` }}
+                        >
+                            {col.label}
+                        </span>
+                    ))}
+                </div>
+
+                {/* Sem aria-hidden aqui: os nós dentro são botões reais e
+                    focáveis (SkillNode) — escondê-los do wrapper inteiro os
+                    tiraria da árvore de acessibilidade. Só o SVG dos
+                    conectores (puramente decorativo) leva aria-hidden,
+                    abaixo. */}
+                <div className="relative aspect-[9/10] w-full sm:aspect-[3/4]">
+                    {/* Conectores: linha fixa (hairline) + "luz" animada por cima */}
+                    <svg
+                        aria-hidden="true"
+                        viewBox="0 0 100 100"
+                        preserveAspectRatio="none"
+                        className="absolute inset-0 h-full w-full overflow-visible"
                     >
-                        {col.label}
-                    </span>
-                ))}
+                        {EDGES.map((edge) => {
+                            const from = NODE_BY_ID.get(edge.from)!;
+                            const to = NODE_BY_ID.get(edge.to)!;
+                            const d = curvePath(from.x, from.y, to.x, to.y);
+                            const pathId = `skills-flow-edge-${edge.from}-${edge.to}`;
 
-                {/* Conectores: linha fixa (hairline) + "luz" animada por cima */}
-                <svg
-                    aria-hidden="true"
-                    viewBox="0 0 100 100"
-                    preserveAspectRatio="none"
-                    className="absolute inset-0 h-full w-full overflow-visible"
-                >
-                    {EDGES.map((edge) => {
-                        const from = NODE_BY_ID.get(edge.from)!;
-                        const to = NODE_BY_ID.get(edge.to)!;
-                        const d = curvePath(from.x, from.y, to.x, to.y);
-                        const pathId = `skills-flow-edge-${edge.from}-${edge.to}`;
-
-                        return (
-                            <g key={pathId}>
-                                <path
-                                    id={pathId}
-                                    d={d}
-                                    fill="none"
-                                    className="stroke-border"
-                                    strokeWidth={0.4}
-                                />
-                                {!prefersReducedMotion && (
-                                    <circle
-                                        r={0.9}
-                                        className="fill-accent"
-                                        style={{
-                                            filter: 'drop-shadow(0 0 2px rgb(var(--color-accent) / 0.9))',
-                                        }}
-                                    >
-                                        <animateMotion
-                                            dur="2.4s"
-                                            repeatCount="indefinite"
-                                            keyPoints="0;1"
-                                            keyTimes="0;1"
-                                            calcMode="linear"
+                            return (
+                                <g key={pathId}>
+                                    <path
+                                        id={pathId}
+                                        d={d}
+                                        fill="none"
+                                        className="stroke-border"
+                                        strokeWidth={0.4}
+                                    />
+                                    {!prefersReducedMotion && (
+                                        <circle
+                                            r={0.9}
+                                            className="fill-accent"
+                                            style={{
+                                                filter: 'drop-shadow(0 0 2px rgb(var(--color-accent) / 0.9))',
+                                            }}
                                         >
-                                            <mpath href={`#${pathId}`} />
-                                        </animateMotion>
-                                    </circle>
-                                )}
-                            </g>
-                        );
-                    })}
-                </svg>
+                                            <animateMotion
+                                                dur="2.4s"
+                                                repeatCount="indefinite"
+                                                keyPoints="0;1"
+                                                keyTimes="0;1"
+                                                calcMode="linear"
+                                            >
+                                                <mpath href={`#${pathId}`} />
+                                            </animateMotion>
+                                        </circle>
+                                    )}
+                                </g>
+                            );
+                        })}
+                    </svg>
 
-                {/* Nós (ícone + tooltip), por cima dos conectores */}
-                {NODES.map((node) => (
-                    <SkillNode
-                        key={node.id}
-                        icon={node.icon}
-                        style={{
-                            left: `${node.x}%`,
-                            top: `${node.y}%`,
-                        }}
-                    />
-                ))}
+                    {/* Nós (ícone + tooltip), por cima dos conectores */}
+                    {NODES.map((node) => (
+                        <SkillNode
+                            key={node.id}
+                            icon={node.icon}
+                            style={{
+                                left: `${node.x}%`,
+                                top: `${node.y}%`,
+                            }}
+                        />
+                    ))}
+                </div>
             </div>
         </div>
     );
