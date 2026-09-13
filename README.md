@@ -77,8 +77,8 @@ npm run preview # serve o build de /dist localmente
   build); performance ainda só avisa (nota real ~60 hoje — otimizar é trabalho futuro, travar o
   build nisso agora só bloquearia PRs sem ninguém ter mexido em performance ainda).
 - Padrão de engenharia completo (arquitetura por tier, Definition of Done, PR template,
-  auditoria) segue o padrão pessoal da autora. Um `CLAUDE.md` específico deste projeto,
-  versionado no repositório, está planejado (ver `docs/BACKLOG.md`).
+  auditoria) segue o padrão pessoal da autora. Especificidades deste projeto (tier, stack,
+  design system, pendências) estão versionadas em [`CLAUDE.md`](CLAUDE.md), na raiz.
 
 ## Backlog e decisões
 
