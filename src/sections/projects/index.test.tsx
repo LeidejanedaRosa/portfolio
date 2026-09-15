@@ -96,9 +96,11 @@ describe('<Projects />', () => {
         );
     });
 
+    // Timeout maior que o padrão (5s): sob disputa de CPU (ex.: suíte
+    // inteira rodando no hook de pre-push) o axe-core pode passar de 5s.
     it('não tem violações de acessibilidade', async () => {
         const { container } = render(<Projects />);
 
         expect(await axe(container)).toHaveNoViolations();
-    });
+    }, 15000);
 });
