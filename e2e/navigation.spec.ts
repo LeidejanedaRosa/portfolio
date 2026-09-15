@@ -21,7 +21,10 @@ test('carrega a home com o nome e navega pelas seções via navbar', async ({
 
     await nav.getByRole('link', { name: 'Sobre' }).click();
     await expect(
-        page.getByRole('heading', { level: 2, name: /sobre mim/i }),
+        page.getByRole('heading', {
+            level: 2,
+            name: /desenvolvedora full stack/i,
+        }),
     ).toBeInViewport();
 
     await nav.getByRole('link', { name: 'Projetos' }).click();
