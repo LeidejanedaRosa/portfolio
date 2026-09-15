@@ -19,7 +19,10 @@ describe('<App />', () => {
             }),
         ).toBeInTheDocument();
         expect(
-            screen.getByRole('heading', { level: 2, name: /sobre mim/i }),
+            screen.getByRole('heading', {
+                level: 2,
+                name: /desenvolvedora full stack/i,
+            }),
         ).toBeInTheDocument();
         expect(
             screen.getByRole('heading', { level: 2, name: /projetos/i }),
