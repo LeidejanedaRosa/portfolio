@@ -18,10 +18,10 @@
         --color-surface: 255 255 255; /* white      */
         --color-surface-foreground: 15 23 42; /* slate-900  */
 
-        --color-muted: 226 232 240; /* slate-200  */
+        --color-muted: 148 163 184; /* slate-400  (2.5:1 vs bg — hover perceptível) */
         --color-muted-foreground: 71 85 105; /* slate-600  (6.6:1 sobre bg) */
 
-        --color-border: 226 232 240; /* slate-200  */
+        --color-border: 100 116 139; /* slate-500  (4.55:1 vs bg — WCAG 1.4.11 ≥3:1) */
 
         --color-primary: 15 23 42; /* slate-900  */
         --color-primary-foreground: 248 250 252; /* slate-50   */
@@ -45,10 +45,10 @@
         --color-surface: 30 41 59; /* slate-800  */
         --color-surface-foreground: 241 245 249;
 
-        --color-muted: 30 41 59; /* slate-800  */
+        --color-muted: 71 85 105; /* slate-600  (antes = surface, hover ficava 100% invisível) */
         --color-muted-foreground: 148 163 184; /* slate-400  */
 
-        --color-border: 51 65 85; /* slate-700  */
+        --color-border: 100 116 139; /* slate-500  (3.07:1 vs surface — WCAG 1.4.11 ≥3:1) */
 
         --color-primary: 241 245 249; /* slate-100  */
         --color-primary-foreground: 15 23 42; /* slate-900  */
