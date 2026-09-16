@@ -70,21 +70,27 @@ export const HomePage = () => {
             id="home"
             ref={sectionRef}
             aria-labelledby="home-title"
-            // h- (altura DEFINIDA), não min-h: os filhos abaixo usam h-full
-            // e inset-0 (a foto/cena do desktop, a centralização do texto) —
-            // isso só funciona em CSS se o ancestral tiver uma altura
-            // definida. min-height NÃO conta como definida pra esse cálculo,
-            // mesmo quando o resultado visual acaba do mesmo tamanho — os
-            // filhos com % colapsam pro tamanho do próprio conteúdo (foi
-            // exatamente isso que tirou a centralização do texto quando
-            // testei min-h aqui antes).
+            // grid + min-h (não flex + h-full) abaixo de 1024px: a foto
+            // mobile cresce com a altura da tela (calc(100svh-nav-24rem) lá
+            // embaixo), e em telas estreitas-mas-altas (ex.: janela de
+            // desktop redimensionada pra ~960px de largura) esse conteúdo
+            // pode passar de 1000px — bem mais que 100svh-nav. Com `height`
+            // fixo isso TRANSBORDAVA por cima da seção Sobre (a altura da
+            // section não mudava, só o conteúdo vazava pra fora da caixa).
+            // `min-h` resolve isso (a caixa cresce se o conteúdo pedir mais),
+            // mas só funciona pra centralizar com Grid: com Flexbox, os
+            // filhos que usam `h-full`/`%` pra centralizar via
+            // justify-center colapsam pra `auto` quando o pai só tem
+            // min-height (a altura não é "definida" pra esse cálculo em
+            // CSS, só min-height sozinho não conta) — foi o que tirou a
+            // centralização quando testei min-h aqui antes. Grid não tem
+            // esse problema: `place-items-center` centraliza o item dentro
+            // da row disponível sem exigir altura percentual nos filhos.
             //
-            // Sem overflow-hidden: se o conteúdo algum dia precisar de mais
-            // espaço que essa altura (zoom de fonte, texto maior no futuro),
-            // ele só transborda visualmente pro rodapé — sem cortar nada —
-            // e a página rola mais um pouco pra mostrar. overflow:visible é
-            // o padrão, então isso já acontece sem precisar de mais nada.
-            className="relative h-[calc(100svh-var(--nav-height,4.5rem))]"
+            // A partir de 1024px volta pro `height` fixo (não só min-h):
+            // é o que a cena full-bleed abaixo (`absolute inset-0`) precisa
+            // pra ocupar a section inteira de forma previsível.
+            className="relative grid min-h-[calc(100svh-var(--nav-height,4.5rem))] lg:h-[calc(100svh-var(--nav-height,4.5rem))]"
         >
             {/* Texto: o MESMO padrão `mx-auto max-w-6xl px-6` que Sobre,
                 Projetos e Contato usam — por isso alinha com elas em
@@ -98,8 +104,8 @@ export const HomePage = () => {
                 inteira (não dos 1152px do container), quebrando em telas
                 largas. Com essa div extra, o pai passa a ser o max-w-6xl já
                 travado em 1152px, e a conta fica estável em qualquer tela. */}
-            <div className="relative z-10 mx-auto h-full max-w-6xl px-6">
-                <div className="flex h-full flex-col justify-center gap-4 py-3 lg:gap-16 lg:py-8 lg:pr-[52%]">
+            <div className="relative z-10 mx-auto w-full max-w-6xl self-center px-6">
+                <div className="flex flex-col gap-4 py-3 lg:gap-16 lg:py-8 lg:pr-[52%]">
                     {/* `order-2`: visualmente depois da foto em coluna única —
                         mas continua primeiro no DOM (o <h1> antes do conteúdo
                         decorativo é o que faz sentido pra quem lê com leitor
