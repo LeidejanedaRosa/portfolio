@@ -134,5 +134,6 @@ scan (gitleaks), consentimento de cookies (LGPD), SEO básico (OG válido, JSON-
 sitemap.xml) e documentação (README, `CLAUDE.md`, template de PR) — e o site já está no ar
 (Vercel, `leidejanedarosa.vercel.app`, deploy automático). O redesenho de Sobre Mim (PR #27) e
 da Home (`feat/home-remove-photo`) fecharam o polimento visual ativo. Daqui pra frente: decidir
-domínio próprio (§6.2), e os itens de menor prioridade que sobraram em §1/§2/§3/§5 — nenhum
-bloqueando, é manutenção/polimento a partir daqui.
+domínio próprio (§6.2), manter o hábito de teste `axe` em componente novo (3.2 — 🔴 alta, mas é
+prática contínua, não um item que "fecha"), e os demais itens de menor prioridade que sobraram
+em §1/§2/§3/§5 — nenhum bloqueando, é manutenção/polimento a partir daqui.
