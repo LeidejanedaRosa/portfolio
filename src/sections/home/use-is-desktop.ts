@@ -14,6 +14,7 @@ export function useIsDesktop() {
         const handleChange = (event: MediaQueryListEvent) =>
             setIsDesktop(event.matches);
 
+        setIsDesktop(mediaQuery.matches);
         mediaQuery.addEventListener('change', handleChange);
         return () => mediaQuery.removeEventListener('change', handleChange);
     }, []);
