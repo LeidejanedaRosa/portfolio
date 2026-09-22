@@ -85,8 +85,8 @@ const COLUMN_LABELS = [
 
 const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
 
-// Hook próprio (mesmo padrão do `useIsDesktop` da Home) em vez do
-// `useReducedMotion` do Framer Motion: o hook da lib guarda o valor inicial
+// Hook próprio em vez do `useReducedMotion` do Framer Motion: o hook da lib
+// guarda o valor inicial
 // numa referência de módulo, então um `matchMedia` mockado *depois* que a
 // lib já carregou não é reconsultado — em teste, o mock nunca "pega". Um
 // hook local, que lê `matchMedia` a cada montagem, responde de verdade.
