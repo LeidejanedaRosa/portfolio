@@ -25,36 +25,18 @@ describe('<HomePage />', () => {
         ).toHaveAttribute('href', '#projects');
     });
 
-    it('em telas pequenas, não baixa a foto dos cadernos (só o fundo atrás do texto)', () => {
+    it('a foto de fundo é decorativa (não entra na árvore de acessibilidade)', () => {
         render(<HomePage />);
 
-        expect(
-            screen.queryByRole('img', { name: /cadernos com anotações/i }),
-        ).not.toBeInTheDocument();
+        expect(screen.queryAllByRole('img')).toHaveLength(0);
     });
 
-    it('em telas grandes, renderiza a foto dos cadernos com dimensões declaradas (evita CLS)', () => {
-        vi.spyOn(window, 'matchMedia').mockImplementation(
-            (query) =>
-                ({
-                    matches: query.includes('1024px'),
-                    media: query,
-                    onchange: null,
-                    addListener: () => {},
-                    removeListener: () => {},
-                    addEventListener: () => {},
-                    removeEventListener: () => {},
-                    dispatchEvent: () => false,
-                }) as MediaQueryList,
-        );
+    it('a foto de fundo declara dimensões (evita CLS) e é a mesma em qualquer breakpoint', () => {
+        const { container } = render(<HomePage />);
 
-        render(<HomePage />);
-
-        const photo = screen.getByRole('img', {
-            name: /cadernos com anotações/i,
-        });
-        expect(photo).toHaveAttribute('width', '1264');
-        expect(photo).toHaveAttribute('height', '842');
+        const photo = container.querySelector('img[aria-hidden="true"]');
+        expect(photo).toHaveAttribute('width', '1280');
+        expect(photo).toHaveAttribute('height', '720');
     });
 
     it('não tem violações de acessibilidade', async () => {
