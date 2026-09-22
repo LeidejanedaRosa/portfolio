@@ -5,7 +5,7 @@ interface GlowPortraitProps {
 
 export const GlowPortrait = ({ src, alt }: GlowPortraitProps) => {
     return (
-        <div className="relative flex h-[22rem] items-end justify-center sm:h-[26rem] lg:h-[30rem]">
+        <div className="relative mx-auto aspect-square h-64 sm:h-72 lg:h-80">
             <div
                 aria-hidden="true"
                 className="pointer-events-none absolute -inset-8 rounded-full bg-accent/20 blur-3xl"
@@ -16,7 +16,7 @@ export const GlowPortrait = ({ src, alt }: GlowPortraitProps) => {
             />
             <div
                 aria-hidden="true"
-                className="pointer-events-none absolute left-1/2 top-1/2 aspect-square h-[75%] w-auto -translate-x-1/2 -translate-y-1/2 rounded-full border border-accent/25"
+                className="pointer-events-none absolute left-1/2 top-1/2 aspect-square h-[75%] w-auto -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-accent/60"
             />
             <span
                 aria-hidden="true"
@@ -31,7 +31,7 @@ export const GlowPortrait = ({ src, alt }: GlowPortraitProps) => {
                 alt={alt}
                 width={427}
                 height={585}
-                className="relative z-10 h-full w-auto max-w-full object-contain object-bottom"
+                className="absolute inset-0 z-10 h-full w-full object-cover object-top"
             />
         </div>
     );

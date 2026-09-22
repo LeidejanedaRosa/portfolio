@@ -18,9 +18,14 @@ export const AboutMe = () => {
         <section
             id="about"
             aria-labelledby="about-title"
-            className="mx-auto max-w-6xl overflow-x-clip px-6 xl:overflow-x-visible"
+            className="relative overflow-x-clip px-6 xl:overflow-x-visible"
         >
-            <div className="py-12 lg:py-16">
+            <ThemedBackgroundImage
+                lightSrc={blueprintBgLight}
+                darkSrc={blueprintBgDark}
+            />
+
+            <div className="mx-auto max-w-6xl py-12 lg:py-16">
                 <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
                     <div>
                         <p className="font-mono text-xs font-bold uppercase text-accent">
@@ -61,12 +66,7 @@ export const AboutMe = () => {
                 </div>
             </div>
 
-            <div className="relative pb-24 pt-8 lg:pt-4">
-                <ThemedBackgroundImage
-                    lightSrc={blueprintBgLight}
-                    darkSrc={blueprintBgDark}
-                />
-
+            <div className="mx-auto max-w-6xl pb-24 pt-8 lg:pt-4">
                 <div className="grid gap-10 md:grid-cols-2 lg:gap-12 xl:grid-cols-3">
                     <div className="col-span-1">
                         <h3 className="font-mono text-xl font-bold text-foreground">

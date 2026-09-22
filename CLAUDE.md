@@ -43,8 +43,10 @@ esquecimento.
 - Tipografia: JetBrains Mono (headings) + IBM Plex Sans (body), self-hosted via
   `@fontsource-variable` (sem CDN de terceiro).
 - Cor: família slate + sky do Tailwind. `primary #0F172A`, `secondary #334155`,
-  `accent/CTA #0369A1`, `background #F8FAFC`, `border #E2E8F0`, `error #DC2626`.
-  Dark mode inverte (tokens custom properties em `src/index.css`, `@layer base`).
+  `accent/CTA #0369A1`, `background #F8FAFC`, `border #64748B` (slate-500 — não
+  slate-200: o tom mais claro tinha só 1.18:1 de contraste contra o fundo,
+  abaixo do mínimo de 3:1 do WCAG 1.4.11 pra bordas/UI), `error #DC2626`. Dark
+  mode inverte (tokens custom properties em `src/index.css`, `@layer base`).
 - Navegação: single-page com scroll suave + `IntersectionObserver` pra marcar a
   aba ativa (`use-active-section`).
 
@@ -65,6 +67,6 @@ próprio ainda (ver `docs/BACKLOG.md` §6.2).
 ## Pendências conhecidas
 
 - **Performance do Lighthouse (~60) não otimizada ainda** — bundle JS (~365KB) e
-  imagens (`desk-scene.webp`, 236KB) são os suspeitos mais prováveis.
+  as imagens de fundo/hero são os suspeitos mais prováveis.
 - Histórico completo de decisões de produto/design e outras pendências:
   [`docs/BACKLOG.md`](docs/BACKLOG.md).
