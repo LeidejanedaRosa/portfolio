@@ -521,8 +521,13 @@ export const Projects = () => {
         const ul = timelineRef.current;
         if (!ul) return;
 
-        function measure() {
-            const ulHeight = ul.offsetHeight;
+        // `list` como parâmetro (não capturar `ul` direto): TypeScript não
+        // preserva o `if (!ul) return` acima dentro de uma function
+        // declaration — ela é hoisted e podia, na visão do compilador, ser
+        // chamada de qualquer lugar, então `ul` volta a ser
+        // `HTMLUListElement | null` lá dentro.
+        function measure(list: HTMLUListElement) {
+            const ulHeight = list.offsetHeight;
             if (!ulHeight) return;
 
             setThresholds(
@@ -532,7 +537,7 @@ export const Projects = () => {
             );
         }
 
-        measure();
+        measure(ul);
 
         if (typeof ResizeObserver === 'undefined') {
             // Navegador sem suporte (raro hoje): mede uma vez no mount e
@@ -540,7 +545,7 @@ export const Projects = () => {
             return;
         }
 
-        const observer = new ResizeObserver(measure);
+        const observer = new ResizeObserver(() => measure(ul));
         observer.observe(ul);
         return () => observer.disconnect();
     }, []);
