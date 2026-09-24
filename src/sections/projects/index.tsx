@@ -323,6 +323,13 @@ function ProjectPreview({
                     src={url}
                     title={`Pré-visualização ao vivo de ${title}`}
                     loading="lazy"
+                    // allow-same-origin: o Verificador do FCR é
+                    // offline-first via Service Worker, que exige o mesmo
+                    // origin do iframe pra registrar. Sem allow-top-navigation
+                    // nem allow-popups: o site embutido não pode redirecionar
+                    // a aba inteira nem abrir popups. Sem allow-downloads:
+                    // nenhum dos sites embutidos oferece download.
+                    sandbox="allow-scripts allow-same-origin allow-forms"
                     className="h-full w-full"
                 />
             </div>
@@ -507,12 +514,16 @@ export const Projects = () => {
     // Posição de cada bolinha (centro vertical do <li>) como fração 0–1 da
     // altura da lista — mesmo referencial do `scrollYProgress`, comparado
     // direto em `TimelineRow`. `useLayoutEffect`: mede antes do primeiro
-    // paint, sem flash. Remedido no resize (altura muda entre breakpoints).
+    // paint, sem flash. ResizeObserver na <ul> (não só `resize` da window):
+    // a altura da lista também muda quando um <details> de código abre —
+    // mesmo padrão de <Layout /> pro --nav-height.
     useLayoutEffect(() => {
+        const ul = timelineRef.current;
+        if (!ul) return;
+
         function measure() {
-            const ul = timelineRef.current;
-            const ulHeight = ul?.offsetHeight;
-            if (!ul || !ulHeight) return;
+            const ulHeight = ul.offsetHeight;
+            if (!ulHeight) return;
 
             setThresholds(
                 liRefs.current.map((li) =>
@@ -522,8 +533,16 @@ export const Projects = () => {
         }
 
         measure();
-        window.addEventListener('resize', measure);
-        return () => window.removeEventListener('resize', measure);
+
+        if (typeof ResizeObserver === 'undefined') {
+            // Navegador sem suporte (raro hoje): mede uma vez no mount e
+            // segue sem observar — melhor que quebrar o app inteiro.
+            return;
+        }
+
+        const observer = new ResizeObserver(measure);
+        observer.observe(ul);
+        return () => observer.disconnect();
     }, []);
 
     return (
@@ -540,9 +559,9 @@ export const Projects = () => {
             </h2>
             <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
                 Os seis projetos abaixo são reais — a maioria é trabalho de
-                cliente ou de impacto social. Onde o repositório ainda é
-                privado, cada um traz um trecho real de código, sem segredos;
-                onde já está público, dá pra ver o código e o site no ar.
+                cliente ou de impacto social. Nos que ainda são privados, você
+                encontra um trecho real de código ou um link pra testar ao vivo;
+                nos que já são públicos, dá pra ver o código e o site no ar.
             </p>
 
             <ul ref={timelineRef} className="relative mt-16">
