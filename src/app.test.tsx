@@ -59,6 +59,9 @@ describe('<App />', () => {
     it('não tem violações de acessibilidade na página inteira', async () => {
         const { container } = render(<App />);
 
-        expect(await axe(container)).toHaveNoViolations();
+        // iframes: false — os previews ao vivo da seção Projetos travam o
+        // axe em jsdom (sem navegação real, o `src` nunca carrega; ver o
+        // mesmo comentário em sections/projects/index.test.tsx).
+        expect(await axe(container, { iframes: false })).toHaveNoViolations();
     }, 30000);
 });
