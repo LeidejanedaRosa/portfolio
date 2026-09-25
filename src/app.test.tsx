@@ -6,10 +6,10 @@ import { App } from './app';
 
 /**
  * Smoke test do pipeline real (aliases, framer-motion, tokens) + garantia de
- * que a página tem os landmarks, as 4 seções montadas e zero violação de a11y.
+ * que a página tem os landmarks, as 5 seções montadas e zero violação de a11y.
  */
 describe('<App />', () => {
-    it('monta as quatro seções com seus títulos', () => {
+    it('monta as cinco seções com seus títulos', () => {
         render(<App />);
 
         expect(
@@ -26,6 +26,12 @@ describe('<App />', () => {
         ).toBeInTheDocument();
         expect(
             screen.getByRole('heading', { level: 2, name: /projetos/i }),
+        ).toBeInTheDocument();
+        expect(
+            screen.getByRole('heading', {
+                level: 2,
+                name: /perguntas frequentes/i,
+            }),
         ).toBeInTheDocument();
         expect(
             screen.getByRole('heading', { level: 2, name: /contato/i }),
