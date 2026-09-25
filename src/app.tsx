@@ -3,6 +3,7 @@ import { Layout } from './components/organisms/general/layout';
 import { ConsentProvider } from './consent';
 import { AboutMe } from './sections/about-me';
 import { Contact } from './sections/contact';
+import { Faq } from './sections/faq';
 import { HomePage } from './sections/home';
 import { Projects } from './sections/projects';
 import { ThemeProvider } from './theme';
@@ -15,6 +16,7 @@ export const App = () => {
                     <HomePage />
                     <AboutMe />
                     <Projects />
+                    <Faq />
                     <Contact />
                 </Layout>
                 <CookieConsentBanner />

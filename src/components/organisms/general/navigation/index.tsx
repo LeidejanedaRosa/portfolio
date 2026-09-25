@@ -4,6 +4,7 @@ import {
     BriefcaseIcon,
     EnvelopeIcon,
     HomeIcon,
+    QuestionMarkCircleIcon,
     UserIcon,
     XMarkIcon,
 } from '@heroicons/react/24/outline';
@@ -23,6 +24,7 @@ const ITEMS: readonly NavItem[] = [
     { id: 'home', label: 'Início', Icon: HomeIcon },
     { id: 'about', label: 'Sobre', Icon: UserIcon },
     { id: 'projects', label: 'Projetos', Icon: BriefcaseIcon },
+    { id: 'faq', label: 'FAQ', Icon: QuestionMarkCircleIcon },
     { id: 'contact', label: 'Contato', Icon: EnvelopeIcon },
 ];
 const ITEM_IDS = ITEMS.map((item) => item.id);

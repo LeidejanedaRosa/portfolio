@@ -161,6 +161,48 @@
             transparent
         );
     }
+
+    /* Escurece as perguntas fechadas do FAQ quando uma está aberta OU sob o
+       mouse — o olho vai direto pra ativa, exatamente como no hover do
+       michaelpumo.com. `:has()` não tem variante pronta no Tailwind pra
+       "irmã com [open]/:hover em algum lugar dentro do mesmo pai", só pra
+       ancestral/descendente do próprio elemento (`has-*`), por isso a regra
+       é escrita à mão aqui.
+       Um seletor só (não dois separados pra [open] e :hover): com dois
+       seletores, passar o mouse numa pergunta diferente da que está aberta
+       esmaecia a aberta também (ela não estava sob o mouse). Juntando as
+       duas condições no :has() e excluindo quem é aberto OU hovered do lado
+       de fora, os dois ficam em destaque mesmo quando são itens diferentes.
+       opacity: 0.9, não 0.5: confirmado com axe-core num Chromium real (o
+       jsdom dos testes unitários não simula opacidade o bastante pra pegar
+       isso) que 0.5 quebra WCAG AA (2.2–3.4:1 conforme o elemento, abaixo do
+       4,5:1 mínimo) nos dois temas — o número (`text-accent`, cor mais clara)
+       é o pior caso, precisa do valor mais alto pra passar. */
+    .faq-list:has(details:hover, details[open])
+        details:not(:hover):not([open]) {
+        opacity: 0.9;
+    }
+
+    /* O título (fora da <ul>) precisa do mesmo esmaecimento — daí subir até
+       .faq-section, o ancestral comum, em vez de escrever a regra dentro de
+       .faq-list. Mesmo valor 0.9 do motivo acima: era `text-muted-foreground`
+       a 0.5, também abaixo de 4,5:1 nos dois temas. */
+    .faq-section:has(.faq-list details[open]) .faq-eyebrow,
+    .faq-section:has(.faq-list details:hover) .faq-eyebrow {
+        opacity: 0.9;
+    }
+
+    .faq-list details,
+    .faq-eyebrow {
+        transition: opacity 200ms ease;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .faq-list details,
+        .faq-eyebrow {
+            transition: none;
+        }
+    }
 }
 
 @layer utilities {

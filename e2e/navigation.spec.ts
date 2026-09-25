@@ -32,6 +32,11 @@ test('carrega a home com o nome e navega pelas seções via navbar', async ({
         page.getByRole('heading', { level: 2, name: /projetos/i }),
     ).toBeInViewport();
 
+    await nav.getByRole('link', { name: 'FAQ' }).click();
+    await expect(
+        page.getByRole('heading', { level: 2, name: /perguntas frequentes/i }),
+    ).toBeInViewport();
+
     await nav.getByRole('link', { name: 'Contato' }).click();
     await expect(
         page.getByRole('heading', { level: 2, name: /contato/i }),
