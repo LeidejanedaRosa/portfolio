@@ -22,7 +22,7 @@ describe('<Navigation />', () => {
         ).toBeInTheDocument();
     });
 
-    it('tem os 4 links âncora apontando para as seções', () => {
+    it('tem os 5 links âncora apontando para as seções', () => {
         renderNav();
 
         const hrefs = (name: RegExp) =>
@@ -33,6 +33,7 @@ describe('<Navigation />', () => {
         expect(hrefs(/início/i)).toContain('#home');
         expect(hrefs(/sobre/i)).toContain('#about');
         expect(hrefs(/projetos/i)).toContain('#projects');
+        expect(hrefs(/faq/i)).toContain('#faq');
         expect(hrefs(/contato/i)).toContain('#contact');
     });
 
