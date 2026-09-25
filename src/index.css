@@ -161,6 +161,42 @@
             transparent
         );
     }
+
+    /* Escurece as perguntas fechadas do FAQ quando uma está aberta OU sob o
+       mouse — o olho vai direto pra ativa, exatamente como no hover do
+       michaelpumo.com. `:has()` não tem variante pronta no Tailwind pra
+       "irmã com [open]/:hover em algum lugar dentro do mesmo pai", só pra
+       ancestral/descendente do próprio elemento (`has-*`), por isso a regra
+       é escrita à mão aqui.
+       Um seletor só (não dois separados pra [open] e :hover): com dois
+       seletores, passar o mouse numa pergunta diferente da que está aberta
+       esmaecia a aberta também (ela não estava sob o mouse). Juntando as
+       duas condições no :has() e excluindo quem é aberto OU hovered do lado
+       de fora, os dois ficam em destaque mesmo quando são itens diferentes. */
+    .faq-list:has(details:hover, details[open])
+        details:not(:hover):not([open]) {
+        opacity: 0.5;
+    }
+
+    /* O título (fora da <ul>) precisa do mesmo esmaecimento — daí subir até
+       .faq-section, o ancestral comum, em vez de escrever a regra dentro de
+       .faq-list. */
+    .faq-section:has(.faq-list details[open]) .faq-eyebrow,
+    .faq-section:has(.faq-list details:hover) .faq-eyebrow {
+        opacity: 0.5;
+    }
+
+    .faq-list details,
+    .faq-eyebrow {
+        transition: opacity 200ms ease;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .faq-list details,
+        .faq-eyebrow {
+            transition: none;
+        }
+    }
 }
 
 @layer utilities {
