@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import {
     siCelery,
     siExpress,
@@ -18,6 +17,7 @@ import {
 } from 'simple-icons';
 
 import { SkillNode } from '@components/atoms/skill-node';
+import { usePrefersReducedMotion } from '@src/lib/use-prefers-reduced-motion';
 
 interface FlowNode {
     id: string;
@@ -82,32 +82,6 @@ const COLUMN_LABELS = [
     { label: 'Back-end', x: 50 },
     { label: 'Dados', x: 88 },
 ] as const;
-
-const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
-
-// Hook próprio em vez do `useReducedMotion` do Framer Motion: o hook da lib
-// guarda o valor inicial
-// numa referência de módulo, então um `matchMedia` mockado *depois* que a
-// lib já carregou não é reconsultado — em teste, o mock nunca "pega". Um
-// hook local, que lê `matchMedia` a cada montagem, responde de verdade.
-function usePrefersReducedMotion() {
-    const [prefersReduced, setPrefersReduced] = useState(
-        () =>
-            typeof window !== 'undefined' &&
-            window.matchMedia(REDUCED_MOTION_QUERY).matches,
-    );
-
-    useEffect(() => {
-        const mediaQuery = window.matchMedia(REDUCED_MOTION_QUERY);
-        const handleChange = (event: MediaQueryListEvent) =>
-            setPrefersReduced(event.matches);
-
-        mediaQuery.addEventListener('change', handleChange);
-        return () => mediaQuery.removeEventListener('change', handleChange);
-    }, []);
-
-    return prefersReduced;
-}
 
 /**
  * Fluxo visual das principais tecnologias: front-end → back-end → dados, com
