@@ -166,6 +166,27 @@ describe('<Projects />', () => {
 
     // Timeout maior que o padrão (5s): sob disputa de CPU (ex.: suíte
     // inteira rodando no hook de pre-push) o axe-core pode passar de 5s.
+    it('tem fundo de blueprint nos dois temas, escondido de leitor de tela', () => {
+        const { container } = render(<Projects />);
+
+        const backgrounds = Array.from(
+            container.querySelectorAll('img'),
+        ).filter((img) =>
+            img.getAttribute('src')?.includes('projects-blueprint-bg'),
+        );
+
+        expect(backgrounds).toHaveLength(2);
+        for (const img of backgrounds) {
+            expect(img).toHaveAttribute('alt', '');
+            expect(img).toHaveAttribute('aria-hidden', 'true');
+        }
+        expect(
+            screen
+                .queryAllByRole('img')
+                .filter((img) => backgrounds.includes(img as HTMLImageElement)),
+        ).toHaveLength(0);
+    });
+
     it('não tem violações de acessibilidade', async () => {
         const { container } = render(<Projects />);
 
