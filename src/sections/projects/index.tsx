@@ -5,6 +5,7 @@ import projectsBgLight from '@assets/images/projects-blueprint-bg-light.webp';
 import projectsBgDark from '@assets/images/projects-blueprint-bg.webp';
 import { ThemedBackgroundImage } from '@components/molecules/general/themed-background-image';
 import { READING_LINE_OFFSET } from '@src/lib/reading-line';
+import { SECTION_PB, SECTION_PT } from '@src/lib/section-spacing';
 import { usePrefersReducedMotion } from '@src/lib/use-prefers-reduced-motion';
 
 import { PROJECTS } from './data';
@@ -88,7 +89,7 @@ export const Projects = () => {
         <section
             id="projects"
             aria-labelledby="projects-title"
-            className="relative px-6 py-24"
+            className={`relative px-6 ${SECTION_PB} ${SECTION_PT}`}
         >
             {/* Fundo "grudado" na tela, não esticado na seção inteira: com
                 ~3000px de altura, `object-cover` ampliaria a imagem 16:9 umas
