@@ -3,6 +3,7 @@ import { useRef } from 'react';
 
 import homeHeroBg from '@assets/images/home-hero-bg.webp';
 import { DuotoneBackgroundImage } from '@components/molecules/general/duotone-background-image';
+import { SECTION_PB, SECTION_PT } from '@src/lib/section-spacing';
 
 export const HomePage = () => {
     const prefersReducedMotion = useReducedMotion();
@@ -19,7 +20,7 @@ export const HomePage = () => {
             id="home"
             ref={sectionRef}
             aria-labelledby="home-title"
-            className="relative grid overflow-clip min-h-[calc(100svh-var(--nav-height,4.5rem))] lg:h-[calc(100svh-var(--nav-height,4.5rem))]"
+            className={`relative overflow-clip px-6 md:px-10 lg:px-12 ${SECTION_PB} ${SECTION_PT}`}
         >
             <DuotoneBackgroundImage
                 src={homeHeroBg}
@@ -28,7 +29,7 @@ export const HomePage = () => {
                 parallaxY={prefersReducedMotion ? 0 : parallaxY}
             />
 
-            <div className="relative z-10 mx-auto w-full max-w-6xl self-center px-6 py-12 md:px-10 lg:px-12 lg:py-8">
+            <div className="relative z-10 mx-auto w-full max-w-6xl">
                 <div className="max-w-xl">
                     <p className="font-mono text-sm uppercase tracking-[0.2em] text-accent">
                         Portfólio

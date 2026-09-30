@@ -52,8 +52,8 @@ export const STORY: readonly StoryCardEntry[] = [
         id: 'formacao',
         title: 'Formação',
         icon: GraduationCapIcon,
-        period: '1997 e 2011',
-        text: 'Onde tudo começou: Técnico em Informática (Visual Basic, Delphi, Access), seguido por Gestão de Negócios em 2011.',
+        period: '1997–2026',
+        text: 'Onde tudo começou: Técnico em Informática (Visual Basic, Delphi, Access), Gestão de Negócios em 2011 — e agora, Bacharelado em Engenharia de Software, em andamento.',
     },
 ] as const;
 
@@ -86,6 +86,12 @@ export const EXPERIENCE: readonly TimelineEntry[] = [
 ] as const;
 
 export const EDUCATION: readonly EducationEntry[] = [
+    {
+        id: 'engenharia-software',
+        course: 'Bacharelado em Engenharia de Software',
+        institution: 'Centro Universitário Cidade Verde — UNICIVE',
+        period: '2026–2030 (cursando)',
+    },
     {
         id: 'gestao-negocios',
         course: 'Gestão de Negócios',

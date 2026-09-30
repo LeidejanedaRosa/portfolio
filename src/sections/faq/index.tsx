@@ -1,5 +1,7 @@
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 
+import { SECTION_PB, SECTION_PT } from '@src/lib/section-spacing';
+
 interface FaqEntry {
     id: string;
     question: string;
@@ -46,15 +48,10 @@ const FAQS: readonly FaqEntry[] = [
 
 export const Faq = () => {
     return (
-        // min-h em toda largura (nunca h- fixo, nem em lg): 7 perguntas — ou
-        // uma resposta longa aberta — podem passar da altura da viewport
-        // mesmo em telas grandes. h- fixo cortaria a diferença pra fora da
-        // caixa da seção, sobrepondo o Contato logo abaixo; min-h só usa a
-        // viewport inteira como piso, e cresce se precisar.
         <section
             id="faq"
             aria-labelledby="faq-title"
-            className="faq-section justify-safe-center mx-auto flex min-h-[calc(100svh-var(--nav-height,4.5rem))] max-w-3xl flex-col px-6 lg:min-h-[calc(100svh-var(--nav-height,4.5rem))]"
+            className={`faq-section mx-auto max-w-2xl px-6 ${SECTION_PB} ${SECTION_PT}`}
         >
             <h2
                 id="faq-title"
@@ -74,7 +71,10 @@ export const Faq = () => {
                     return (
                         <li key={faq.id}>
                             <details name="faq" className="group py-5">
-                                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 [&::-webkit-details-marker]:hidden">
+                                {/* Sem justify-between: a seta fica logo
+                                    depois da pergunta, não esticada até a
+                                    borda do bloco. */}
+                                <summary className="flex cursor-pointer list-none items-center gap-3 [&::-webkit-details-marker]:hidden">
                                     <span className="flex items-baseline gap-4">
                                         <span className="font-mono text-sm text-accent">
                                             {number}

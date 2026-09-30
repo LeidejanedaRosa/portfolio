@@ -4,6 +4,7 @@ import { siGithub, siGmail, siWhatsapp, type SimpleIcon } from 'simple-icons';
 import { BlueprintFrame } from '@components/atoms/blueprint-frame';
 import { useConsent } from '@src/consent';
 import { brandHoverColor } from '@src/lib/brand-hover-color';
+import { SECTION_PB, SECTION_PT } from '@src/lib/section-spacing';
 
 // simple-icons removeu o logo do LinkedIn do pacote (política de marca da
 // plataforma) — mesmo formato de ícone (SimpleIcon), mantido localmente.
@@ -74,11 +75,14 @@ function ContactLink({ channel }: { channel: Channel }) {
             >
                 <path d={channel.icon.path} />
             </svg>
-            <span className="flex flex-col">
+            {/* min-w-0: sem isso, o e-mail (uma string sem espaço) força esta
+                coluna flex a crescer no tamanho do texto inteiro, estourando
+                a largura do card em telas estreitas (320px). */}
+            <span className="flex min-w-0 flex-col">
                 <span className="font-mono text-sm font-medium text-foreground">
                     {channel.label}
                 </span>
-                <span className="text-sm text-muted-foreground">
+                <span className="break-words text-sm text-muted-foreground">
                     {channel.handle}
                 </span>
             </span>
@@ -90,22 +94,17 @@ export const Contact = () => {
     const { reset } = useConsent();
 
     return (
-        // h- (não min-h) + flex centering: o conteúdo já cabe com folga numa
-        // tela comum, então centralizar verticalmente faz a seção "dominar a
-        // tela" como a Home, em vez de ficar presa no topo com um vão vazio
-        // embaixo. Sem overflow-hidden: se algum dia não couber (zoom de
-        // fonte, mais um canal), a seção só cresce e a página rola — não
-        // corta nada.
-        //
-        // .justify-safe-center (utilitário em index.css): se um dia não
-        // couber, cai pro alinhamento no topo sozinho, em vez de centralizar
-        // o excesso pros dois lados e esconder o título "Contato" atrás da
-        // barra (mesmo raciocínio do Sobre Mim — ver o comentário lá e em
-        // index.css).
+        // min-h: como é a última seção, sem conteúdo depois pra "dar corda" à
+        // rolagem, a página não teria como rolar o suficiente pra encostar o
+        // título dela no topo se o conteúdo for mais baixo que a tela
+        // (sobraria um vão — medido de verdade, 331px a mais que as outras
+        // seções num desktop comum). Altura mínima de uma tela garante espaço
+        // de rolagem de sobra; o conteúdo continua alinhado no topo (pt-16),
+        // não centralizado.
         <section
             id="contact"
             aria-labelledby="contact-title"
-            className="justify-safe-center mx-auto flex h-[calc(100svh-var(--nav-height,4.5rem))] max-w-6xl flex-col px-6"
+            className={`mx-auto min-h-[calc(100svh-var(--nav-height,4.5rem))] max-w-6xl px-6 ${SECTION_PB} ${SECTION_PT}`}
         >
             <h2
                 id="contact-title"
@@ -119,7 +118,11 @@ export const Contact = () => {
             </p>
 
             <BlueprintFrame grid className="mt-10 p-6">
-                <ul className="grid gap-4 sm:grid-cols-2">
+                {/* grid-cols-1 explícito: sem ele, a coluna única implícita
+                    do grid é dimensionada pelo conteúdo (min-content), não
+                    pela largura disponível — o card do e-mail estourava a
+                    tela em 320px mesmo com o texto já quebrando linha. */}
+                <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     {CHANNELS.map((channel) => (
                         <li key={channel.id}>
                             <ContactLink channel={channel} />
@@ -131,7 +134,7 @@ export const Contact = () => {
             <button
                 type="button"
                 onClick={reset}
-                className="mt-6 self-start text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground"
+                className="mt-6 text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground"
             >
                 Preferências de cookies
             </button>
