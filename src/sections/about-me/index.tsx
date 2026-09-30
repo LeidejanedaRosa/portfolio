@@ -10,6 +10,7 @@ import { SkillsFlow } from '@components/molecules/general/skills-flow';
 import { StoryCards } from '@components/molecules/general/story-cards';
 import { TechCarousel } from '@components/molecules/general/tech-carousel';
 import { ThemedBackgroundImage } from '@components/molecules/general/themed-background-image';
+import { SECTION_PB, SECTION_PT } from '@src/lib/section-spacing';
 
 import { COURSES, EDUCATION, EXPERIENCE, STORY, TOOLING } from './data';
 
@@ -25,7 +26,7 @@ export const AboutMe = () => {
                 darkSrc={blueprintBgDark}
             />
 
-            <div className="mx-auto max-w-6xl py-12 lg:py-16">
+            <div className={`mx-auto max-w-6xl pb-12 lg:pb-16 ${SECTION_PT}`}>
                 <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
                     <div>
                         <p className="font-mono text-xs font-bold uppercase text-accent">
@@ -66,7 +67,7 @@ export const AboutMe = () => {
                 </div>
             </div>
 
-            <div className="mx-auto max-w-6xl pb-24 pt-8 lg:pt-4">
+            <div className={`mx-auto max-w-6xl pt-8 lg:pt-4 ${SECTION_PB}`}>
                 <div className="grid gap-10 md:grid-cols-2 lg:gap-12 xl:grid-cols-3">
                     <div className="col-span-1">
                         <h3 className="font-mono text-xl font-bold text-foreground">
@@ -94,7 +95,7 @@ export const AboutMe = () => {
                             <div className="mt-5">
                                 <CourseList
                                     entries={COURSES}
-                                    initialCount={4}
+                                    initialCount={2}
                                 />
                             </div>
                         </div>
