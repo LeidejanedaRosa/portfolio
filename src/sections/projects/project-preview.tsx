@@ -1,3 +1,8 @@
+// Altura fixa do preview abaixo de md (ver comentário no wrapper). 440px
+// mostra bem mais do site embutido do que os 320px de antes, sem ficar
+// longo demais de rolar no celular.
+const MOBILE_PREVIEW_HEIGHT = 'h-[440px]';
+
 export function ProjectPreview({
     title,
     url,
@@ -11,7 +16,16 @@ export function ProjectPreview({
     hugCenter: 'left' | 'right';
 }) {
     return (
-        <div className="flex h-full min-h-80 flex-col">
+        // Altura fixa (não min-h-*) abaixo de md: sem `md:grid` (ver
+        // TimelineRow), não existe irmão de linha pro CSS Grid esticar
+        // contra, então este wrapper fica com altura "auto" mesmo com
+        // min-height — e altura "auto" não é definida o bastante pra
+        // propagar % pros filhos (o `flex-1` do box do iframe, e o
+        // `h-full` do próprio iframe), que caíam pro tamanho padrão do
+        // navegador (~300×150). Altura fixa dá definição pra essa cadeia
+        // de % resolver direito; md:h-full volta a esticar igual ao card
+        // quando o Grid entra em ação.
+        <div className={`flex ${MOBILE_PREVIEW_HEIGHT} flex-col md:h-full`}>
             <div className="flex shrink-0 items-center justify-between gap-3 pb-2">
                 <span className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
                     Exemplo ao vivo
