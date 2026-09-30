@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, type Ref } from 'react';
 import {
     Bars3Icon,
     BriefcaseIcon,
@@ -55,7 +55,17 @@ function NavLink({
     );
 }
 
-export const Navigation = () => {
+export const Navigation = ({
+    barRef,
+}: {
+    /** Ref da barra fixa (sem o painel mobile) — quem publica
+     * `--nav-height` (`<Layout />`) precisa medir só ela, não o `<nav>`
+     * inteiro: com o painel do menu mobile somado, abrir o menu "infla" a
+     * altura publicada, e um link clicado lá dentro rola a página usando
+     * essa altura inflada — sobra um vão acima da seção de destino, porque
+     * o painel já fechou quando o salto termina. */
+    barRef?: Ref<HTMLDivElement>;
+}) => {
     const active = useActiveSection(ITEM_IDS);
     const [menuOpen, setMenuOpen] = useState(false);
     const menuButtonRef = useRef<HTMLButtonElement>(null);
@@ -79,7 +89,10 @@ export const Navigation = () => {
 
     return (
         <nav aria-label="Principal">
-            <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-3">
+            <div
+                ref={barRef}
+                className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-3"
+            >
                 <a
                     href="#home"
                     onClick={() => setMenuOpen(false)}

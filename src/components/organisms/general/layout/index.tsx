@@ -20,20 +20,24 @@ interface LayoutProps {
  * inteira (bem mais alta que ele) — sobra espaço de verdade pra grudar.
  */
 export function Layout({ children }: LayoutProps) {
-    const headerRef = useRef<HTMLElement>(null);
+    const navBarRef = useRef<HTMLDivElement>(null);
 
-    // Publica a altura real da barra fixa (o <header>) como variável CSS
-    // (--nav-height). A Home usa isso pra fazer a hero ocupar "tela menos
-    // barra" sem cravar um número mágico que quebraria se a barra mudasse de
-    // altura (ex.: menu mobile aberto, zoom do navegador).
+    // Publica a altura real da barra fixa como variável CSS (--nav-height).
+    // A Home usa isso pra fazer a hero ocupar "tela menos barra" sem cravar
+    // um número mágico que quebraria se a barra mudasse de altura (ex.: zoom
+    // do navegador). Mede só a barra (via `barRef` da `<Navigation />`), não
+    // o <header> inteiro: o header também contém o painel do menu mobile, e
+    // medir o header junto faria a altura publicada "inflar" enquanto o menu
+    // está aberto — ver o comentário em `barRef` na Navigation pro bug real
+    // que isso causava.
     useEffect(() => {
-        const header = headerRef.current;
-        if (!header) return;
+        const bar = navBarRef.current;
+        if (!bar) return;
 
         const updateHeight = () => {
             document.documentElement.style.setProperty(
                 '--nav-height',
-                `${header.getBoundingClientRect().height}px`,
+                `${bar.getBoundingClientRect().height}px`,
             );
         };
 
@@ -46,7 +50,7 @@ export function Layout({ children }: LayoutProps) {
         }
 
         const observer = new ResizeObserver(updateHeight);
-        observer.observe(header);
+        observer.observe(bar);
         return () => observer.disconnect();
     }, []);
 
@@ -65,11 +69,8 @@ export function Layout({ children }: LayoutProps) {
                 Home → Sobre), então o "vidro fosco" deixava a última fatia
                 da seção anterior transparecer através dela — lia como bug,
                 não como efeito. */}
-            <header
-                ref={headerRef}
-                className="sticky top-0 z-50 border-b border-border bg-background"
-            >
-                <Navigation />
+            <header className="sticky top-0 z-50 border-b border-border bg-background">
+                <Navigation barRef={navBarRef} />
             </header>
 
             {/* tabIndex=-1: alvo focável do skip link. O foco visível vem da
