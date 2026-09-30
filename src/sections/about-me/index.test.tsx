@@ -82,7 +82,7 @@ describe('<AboutMe />', () => {
         ).toBeInTheDocument();
     });
 
-    it('mostra só os 4 cursos de mais peso, com botão pra expandir os outros 10', async () => {
+    it('mostra só os 2 cursos de mais peso, com botão pra expandir os outros 12', async () => {
         const user = userEvent.setup();
         render(<AboutMe />);
 
@@ -91,14 +91,16 @@ describe('<AboutMe />', () => {
         ).toBeInTheDocument();
 
         // 14 cursos confirmados (Coodesh consolidado só na data mais
-        // recente de cada teste, a pedido dela) — só 4 visíveis até
-        // expandir, os de mais carga/substância primeiro.
+        // recente de cada teste, a pedido dela) — só 2 visíveis até
+        // expandir (a coluna de Educação ganhou uma 3ª entrada — a
+        // faculdade em andamento —, então Cursos mostra menos por padrão
+        // pra continuar alinhada com a altura da coluna Experiência).
         const lists = screen.getAllByRole('list');
         const courseList = lists.find((list) =>
             within(list).queryByText(/desenvolvimento de software/i),
         ) as HTMLElement;
         expect(courseList).toBeTruthy();
-        expect(within(courseList).getAllByRole('listitem')).toHaveLength(4);
+        expect(within(courseList).getAllByRole('listitem')).toHaveLength(2);
         expect(
             within(courseList).getAllByRole('listitem')[0],
         ).toHaveTextContent('Cubos Academy');
