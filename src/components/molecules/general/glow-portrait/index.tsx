@@ -16,7 +16,7 @@ export const GlowPortrait = ({ src, alt }: GlowPortraitProps) => {
             />
             <div
                 aria-hidden="true"
-                className="pointer-events-none absolute left-1/2 top-1/2 aspect-square h-[75%] w-auto -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-accent/60"
+                className="pointer-events-none absolute -inset-3 rounded-full border-2 border-accent/60"
             />
             <span
                 aria-hidden="true"
