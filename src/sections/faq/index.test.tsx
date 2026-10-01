@@ -16,13 +16,10 @@ describe('<Faq />', () => {
         expect(heading).toHaveAttribute('id', 'faq-title');
     });
 
-    it('lista as sete perguntas, todas fechadas por padrão', () => {
+    it('lista as quatro perguntas, todas fechadas por padrão', () => {
         render(<Faq />);
 
         const questions = [
-            'Que tipo de projeto você topa?',
-            'Trabalha remoto?',
-            'Qual sua stack?',
             'Por que alguns projetos são privados?',
             'Quanto tempo dura um projeto?',
             'Você também faz o design, ou só o desenvolvimento?',
@@ -40,7 +37,7 @@ describe('<Faq />', () => {
         const user = userEvent.setup();
         render(<Faq />);
 
-        const question = screen.getByText('Trabalha remoto?');
+        const question = screen.getByText('Quanto tempo dura um projeto?');
         const details = question.closest('details') as HTMLDetailsElement;
 
         expect(details).not.toHaveAttribute('open');
@@ -48,17 +45,38 @@ describe('<Faq />', () => {
         await user.click(question);
 
         expect(details).toHaveAttribute('open');
-        expect(screen.getByText(/freelancer 100% remoto/i)).toBeVisible();
+        expect(screen.getByText(/poucas semanas/i)).toBeVisible();
     });
 
     it('todo <details> compartilha o mesmo `name` — só um fica aberto por vez (accordion nativo, sem estado em React)', () => {
         render(<Faq />);
 
         const allDetails = document.querySelectorAll('details');
-        expect(allDetails.length).toBe(7);
+        expect(allDetails.length).toBe(4);
         allDetails.forEach((details) => {
             expect(details).toHaveAttribute('name', 'faq');
         });
+    });
+
+    it('tem fundo de blueprint nos dois temas, escondido de leitor de tela', () => {
+        const { container } = render(<Faq />);
+
+        const backgrounds = Array.from(
+            container.querySelectorAll('img'),
+        ).filter((img) =>
+            img.getAttribute('src')?.includes('faq-blueprint-bg'),
+        );
+
+        expect(backgrounds).toHaveLength(2);
+        for (const img of backgrounds) {
+            expect(img).toHaveAttribute('alt', '');
+            expect(img).toHaveAttribute('aria-hidden', 'true');
+        }
+        expect(
+            screen
+                .queryAllByRole('img')
+                .filter((img) => backgrounds.includes(img as HTMLImageElement)),
+        ).toHaveLength(0);
     });
 
     it('não tem violações de acessibilidade', async () => {
