@@ -1,4 +1,5 @@
 import js from '@eslint/js';
+import eslintConfigPrettier from 'eslint-config-prettier';
 import globals from 'globals';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
@@ -7,7 +8,14 @@ import tseslint from 'typescript-eslint';
 export default tseslint.config(
     { ignores: ['dist', 'coverage', '.husky'] },
     {
-        extends: [js.configs.recommended, ...tseslint.configs.recommended],
+        // eslintConfigPrettier por último: desliga só as regras de formatação
+        // do ESLint que conflitariam com o Prettier (quem formata é o
+        // Prettier; o ESLint cuida de lint de verdade).
+        extends: [
+            js.configs.recommended,
+            ...tseslint.configs.recommended,
+            eslintConfigPrettier,
+        ],
         files: ['**/*.{ts,tsx}'],
         languageOptions: {
             ecmaVersion: 2020,
