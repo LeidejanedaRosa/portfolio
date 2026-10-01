@@ -1,7 +1,11 @@
+import { ArrowDownTrayIcon } from '@heroicons/react/24/outline';
 import { type CSSProperties } from 'react';
 import { siGithub, siGmail, siWhatsapp, type SimpleIcon } from 'simple-icons';
 
+import contactBgLight from '@assets/images/contact-blueprint-bg-light.webp';
+import contactBgDark from '@assets/images/contact-blueprint-bg.webp';
 import { BlueprintFrame } from '@components/atoms/blueprint-frame';
+import { ThemedBackgroundImage } from '@components/molecules/general/themed-background-image';
 import { useConsent } from '@src/consent';
 import { brandHoverColor } from '@src/lib/brand-hover-color';
 import { SECTION_PB, SECTION_PT } from '@src/lib/section-spacing';
@@ -13,6 +17,10 @@ const linkedinIcon: SimpleIcon = {
     hex: '0A66C2',
     path: 'M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z',
 } as SimpleIcon;
+
+// Arquivo estático em `public/` (não importado como módulo): só precisa
+// estar no caminho certo pra funcionar, sem passar pelo bundler.
+const RESUME_HREF = '/leidejane-da-rosa-curriculo.pdf';
 
 interface Channel {
     id: string;
@@ -53,7 +61,7 @@ const CHANNELS: readonly Channel[] = [
     },
 ];
 
-function ContactLink({ channel }: { channel: Channel }) {
+function ContactLink({ channel }: { readonly channel: Channel }) {
     const isExternal = !channel.href.startsWith('mailto:');
 
     return (
@@ -61,17 +69,34 @@ function ContactLink({ channel }: { channel: Channel }) {
             href={channel.href}
             target={isExternal ? '_blank' : undefined}
             rel={isExternal ? 'noreferrer noopener' : undefined}
-            className="group flex items-center gap-4 rounded-lg border border-border p-4 transition-colors duration-200 hover:border-accent hover:bg-muted"
+            // bg-background sólido: sem isso, a grade "blueprint" do fundo da
+            // seção passava por trás do card e ficava confusa de ler (mesmo
+            // motivo do ProjectCard em Projetos). Borda e ícone usam a MESMA
+            // cor de marca no hover (--brand-hover-*, aqui no <a> pra
+            // cascatear pro <svg> filho) — já existia só no ícone; bg-muted
+            // puro (sólido) ficava escuro demais como "sombreado" do card, o
+            // /20 deixa só uma sugestão de preenchimento. Duas variáveis (não
+            // uma): o preto do GitHub precisa continuar preto no tema claro
+            // (lê bem ali) e só virar accent no escuro, onde sumiria —
+            // `brandHoverColor(hex, theme)` já resolve isso por tema.
+            className="group flex items-center gap-4 rounded-lg border border-border bg-background p-4 transition-colors duration-200 hover:border-[var(--brand-hover-light)] hover:bg-muted/20 dark:hover:border-[var(--brand-hover-dark)]"
+            style={
+                {
+                    '--brand-hover-light': brandHoverColor(
+                        channel.icon.hex,
+                        'light',
+                    ),
+                    '--brand-hover-dark': brandHoverColor(
+                        channel.icon.hex,
+                        'dark',
+                    ),
+                } as CSSProperties
+            }
         >
             <svg
                 aria-hidden="true"
                 viewBox="0 0 24 24"
-                className="h-8 w-8 shrink-0 fill-muted-foreground transition-colors duration-200 group-hover:fill-[var(--brand-hover)]"
-                style={
-                    {
-                        '--brand-hover': brandHoverColor(channel.icon.hex),
-                    } as CSSProperties
-                }
+                className="h-8 w-8 shrink-0 fill-muted-foreground transition-colors duration-200 group-hover:fill-[var(--brand-hover-light)] dark:group-hover:fill-[var(--brand-hover-dark)]"
             >
                 <path d={channel.icon.path} />
             </svg>
@@ -104,40 +129,64 @@ export const Contact = () => {
         <section
             id="contact"
             aria-labelledby="contact-title"
-            className={`mx-auto min-h-[calc(100svh-var(--nav-height,4.5rem))] max-w-6xl px-6 ${SECTION_PB} ${SECTION_PT}`}
+            className={`relative min-h-[calc(100svh-var(--nav-height,4.5rem))] overflow-x-clip px-6 ${SECTION_PB} ${SECTION_PT}`}
         >
-            <h2
-                id="contact-title"
-                className="font-mono text-3xl font-bold text-foreground"
-            >
-                Contato
-            </h2>
-            <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-                Vaga plena, projeto ou só uma ideia pra trocar sobre arquitetura
-                de software — esses são os melhores caminhos pra me encontrar.
-            </p>
+            <ThemedBackgroundImage
+                lightSrc={contactBgLight}
+                darkSrc={contactBgDark}
+            />
 
-            <BlueprintFrame grid className="mt-10 p-6">
-                {/* grid-cols-1 explícito: sem ele, a coluna única implícita
-                    do grid é dimensionada pelo conteúdo (min-content), não
-                    pela largura disponível — o card do e-mail estourava a
-                    tela em 320px mesmo com o texto já quebrando linha. */}
-                <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    {CHANNELS.map((channel) => (
-                        <li key={channel.id}>
-                            <ContactLink channel={channel} />
-                        </li>
-                    ))}
-                </ul>
-            </BlueprintFrame>
+            {/* O fundo acima cobre a seção inteira (largura cheia); o
+                conteúdo continua restrito e centralizado por dentro. */}
+            <div className="mx-auto max-w-6xl">
+                <h2
+                    id="contact-title"
+                    className="font-mono text-3xl font-bold text-foreground"
+                >
+                    Contato
+                </h2>
+                <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
+                    Esses são os melhores caminhos pra me encontrar.
+                </p>
 
-            <button
-                type="button"
-                onClick={reset}
-                className="mt-6 text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground"
-            >
-                Preferências de cookies
-            </button>
+                <BlueprintFrame grid className="mt-10 p-6">
+                    {/* grid-cols-1 explícito: sem ele, a coluna única
+                        implícita do grid é dimensionada pelo conteúdo
+                        (min-content), não pela largura disponível — o card
+                        do e-mail estourava a tela em 320px mesmo com o
+                        texto já quebrando linha. */}
+                    <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        {CHANNELS.map((channel) => (
+                            <li key={channel.id}>
+                                <ContactLink channel={channel} />
+                            </li>
+                        ))}
+                    </ul>
+                </BlueprintFrame>
+
+                {/* flex (não inline-flex): a seção não é mais flex-col (ver
+                    comentário acima), então um link sem isso ficaria na
+                    mesma linha do botão "Preferências de cookies" logo
+                    abaixo — dois pesos de ação diferentes (CTA principal
+                    vs. link secundário) não deviam disputar a mesma
+                    linha. */}
+                <a
+                    href={RESUME_HREF}
+                    download
+                    className="mt-6 flex w-fit items-center gap-2 rounded-lg bg-accent px-5 py-3 font-medium text-accent-foreground transition-colors duration-200 hover:bg-accent/90"
+                >
+                    <ArrowDownTrayIcon className="h-5 w-5" aria-hidden="true" />
+                    Baixar currículo
+                </a>
+
+                <button
+                    type="button"
+                    onClick={reset}
+                    className="mt-6 text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground"
+                >
+                    Preferências de cookies
+                </button>
+            </div>
         </section>
     );
 };

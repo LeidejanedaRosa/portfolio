@@ -67,6 +67,20 @@ describe('<Contact />', () => {
         }
     });
 
+    it('link de currículo baixa o PDF estático, sem abrir nova aba', () => {
+        renderContact();
+
+        const resumeLink = screen.getByRole('link', {
+            name: /baixar currículo/i,
+        });
+        expect(resumeLink).toHaveAttribute(
+            'href',
+            '/leidejane-da-rosa-curriculo.pdf',
+        );
+        expect(resumeLink).toHaveAttribute('download');
+        expect(resumeLink).not.toHaveAttribute('target');
+    });
+
     it('"Preferências de cookies" limpa a escolha salva', async () => {
         localStorage.setItem('cookie-consent', 'accepted');
         const user = userEvent.setup();
@@ -77,6 +91,27 @@ describe('<Contact />', () => {
         );
 
         expect(localStorage.getItem('cookie-consent')).toBeNull();
+    });
+
+    it('tem fundo de blueprint nos dois temas, escondido de leitor de tela', () => {
+        const { container } = renderContact();
+
+        const backgrounds = Array.from(
+            container.querySelectorAll('img'),
+        ).filter((img) =>
+            img.getAttribute('src')?.includes('contact-blueprint-bg'),
+        );
+
+        expect(backgrounds).toHaveLength(2);
+        for (const img of backgrounds) {
+            expect(img).toHaveAttribute('alt', '');
+            expect(img).toHaveAttribute('aria-hidden', 'true');
+        }
+        expect(
+            screen
+                .queryAllByRole('img')
+                .filter((img) => backgrounds.includes(img as HTMLImageElement)),
+        ).toHaveLength(0);
     });
 
     it('não tem violações de acessibilidade', async () => {
