@@ -159,7 +159,7 @@ export const SkillsFlow = () => {
                                             r={0.9}
                                             className="fill-accent"
                                             style={{
-                                                filter: 'drop-shadow(0 0 2px rgb(var(--color-accent) / 0.9))',
+                                                filter: 'drop-shadow(0 0 2px color-mix(in srgb, var(--color-accent) 90%, transparent))',
                                             }}
                                         >
                                             <animateMotion

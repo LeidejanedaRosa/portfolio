@@ -189,7 +189,7 @@ export const ExperienceTimeline = ({ entries }: ExperienceTimelineProps) => {
                     aria-hidden="true"
                     style={{
                         top: lightTop,
-                        filter: 'drop-shadow(0 0 4px rgb(var(--color-accent) / 0.85))',
+                        filter: 'drop-shadow(0 0 4px color-mix(in srgb, var(--color-accent) 85%, transparent))',
                     }}
                     className="pointer-events-none absolute left-0 z-10 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent"
                 />
