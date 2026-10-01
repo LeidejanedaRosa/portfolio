@@ -1,6 +1,8 @@
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 
-import { SECTION_PB, SECTION_PT } from '@src/lib/section-spacing';
+import faqBgLight from '@assets/images/faq-blueprint-bg-light.webp';
+import faqBgDark from '@assets/images/faq-blueprint-bg.webp';
+import { ThemedBackgroundImage } from '@components/molecules/general/themed-background-image';
 
 interface FaqEntry {
     id: string;
@@ -9,21 +11,6 @@ interface FaqEntry {
 }
 
 const FAQS: readonly FaqEntry[] = [
-    {
-        id: 'tipo-projeto',
-        question: 'Que tipo de projeto você topa?',
-        answer: 'Projetos com propósito real — de impacto social (como o Faladoria, mediação entre usuários do SUS e gestores públicos) a sistemas com regra de negócio de verdade. Hoje atuo como freelancer, buscando também uma posição CLT remota.',
-    },
-    {
-        id: 'remoto',
-        question: 'Trabalha remoto?',
-        answer: 'Sim — hoje como freelancer 100% remoto, e estou aberta a uma posição CLT remota também.',
-    },
-    {
-        id: 'stack',
-        question: 'Qual sua stack?',
-        answer: 'No frontend, React + TypeScript, com Vite e Tailwind CSS. No backend, Node (Fastify) e Python (Flask), com MongoDB. Cada projeto na seção Projetos mostra a stack específica dele.',
-    },
     {
         id: 'privado',
         question: 'Por que alguns projetos são privados?',
@@ -42,60 +29,75 @@ const FAQS: readonly FaqEntry[] = [
     {
         id: 'contato',
         question: 'Como entro em contato?',
-        answer: 'Pelos canais diretos na seção Contato — e-mail, LinkedIn, GitHub ou WhatsApp. Sem formulário de propósito, pra evitar spam de terceiro e ir direto ao ponto.',
+        answer: 'Pelos canais diretos na seção Contato — e-mail, LinkedIn, GitHub ou WhatsApp.',
     },
 ];
 
 export const Faq = () => {
     return (
+        // min-h + flex + justify-safe-center: conteúdo centralizado na tela
+        // (a pedido da Leidejane), não encostado no topo como as outras
+        // seções — FAQ é a única com esse tratamento, de propósito. "safe"
+        // em vez de só "center": se um dia não couber (zoom de fonte, mais
+        // perguntas), cai pro alinhamento no topo sozinho, em vez de
+        // centralizar o excesso pros dois lados e esconder o título atrás
+        // da barra (mesmo raciocínio do Contato, ver `.justify-safe-center`
+        // em index.css).
         <section
             id="faq"
             aria-labelledby="faq-title"
-            className={`faq-section mx-auto max-w-2xl px-6 ${SECTION_PB} ${SECTION_PT}`}
+            className="faq-section justify-safe-center relative flex min-h-[calc(100svh-var(--nav-height,4.5rem))] flex-col overflow-x-clip px-6"
         >
-            <h2
-                id="faq-title"
-                className="faq-eyebrow font-mono text-sm font-medium text-muted-foreground"
-            >
-                Perguntas frequentes
-            </h2>
+            <ThemedBackgroundImage lightSrc={faqBgLight} darkSrc={faqBgDark} />
 
-            {/* .faq-list e .faq-eyebrow: as regras que escurecem as demais
-                perguntas (e o título) ao abrir ou passar o mouse moram no
-                index.css (:has() não tem variante pronta no Tailwind pra
-                "irmã com [open]/:hover", só pra ancestral/descendente). */}
-            <ul className="faq-list mt-6">
-                {FAQS.map((faq, index) => {
-                    const number = String(index + 1).padStart(2, '0');
+            {/* O fundo acima cobre a seção inteira (largura cheia); o bloco
+                de conteúdo continua estreito e centralizado por dentro. */}
+            <div className="mx-auto max-w-2xl">
+                <h2
+                    id="faq-title"
+                    className="faq-eyebrow font-mono text-sm font-medium text-muted-foreground"
+                >
+                    Perguntas frequentes
+                </h2>
 
-                    return (
-                        <li key={faq.id}>
-                            <details name="faq" className="group py-5">
-                                {/* Sem justify-between: a seta fica logo
-                                    depois da pergunta, não esticada até a
-                                    borda do bloco. */}
-                                <summary className="flex cursor-pointer list-none items-center gap-3 [&::-webkit-details-marker]:hidden">
-                                    <span className="flex items-baseline gap-4">
-                                        <span className="font-mono text-sm text-accent">
-                                            {number}
+                {/* .faq-list e .faq-eyebrow: as regras que escurecem as
+                    demais perguntas (e o título) ao abrir ou passar o mouse
+                    moram no index.css (:has() não tem variante pronta no
+                    Tailwind pra "irmã com [open]/:hover", só pra
+                    ancestral/descendente). */}
+                <ul className="faq-list mt-6">
+                    {FAQS.map((faq, index) => {
+                        const number = String(index + 1).padStart(2, '0');
+
+                        return (
+                            <li key={faq.id}>
+                                <details name="faq" className="group py-5">
+                                    {/* Sem justify-between: a seta fica logo
+                                        depois da pergunta, não esticada até a
+                                        borda do bloco. */}
+                                    <summary className="flex cursor-pointer list-none items-center gap-3 [&::-webkit-details-marker]:hidden">
+                                        <span className="flex items-baseline gap-4">
+                                            <span className="font-mono text-sm text-accent">
+                                                {number}
+                                            </span>
+                                            <span className="faq-question font-mono text-lg font-bold text-foreground">
+                                                {faq.question}
+                                            </span>
                                         </span>
-                                        <span className="font-mono text-lg font-bold text-foreground">
-                                            {faq.question}
-                                        </span>
-                                    </span>
-                                    <ChevronDownIcon
-                                        aria-hidden="true"
-                                        className="h-5 w-5 shrink-0 text-muted-foreground transition-transform duration-200 group-open:rotate-180 motion-reduce:transition-none"
-                                    />
-                                </summary>
-                                <p className="mt-3 max-w-2xl pl-[3.25rem] text-muted-foreground">
-                                    {faq.answer}
-                                </p>
-                            </details>
-                        </li>
-                    );
-                })}
-            </ul>
+                                        <ChevronDownIcon
+                                            aria-hidden="true"
+                                            className="h-5 w-5 shrink-0 text-muted-foreground transition-transform duration-200 group-open:rotate-180 motion-reduce:transition-none"
+                                        />
+                                    </summary>
+                                    <p className="mt-3 max-w-2xl pl-[3.25rem] text-muted-foreground">
+                                        {faq.answer}
+                                    </p>
+                                </details>
+                            </li>
+                        );
+                    })}
+                </ul>
+            </div>
         </section>
     );
 };
