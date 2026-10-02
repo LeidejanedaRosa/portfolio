@@ -60,23 +60,24 @@ export default mergeConfig(
                         functions: 100,
                         lines: 100,
                     },
-                    // Recalibrado na migração pro vitest 5: o
-                    // @vitest/coverage-v8 novo mede mais preciso que o da v3
-                    // e revelou 2 pontos que o jsdom nunca vai cobrir de
-                    // verdade — não é regressão de teste, é instrumentação
-                    // mais correta. (1) `if (typeof ResizeObserver ===
-                    // 'undefined')` nunca é true nos testes (o stub global
-                    // em src/test/setup.ts sempre fornece um); (2) o
-                    // `setRows` dentro de `measure()` só roda se
-                    // `offsetHeight` for truthy, e o jsdom não faz layout de
-                    // verdade — `offsetHeight` é sempre 0. Os dois exigiriam
-                    // um browser real pra cobrir (e2e), não assert de
-                    // unidade.
+                    // A migração pro vitest 5 (@vitest/coverage-v8 mais
+                    // preciso que o da v3) revelou 2 branches de
+                    // `measure()` sem teste de verdade — cobertos agora com
+                    // testes reais (não só recalibrados): offsetHeight
+                    // simulado via Object.defineProperty no prototype (o
+                    // jsdom não faz layout de verdade, offsetHeight é sempre
+                    // 0 por padrão) e ResizeObserver desligado via
+                    // window/globalThis (o stub global do setup.ts sempre
+                    // fornece um). Os 2 pontos que sobraram sem cobertura
+                    // (guarda de ref nulo antes do mount, fallback de `li`
+                    // nulo no map) são defensivos — não acontecem de
+                    // verdade com os dados reais do projeto, testar exigiria
+                    // mock artificial demais pra valer a pena.
                     'src/sections/projects/**': {
-                        statements: 92,
-                        branches: 83,
-                        functions: 88,
-                        lines: 95,
+                        statements: 97,
+                        branches: 87,
+                        functions: 94,
+                        lines: 100,
                     },
                 },
             },
