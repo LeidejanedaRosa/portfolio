@@ -1,9 +1,4 @@
-import {
-    motion,
-    useScroll,
-    useTransform,
-    type MotionValue,
-} from 'framer-motion';
+import { m, useScroll, useTransform, type MotionValue } from 'framer-motion';
 import { useLayoutEffect, useRef, useState } from 'react';
 
 import { READING_LINE_OFFSET } from '@src/lib/reading-line';
@@ -79,14 +74,14 @@ function TimelineEntryRow({
                 {prefersReducedMotion ? (
                     <span className="absolute inset-0.5 rounded-full bg-accent" />
                 ) : (
-                    <motion.span
+                    <m.span
                         style={{ scale: activity }}
                         className="absolute inset-0.5 rounded-full bg-accent"
                     />
                 )}
             </span>
 
-            <motion.div style={prefersReducedMotion ? undefined : { opacity }}>
+            <m.div style={prefersReducedMotion ? undefined : { opacity }}>
                 <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
                     {entry.period}
                 </p>
@@ -99,7 +94,7 @@ function TimelineEntryRow({
                         {entry.description}
                     </p>
                 )}
-            </motion.div>
+            </m.div>
         </li>
     );
 }
@@ -185,7 +180,7 @@ export const ExperienceTimeline = ({ entries }: ExperienceTimelineProps) => {
     return (
         <ol ref={listRef} className="relative border-l border-border pl-6">
             {!prefersReducedMotion && (
-                <motion.span
+                <m.span
                     aria-hidden="true"
                     style={{
                         top: lightTop,

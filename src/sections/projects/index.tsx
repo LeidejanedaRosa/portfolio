@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { m, useScroll, useTransform } from 'framer-motion';
 import { useLayoutEffect, useRef, useState } from 'react';
 
 import projectsBgLight from '@assets/images/projects-blueprint-bg-light.webp';
@@ -139,7 +139,7 @@ export const Projects = () => {
                     />
 
                     {!prefersReducedMotion && (
-                        <motion.div
+                        <m.div
                             aria-hidden="true"
                             style={{
                                 top: lightTop,

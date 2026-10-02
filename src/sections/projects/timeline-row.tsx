@@ -1,4 +1,4 @@
-import { motion, useTransform, type MotionValue } from 'framer-motion';
+import { m, useTransform, type MotionValue } from 'framer-motion';
 
 import { ConnectorTick } from './connector-tick';
 import { type Project } from './data';
@@ -109,7 +109,7 @@ export function TimelineRow({
                 {prefersReducedMotion ? (
                     <span className="absolute inset-0.5 rounded-full bg-accent" />
                 ) : (
-                    <motion.span
+                    <m.span
                         style={{ scale: fillScale }}
                         className="absolute inset-0.5 rounded-full bg-accent"
                     />
@@ -130,12 +130,12 @@ export function TimelineRow({
                 />
             )}
 
-            <motion.div style={cardMotionStyle} className={cardColumn}>
+            <m.div style={cardMotionStyle} className={cardColumn}>
                 <ProjectCard project={project} index={index} />
-            </motion.div>
+            </m.div>
 
             {project.links?.demo && (
-                <motion.div
+                <m.div
                     style={cardMotionStyle}
                     className={`${previewColumn} mt-8 md:mt-0`}
                 >
@@ -144,7 +144,7 @@ export function TimelineRow({
                         url={project.links.demo}
                         hugCenter={isEven ? 'left' : 'right'}
                     />
-                </motion.div>
+                </m.div>
             )}
         </li>
     );
