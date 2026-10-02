@@ -10,9 +10,12 @@ const observe = vi.fn();
 const disconnect = vi.fn();
 
 beforeEach(() => {
+    // function normal, não arrow: `new IntersectionObserver(...)` precisa de
+    // um construtor de verdade — arrow function nunca tem [[Construct]]. O
+    // Vitest 3 tolerava isso (detalhe interno do `vi.fn()`); a 5 não mais.
     vi.stubGlobal(
         'IntersectionObserver',
-        vi.fn((cb: IOCallback) => {
+        vi.fn(function (cb: IOCallback) {
             capturedCallback = cb;
             return {
                 observe,
