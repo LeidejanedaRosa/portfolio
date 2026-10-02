@@ -80,7 +80,14 @@
           GitHub/LinkedIn — links pra eles ficam no conteúdo da seção de contato).
         -->
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://leidejanedarosa.dev.br/" />
+        <!-- Domínio próprio registrado (leidejanedarosa.dev.br), mas DNS/
+             Vercel ainda não apontados — ver docs/BACKLOG.md §6.2. Enquanto
+             não resolver de verdade, as URLs públicas ficam no domínio que
+             já funciona, senão og:image e o sitemap quebram (confirmado:
+             leidejanedarosa.dev.br não resolve ainda). Trocar as 5 URLs
+             abaixo (aqui, og:image, JSON-LD, sitemap.xml, robots.txt) assim
+             que o domínio estiver no ar de verdade. -->
+        <meta property="og:url" content="https://leidejanedarosa.vercel.app/" />
         <meta
             property="og:title"
             content="Leidejane da Rosa | Engenheira de Software"
@@ -91,7 +98,7 @@
         />
         <meta
             property="og:image"
-            content="https://leidejanedarosa.dev.br/og-image.webp"
+            content="https://leidejanedarosa.vercel.app/og-image.webp"
         />
 
         <script type="application/ld+json">
@@ -100,7 +107,7 @@
                 "@type": "Person",
                 "name": "Leidejane da Rosa",
                 "jobTitle": "Engenheira de Software",
-                "url": "https://leidejanedarosa.dev.br/",
+                "url": "https://leidejanedarosa.vercel.app/",
                 "sameAs": [
                     "https://github.com/LeidejanedaRosa",
                     "https://www.linkedin.com/in/leidejane-da-rosa-a98544205/"
