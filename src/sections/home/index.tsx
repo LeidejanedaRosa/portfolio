@@ -44,9 +44,14 @@ export const HomePage = () => {
                         Portfólio
                     </p>
 
+                    {/* text-balance: sem isso, o navegador quebra a linha
+                        de forma "gananciosa" (enche a primeira linha até
+                        onde cabe) — em ~390px isso deixava só "Rosa" sozinho
+                        na segunda linha. text-wrap: balance pondera as
+                        larguras das linhas antes de escolher onde quebrar. */}
                     <h1
                         id="home-title"
-                        className="mt-3 font-mono text-4xl font-bold leading-tight text-foreground sm:text-5xl"
+                        className="mt-3 text-balance font-mono text-4xl font-bold leading-tight text-foreground sm:text-5xl"
                     >
                         Leidejane da Rosa
                     </h1>
