@@ -59,6 +59,17 @@ if (!window.matchMedia) {
     });
 }
 
+// jsdom não implementa getContext() do <canvas> — o axe-core sonda canvas
+// ao auditar a página (parte do rastreamento de contraste de cor) e isso
+// gerava um aviso "Not implemented" em todo teste com axe, sem quebrar nada.
+// O método em si já existe no jsdom (não dá pra testar "if ausente" como
+// os outros stubs) — ele só loga esse aviso internamente antes de devolver
+// null por não ter o pacote `canvas` instalado. Sobrescrever com null direto
+// pula esse log sem mudar o comportamento (mesmo retorno de um navegador
+// real sem suporte a um tipo de contexto específico).
+HTMLCanvasElement.prototype.getContext = (() =>
+    null) as typeof HTMLCanvasElement.prototype.getContext;
+
 // jsdom não implementa showModal()/close() do <dialog> nativo (usado pelo
 // PrivacyDialog pra focus trap + inert de fundo grátis do navegador).
 // Polyfill mínimo: reflete `.open` e dispara "close" (mesmo evento nativo
