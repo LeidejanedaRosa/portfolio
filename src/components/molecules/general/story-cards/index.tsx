@@ -43,7 +43,7 @@ export const StoryCards = ({ entries }: StoryCardsProps) => {
                         className="relative rounded-lg border border-accent/20 bg-surface p-3 lg:p-3.5"
                     >
                         <div className="absolute inset-0 flex justify-end items-start pr-4 pt-4">
-                            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-accent/15 shadow-[0_0_12px_rgb(var(--color-accent)/0.45)]">
+                            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-accent/15 shadow-[0_0_12px_color-mix(in_srgb,var(--color-accent)_45%,transparent)]">
                                 <Icon className="h-8 w-8 text-accent" />
                             </span>
                         </div>

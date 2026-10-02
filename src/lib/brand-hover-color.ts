@@ -26,5 +26,5 @@ export function brandHoverColor(hex: string, theme?: 'light' | 'dark'): string {
               ? invisibleOnDark
               : invisibleOnDark || invisibleOnLight;
 
-    return fallsBack ? 'rgb(var(--color-accent))' : `#${hex}`;
+    return fallsBack ? 'var(--color-accent)' : `#${hex}`;
 }

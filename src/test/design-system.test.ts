@@ -1,39 +1,44 @@
-import resolveConfig from 'tailwindcss/resolveConfig';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
-// @ts-expect-error — config em JS (CommonJS), sem tipos próprios
-import tailwindConfig from '../../tailwind.config.js';
-
-const { theme } = resolveConfig(tailwindConfig);
+// Tailwind v4 não tem mais config em JS pra inspecionar via `resolveConfig`
+// (API removida na v4) — o contrato agora mora direto no CSS (`@theme` em
+// index.css), então o teste lê o arquivo fonte como texto.
+const css = readFileSync(resolve(__dirname, '../index.css'), 'utf-8');
 
 /**
  * Contrato do design system: as cores são SEMÂNTICAS (papéis) e apontam para
- * variáveis CSS — nunca valores crus de paleta. Se alguém trocar `bg-accent`
- * por `bg-sky-700` no config, este teste quebra.
+ * variáveis CSS — nunca valores crus de paleta. Se alguém apagar um token do
+ * `@theme` ou trocar a estratégia de dark mode, este teste quebra.
  */
-describe('design system — tokens do Tailwind', () => {
-    it('expõe as cores semânticas ligadas às variáveis CSS', () => {
-        expect(theme.colors.background).toBe(
-            'rgb(var(--color-background) / <alpha-value>)',
-        );
-        expect(theme.colors.accent.DEFAULT).toBe(
-            'rgb(var(--color-accent) / <alpha-value>)',
-        );
-        expect(theme.colors.accent.foreground).toBe(
-            'rgb(var(--color-accent-foreground) / <alpha-value>)',
-        );
+describe('design system — tokens do Tailwind (@theme)', () => {
+    it('expõe as cores semânticas como variáveis CSS completas (não placeholder <alpha-value> da v3)', () => {
+        expect(css).toMatch(/--color-background:\s*rgb\(/);
+        expect(css).toMatch(/--color-accent:\s*rgb\(/);
+        expect(css).toMatch(/--color-accent-foreground:\s*rgb\(/);
+        expect(css).not.toContain('<alpha-value>');
     });
 
     it('define primary como papel (variável), não como cor crua', () => {
-        expect(theme.colors.primary.DEFAULT).toContain('var(--color-primary)');
+        expect(css).toMatch(/--color-primary:\s*rgb\(/);
     });
 
     it('usa JetBrains Mono nos títulos e IBM Plex Sans no corpo', () => {
-        expect(theme.fontFamily.mono[0]).toBe('"JetBrains Mono Variable"');
-        expect(theme.fontFamily.sans[0]).toBe('"IBM Plex Sans Variable"');
+        expect(css).toMatch(/--font-mono:\s*\n?\s*'JetBrains Mono Variable'/);
+        expect(css).toMatch(/--font-sans:\s*\n?\s*'IBM Plex Sans Variable'/);
     });
 
-    it('mantém suporte a dark mode por classe', () => {
-        expect(tailwindConfig.darkMode).toBe('class');
+    it('mantém suporte a dark mode por classe (não só prefers-color-scheme)', () => {
+        expect(css).toContain(
+            '@custom-variant dark (&:where(.dark, .dark *));',
+        );
+    });
+
+    it('redefine os tokens de cor dentro de `.dark`, não cria um conjunto novo', () => {
+        const darkBlock = css.slice(css.indexOf('.dark {'));
+        expect(darkBlock).toMatch(/--color-background:\s*rgb\(/);
+        expect(darkBlock).toMatch(/--color-accent:\s*rgb\(/);
     });
 });

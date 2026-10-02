@@ -45,7 +45,7 @@ describe('<TechIcon />', () => {
 
         // hex 0A0A0A é quase preto → some no dark, então cai no accent
         expect(container.querySelector('svg')).toHaveStyle({
-            '--tech-hover': 'rgb(var(--color-accent))',
+            '--tech-hover': 'var(--color-accent)',
         });
     });
 

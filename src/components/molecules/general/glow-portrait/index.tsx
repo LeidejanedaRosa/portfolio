@@ -12,7 +12,7 @@ export const GlowPortrait = ({ src, alt }: GlowPortraitProps) => {
             />
             <div
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_70%,rgb(var(--color-accent)/0.3),transparent_65%)]"
+                className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_70%,color-mix(in_srgb,var(--color-accent)_30%,transparent),transparent_65%)]"
             />
             <div
                 aria-hidden="true"
