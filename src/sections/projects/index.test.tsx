@@ -198,4 +198,79 @@ describe('<Projects />', () => {
         // etc.); o site de dentro do iframe é auditado no Lighthouse dele.
         expect(await axe(container, { iframes: false })).toHaveNoViolations();
     }, 15000);
+
+    // jsdom não faz layout de verdade — offsetHeight/offsetTop são sempre 0,
+    // então `measure()` (dentro do useLayoutEffect) nunca passa do primeiro
+    // `if (!ulHeight) return`. Sobrescrever os dois no prototype antes de
+    // renderizar simula um navegador real o bastante pra exercitar o resto
+    // da função (o cálculo de `top`/`bottom` de cada card).
+    it('mede a posição real dos cards quando a lista tem altura', () => {
+        const originalOffsetHeight = Object.getOwnPropertyDescriptor(
+            HTMLElement.prototype,
+            'offsetHeight',
+        );
+        const originalOffsetTop = Object.getOwnPropertyDescriptor(
+            HTMLElement.prototype,
+            'offsetTop',
+        );
+
+        Object.defineProperty(HTMLElement.prototype, 'offsetHeight', {
+            configurable: true,
+            value: 600,
+        });
+        Object.defineProperty(HTMLElement.prototype, 'offsetTop', {
+            configurable: true,
+            value: 100,
+        });
+
+        try {
+            expect(() => render(<Projects />)).not.toThrow();
+            // mede de verdade, não só "não quebrou": os 6 projetos continuam
+            // todos renderizados depois do measure() rodar com valores
+            // reais (getAllByRole('listitem') pegaria também as listas de
+            // tech stack dentro de cada card, por isso os headings).
+            expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(
+                6,
+            );
+        } finally {
+            if (originalOffsetHeight) {
+                Object.defineProperty(
+                    HTMLElement.prototype,
+                    'offsetHeight',
+                    originalOffsetHeight,
+                );
+            }
+            if (originalOffsetTop) {
+                Object.defineProperty(
+                    HTMLElement.prototype,
+                    'offsetTop',
+                    originalOffsetTop,
+                );
+            }
+        }
+    });
+
+    // Navegador sem ResizeObserver (raro hoje): o componente mede uma vez no
+    // mount e segue sem observar, em vez de quebrar o app inteiro. O stub
+    // global em src/test/setup.ts sempre fornece um ResizeObserver, então
+    // esse branch precisa desligá-lo manualmente pra ser exercitado.
+    it('sem ResizeObserver no navegador, mede uma vez no mount e não quebra', () => {
+        const originalWindowRO = window.ResizeObserver;
+        const originalGlobalRO = globalThis.ResizeObserver;
+
+        // @ts-expect-error — simulando navegador sem suporte a ResizeObserver
+        window.ResizeObserver = undefined;
+        // @ts-expect-error — idem
+        globalThis.ResizeObserver = undefined;
+
+        try {
+            expect(() => render(<Projects />)).not.toThrow();
+            expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(
+                6,
+            );
+        } finally {
+            window.ResizeObserver = originalWindowRO;
+            globalThis.ResizeObserver = originalGlobalRO;
+        }
+    });
 });

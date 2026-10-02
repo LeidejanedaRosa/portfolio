@@ -1,4 +1,4 @@
-import { motion, type MotionValue } from 'framer-motion';
+import { m, type MotionValue } from 'framer-motion';
 
 interface DuotoneBackgroundImageProps {
     src: string;
@@ -15,7 +15,7 @@ export const DuotoneBackgroundImage = ({
 }: DuotoneBackgroundImageProps) => {
     return (
         <>
-            <motion.img
+            <m.img
                 src={src}
                 alt=""
                 aria-hidden="true"

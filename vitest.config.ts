@@ -60,11 +60,24 @@ export default mergeConfig(
                         functions: 100,
                         lines: 100,
                     },
+                    // A migração pro vitest 5 (@vitest/coverage-v8 mais
+                    // preciso que o da v3) revelou 2 branches de
+                    // `measure()` sem teste de verdade — cobertos agora com
+                    // testes reais (não só recalibrados): offsetHeight
+                    // simulado via Object.defineProperty no prototype (o
+                    // jsdom não faz layout de verdade, offsetHeight é sempre
+                    // 0 por padrão) e ResizeObserver desligado via
+                    // window/globalThis (o stub global do setup.ts sempre
+                    // fornece um). Os 2 pontos que sobraram sem cobertura
+                    // (guarda de ref nulo antes do mount, fallback de `li`
+                    // nulo no map) são defensivos — não acontecem de
+                    // verdade com os dados reais do projeto, testar exigiria
+                    // mock artificial demais pra valer a pena.
                     'src/sections/projects/**': {
-                        statements: 96,
-                        branches: 83,
-                        functions: 100,
-                        lines: 96,
+                        statements: 97,
+                        branches: 87,
+                        functions: 94,
+                        lines: 100,
                     },
                 },
             },

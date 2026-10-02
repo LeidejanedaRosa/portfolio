@@ -59,6 +59,18 @@
             content="#0f172a"
             media="(prefers-color-scheme: dark)"
         />
+        <!-- LCP é a imagem de fundo do hero (Home) — sem preload, o
+             navegador só descobre que precisa dela depois de baixar e
+             rodar o JS (ela é renderizada por um componente React, não um
+             <img> cru no HTML). Lighthouse mediu ~3,1s de LCP só por causa
+             disso. fetchpriority="high" reforça a prioridade além do
+             preload em si. -->
+        <link
+            rel="preload"
+            as="image"
+            href="/src/assets/images/home-hero-bg.webp"
+            fetchpriority="high"
+        />
         <link rel="icon" href="favicon.ico" />
         <link rel="apple-touch-icon" href="logo192.png" />
         <link rel="manifest" href="manifest.json" />
