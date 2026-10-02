@@ -17,7 +17,8 @@ qualquer tier.
 ## Stack confirmada
 
 - React 19 + TypeScript + Vite 6
-- Tailwind CSS 3.4 (tokens em `src/index.css`, ver Design abaixo)
+- Tailwind CSS 4 (config CSS-first via `@theme` em `src/index.css`, plugin
+  oficial `@tailwindcss/vite` — ver Design abaixo)
 - Framer Motion — motion ~200ms, sempre respeitando `prefers-reduced-motion`
 - Vitest + Testing Library + vitest-axe (unitário/componente + a11y)
 - Playwright — chromium, firefox, webkit (`e2e/`)
@@ -60,11 +61,10 @@ reload.
 
 ## Deploy
 
-Hospedado no Vercel. Deploy automático a cada push em `main`, preview automático
-por PR. Domínio próprio registrado: `leidejanedarosa.dev.br` (apontamento
-DNS/Vercel é passo manual da Leidejane, fora deste repo — enquanto não propaga,
-o site segue acessível por `leidejanedarosa.vercel.app`; ver `docs/BACKLOG.md`
-§6.2).
+Hospedado no Vercel: [leidejanedarosa.dev.br](https://leidejanedarosa.dev.br/)
+(domínio próprio, DNS confirmado resolvendo). Deploy automático a cada push em
+`main`, preview automático por PR. `leidejanedarosa.vercel.app` continua
+funcionando, mas redireciona (307) pro domínio próprio.
 
 ## Pendências conhecidas
 
