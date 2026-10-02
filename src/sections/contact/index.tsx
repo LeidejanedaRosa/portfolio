@@ -8,7 +8,6 @@ import { BlueprintFrame } from '@components/atoms/blueprint-frame';
 import { ThemedBackgroundImage } from '@components/molecules/general/themed-background-image';
 import { useConsent } from '@src/consent';
 import { brandHoverColor } from '@src/lib/brand-hover-color';
-import { SECTION_PB, SECTION_PT } from '@src/lib/section-spacing';
 
 // simple-icons removeu o logo do LinkedIn do pacote (política de marca da
 // plataforma) — mesmo formato de ícone (SimpleIcon), mantido localmente.
@@ -123,13 +122,15 @@ export const Contact = () => {
         // rolagem, a página não teria como rolar o suficiente pra encostar o
         // título dela no topo se o conteúdo for mais baixo que a tela
         // (sobraria um vão — medido de verdade, 331px a mais que as outras
-        // seções num desktop comum). Altura mínima de uma tela garante espaço
-        // de rolagem de sobra; o conteúdo continua alinhado no topo (pt-16),
-        // não centralizado.
+        // seções num desktop comum). justify-safe-center: conteúdo
+        // centralizado verticalmente (a pedido da Leidejane) — sem
+        // SECTION_PT/PB aqui, porque padding assimétrico (pt-16/pb-24)
+        // desloca o centro do flex pro lado com menos padding; mesmo ajuste
+        // já feito no FAQ e na Home.
         <section
             id="contact"
             aria-labelledby="contact-title"
-            className={`relative min-h-[calc(100svh-var(--nav-height,4.5rem))] overflow-x-clip px-6 ${SECTION_PB} ${SECTION_PT}`}
+            className="relative flex min-h-[calc(100svh-var(--nav-height,4.5rem))] flex-col justify-safe-center overflow-x-clip px-6"
         >
             <ThemedBackgroundImage
                 lightSrc={contactBgLight}
