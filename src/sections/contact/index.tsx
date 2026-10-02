@@ -138,8 +138,14 @@ export const Contact = () => {
             />
 
             {/* O fundo acima cobre a seção inteira (largura cheia); o
-                conteúdo continua restrito e centralizado por dentro. */}
-            <div className="mx-auto max-w-6xl">
+                conteúdo continua restrito e centralizado por dentro.
+                w-full explícito: sem isso, dentro do flex-col da <section>
+                (precisa do flex pro justify-safe-center vertical), esse
+                `<div>` encolhia pro tamanho do conteúdo (grid de 2 colunas
+                vira `1fr` sem largura definida pra resolver, cai pro
+                min-content) em vez de esticar até o max-w-6xl — mesmo bug
+                que não aparecia na Home porque lá o `w-full` já existia. */}
+            <div className="mx-auto w-full max-w-6xl">
                 <h2
                     id="contact-title"
                     className="font-mono text-3xl font-bold text-foreground"
