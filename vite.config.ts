@@ -1,16 +1,13 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import tailwindcss from 'tailwindcss';
-import autoprefixer from 'autoprefixer';
+import tailwindcss from '@tailwindcss/vite';
 import path from 'path';
 
 export default defineConfig({
-    plugins: [react()],
-    css: {
-        postcss: {
-            plugins: [tailwindcss(), autoprefixer()],
-        },
-    },
+    // Plugin oficial do Tailwind v4 pro Vite: substitui o par
+    // postcss.config.js + tailwindcss()/autoprefixer() do PostCSS (v4 já
+    // prefixa sozinho via Lightning CSS, autoprefixer virou redundante).
+    plugins: [react(), tailwindcss()],
     resolve: {
         // Devem espelhar `paths` em tsconfig.app.json
         alias: {
