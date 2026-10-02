@@ -156,6 +156,32 @@ describe('ThemeProvider / useTheme', () => {
         expect(screen.getByTestId('theme')).toHaveTextContent('dark');
     });
 
+    it('com localStorage falhando ao persistir, ainda assim ignora mudança do SO (escolha manual rastreada em memória)', async () => {
+        const media = mockMatchMediaWithChangeSupport(false);
+        const setItemSpy = vi
+            .spyOn(Storage.prototype, 'setItem')
+            .mockImplementation(() => {
+                throw new Error('QuotaExceededError (simulado)');
+            });
+        const user = userEvent.setup();
+        renderWithProvider();
+
+        // a escolha manual funciona mesmo com persist() falhando por baixo
+        await user.click(screen.getByRole('button', { name: 'alternar' }));
+        expect(screen.getByTestId('theme')).toHaveTextContent('dark');
+        expect(localStorage.getItem('theme')).toBeNull(); // confirma que falhou mesmo
+
+        // SO muda — se checássemos só o localStorage (que está vazio por
+        // causa da falha), isso sobrescreveria a escolha manual por engano
+        act(() => {
+            media.fireChange(false);
+        });
+
+        expect(screen.getByTestId('theme')).toHaveTextContent('dark');
+
+        setItemSpy.mockRestore();
+    });
+
     it('mantém a meta theme-color (chrome do navegador) sincronizada com o tema', async () => {
         const meta = document.createElement('meta');
         meta.id = 'theme-color-meta';
