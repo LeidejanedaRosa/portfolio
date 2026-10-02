@@ -47,16 +47,58 @@ function persist(theme: Theme) {
     }
 }
 
+// Meta "theme-color" (chrome nativo do navegador — barra de status mobile
+// etc.): id fixo, ver index.html. Cores precisam bater com --color-background
+// de src/index.css (@theme), light e dark.
+const THEME_COLOR: Record<Theme, string> = {
+    light: '#f8fafc',
+    dark: '#0f172a',
+};
+
+function applyThemeColorMeta(theme: Theme) {
+    document
+        .getElementById('theme-color-meta')
+        ?.setAttribute('content', THEME_COLOR[theme]);
+}
+
 export function ThemeProvider({ children }: { children: ReactNode }) {
     const [theme, setThemeState] = useState<Theme>(getInitialTheme);
 
-    // Efeito colateral único: refletir o estado na classe do <html>.
-    // Tailwind (darkMode: 'class') e os tokens de index.css leem daí.
+    // Efeito colateral único: refletir o estado na classe do <html> e na
+    // meta theme-color. Tailwind (darkMode: 'class') e os tokens de
+    // index.css leem a classe; o chrome nativo do navegador lê a meta.
     useEffect(() => {
         const root = document.documentElement;
         root.classList.toggle('dark', theme === 'dark');
         root.style.colorScheme = theme;
+        applyThemeColorMeta(theme);
     }, [theme]);
+
+    // Só acompanha o SO enquanto o usuário não escolheu um tema manualmente
+    // nesta sessão — getInitialTheme() já prioriza localStorage na primeira
+    // montagem, mas sem isso uma mudança de tema do SO DURANTE a sessão
+    // (ex.: o celular troca de claro pra escuro ao anoitecer) só aparecia
+    // depois de um reload. `persist()` grava a escolha manual; checar o
+    // localStorage aqui (não um estado React à parte) evita duplicar a
+    // mesma fonte de verdade.
+    useEffect(() => {
+        const media = window.matchMedia('(prefers-color-scheme: dark)');
+
+        const handleChange = (event: MediaQueryListEvent) => {
+            let hasManualChoice = false;
+            try {
+                hasManualChoice = localStorage.getItem(STORAGE_KEY) !== null;
+            } catch {
+                // localStorage indisponível — trata como sem escolha manual
+            }
+            if (!hasManualChoice) {
+                setThemeState(event.matches ? 'dark' : 'light');
+            }
+        };
+
+        media.addEventListener('change', handleChange);
+        return () => media.removeEventListener('change', handleChange);
+    }, []);
 
     const setTheme = useCallback((next: Theme) => {
         persist(next);
