@@ -8,7 +8,6 @@ import { BlueprintFrame } from '@components/atoms/blueprint-frame';
 import { ThemedBackgroundImage } from '@components/molecules/general/themed-background-image';
 import { useConsent } from '@src/consent';
 import { brandHoverColor } from '@src/lib/brand-hover-color';
-import { SECTION_PB, SECTION_PT } from '@src/lib/section-spacing';
 
 // simple-icons removeu o logo do LinkedIn do pacote (política de marca da
 // plataforma) — mesmo formato de ícone (SimpleIcon), mantido localmente.
@@ -64,6 +63,30 @@ const CHANNELS: readonly Channel[] = [
 function ContactLink({ channel }: { readonly channel: Channel }) {
     const isExternal = !channel.href.startsWith('mailto:');
 
+    // GitHub é exceção deliberada: a Leidejane quer o preto real da marca
+    // nos dois temas, mesmo sabendo que o contraste fica baixo no escuro
+    // (preto quase sobre fundo quase preto) — `brandHoverColor(hex, theme)`
+    // continua resolvendo os outros canais por tema (cai pro accent quando a
+    // cor real sumiria), só o GitHub ignora esse fallback.
+    const hoverLight =
+        channel.id === 'github'
+            ? `#${channel.icon.hex}`
+            : brandHoverColor(channel.icon.hex, 'light');
+    const hoverDark =
+        channel.id === 'github'
+            ? `#${channel.icon.hex}`
+            : brandHoverColor(channel.icon.hex, 'dark');
+
+    // Halo sutil só pro GitHub no escuro: a borda continua preta (pedido da
+    // Leidejane), mas preto sobre o fundo quase-preto do tema escuro quase
+    // some — nenhuma opacidade resolve "preto sobre preto", então em vez de
+    // mudar a cor da borda, um contorno claro e discreto por fora ajuda o
+    // olho a separar o card do fundo.
+    const githubDarkHalo =
+        channel.id === 'github'
+            ? 'dark:hover:shadow-[0_0_0_1px_color-mix(in_srgb,var(--color-foreground)_25%,transparent),0_0_12px_1px_color-mix(in_srgb,var(--color-foreground)_12%,transparent)]'
+            : '';
+
     return (
         <a
             href={channel.href}
@@ -73,30 +96,23 @@ function ContactLink({ channel }: { readonly channel: Channel }) {
             // seção passava por trás do card e ficava confusa de ler (mesmo
             // motivo do ProjectCard em Projetos). Borda e ícone usam a MESMA
             // cor de marca no hover (--brand-hover-*, aqui no <a> pra
-            // cascatear pro <svg> filho) — já existia só no ícone; bg-muted
-            // puro (sólido) ficava escuro demais como "sombreado" do card, o
-            // /20 deixa só uma sugestão de preenchimento. Duas variáveis (não
-            // uma): o preto do GitHub precisa continuar preto no tema claro
-            // (lê bem ali) e só virar accent no escuro, onde sumiria —
-            // `brandHoverColor(hex, theme)` já resolve isso por tema.
-            className="group flex items-center gap-4 rounded-lg border border-border bg-background p-4 transition-colors duration-200 hover:border-[var(--brand-hover-light)] hover:bg-muted/20 dark:hover:border-[var(--brand-hover-dark)]"
+            // cascatear pro <svg> filho) — já existia só no ícone. No hover,
+            // a cor de fundo precisa continuar OPACA (color-mix, não um
+            // `/20` translúcido) — opacidade deixa o quadriculado do fundo da
+            // seção vazar por trás do card (o `bg-background` da base é
+            // sólido só na base; o hover TROCA essa cor, não soma por cima).
+            className={`group flex items-center gap-4 rounded-lg border border-border bg-background p-4 transition-colors duration-200 hover:border-(--brand-hover-light) hover:bg-[color-mix(in_srgb,var(--color-muted)_20%,var(--color-background))] dark:hover:border-(--brand-hover-dark) ${githubDarkHalo}`}
             style={
                 {
-                    '--brand-hover-light': brandHoverColor(
-                        channel.icon.hex,
-                        'light',
-                    ),
-                    '--brand-hover-dark': brandHoverColor(
-                        channel.icon.hex,
-                        'dark',
-                    ),
+                    '--brand-hover-light': hoverLight,
+                    '--brand-hover-dark': hoverDark,
                 } as CSSProperties
             }
         >
             <svg
                 aria-hidden="true"
                 viewBox="0 0 24 24"
-                className="h-8 w-8 shrink-0 fill-muted-foreground transition-colors duration-200 group-hover:fill-[var(--brand-hover-light)] dark:group-hover:fill-[var(--brand-hover-dark)]"
+                className="h-8 w-8 shrink-0 fill-muted-foreground transition-colors duration-200 group-hover:fill-(--brand-hover-light) dark:group-hover:fill-(--brand-hover-dark)"
             >
                 <path d={channel.icon.path} />
             </svg>
@@ -123,13 +139,15 @@ export const Contact = () => {
         // rolagem, a página não teria como rolar o suficiente pra encostar o
         // título dela no topo se o conteúdo for mais baixo que a tela
         // (sobraria um vão — medido de verdade, 331px a mais que as outras
-        // seções num desktop comum). Altura mínima de uma tela garante espaço
-        // de rolagem de sobra; o conteúdo continua alinhado no topo (pt-16),
-        // não centralizado.
+        // seções num desktop comum). justify-safe-center: conteúdo
+        // centralizado verticalmente (a pedido da Leidejane) — sem
+        // SECTION_PT/PB aqui, porque padding assimétrico (pt-16/pb-24)
+        // desloca o centro do flex pro lado com menos padding; mesmo ajuste
+        // já feito no FAQ e na Home.
         <section
             id="contact"
             aria-labelledby="contact-title"
-            className={`relative min-h-[calc(100svh-var(--nav-height,4.5rem))] overflow-x-clip px-6 ${SECTION_PB} ${SECTION_PT}`}
+            className="relative flex min-h-[calc(100svh-var(--nav-height,4.5rem))] flex-col justify-safe-center overflow-x-clip px-6"
         >
             <ThemedBackgroundImage
                 lightSrc={contactBgLight}
@@ -137,8 +155,14 @@ export const Contact = () => {
             />
 
             {/* O fundo acima cobre a seção inteira (largura cheia); o
-                conteúdo continua restrito e centralizado por dentro. */}
-            <div className="mx-auto max-w-6xl">
+                conteúdo continua restrito e centralizado por dentro.
+                w-full explícito: sem isso, dentro do flex-col da <section>
+                (precisa do flex pro justify-safe-center vertical), esse
+                `<div>` encolhia pro tamanho do conteúdo (grid de 2 colunas
+                vira `1fr` sem largura definida pra resolver, cai pro
+                min-content) em vez de esticar até o max-w-6xl — mesmo bug
+                que não aparecia na Home porque lá o `w-full` já existia. */}
+            <div className="mx-auto w-full max-w-6xl">
                 <h2
                     id="contact-title"
                     className="font-mono text-3xl font-bold text-foreground"

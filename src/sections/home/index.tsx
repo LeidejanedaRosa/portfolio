@@ -3,7 +3,6 @@ import { useRef } from 'react';
 
 import homeHeroBg from '@assets/images/home-hero-bg.webp';
 import { DuotoneBackgroundImage } from '@components/molecules/general/duotone-background-image';
-import { SECTION_PB, SECTION_PT } from '@src/lib/section-spacing';
 
 export const HomePage = () => {
     const prefersReducedMotion = useReducedMotion();
@@ -20,7 +19,17 @@ export const HomePage = () => {
             id="home"
             ref={sectionRef}
             aria-labelledby="home-title"
-            className={`relative overflow-clip px-6 md:px-10 lg:px-12 ${SECTION_PB} ${SECTION_PT}`}
+            // min-h: sem isso, a altura da seção vinha só do conteúdo + padding
+            // fixo — por coincidência quase fecha a tela num notebook
+            // (~768-900px de altura), mas sobra vão num monitor mais alto, com
+            // o início do Sobre Mim aparecendo por baixo antes de rolar
+            // (achado real da Leidejane, visível só fora do notebook). O
+            // fundo (`object-cover`, h-full) acompanha a altura nova sozinho.
+            // justify-safe-center: conteúdo centralizado verticalmente (a
+            // pedido da Leidejane) — sem SECTION_PT/PB aqui, porque padding
+            // assimétrico (pt-16/pb-24) desloca o centro do flex pro lado com
+            // menos padding; mesmo ajuste já feito no FAQ.
+            className="relative flex min-h-[calc(100svh-var(--nav-height,4.5rem))] flex-col justify-safe-center overflow-clip px-6 md:px-10 lg:px-12"
         >
             <DuotoneBackgroundImage
                 src={homeHeroBg}
