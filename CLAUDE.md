@@ -60,9 +60,11 @@ reload.
 
 ## Deploy
 
-Hospedado no Vercel: [leidejanedarosa.vercel.app](https://leidejanedarosa.vercel.app/).
-Deploy automático a cada push em `main`, preview automático por PR. Sem domínio
-próprio ainda (ver `docs/BACKLOG.md` §6.2).
+Hospedado no Vercel. Deploy automático a cada push em `main`, preview automático
+por PR. Domínio próprio registrado: `leidejanedarosa.dev.br` (apontamento
+DNS/Vercel é passo manual da Leidejane, fora deste repo — enquanto não propaga,
+o site segue acessível por `leidejanedarosa.vercel.app`; ver `docs/BACKLOG.md`
+§6.2).
 
 ## Pendências conhecidas
 
