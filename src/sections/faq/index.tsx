@@ -2,6 +2,7 @@ import { ChevronDownIcon } from '@heroicons/react/24/outline';
 
 import faqBgLight from '@assets/images/faq-blueprint-bg-light.webp';
 import faqBgDark from '@assets/images/faq-blueprint-bg.webp';
+import { DimensionLine } from '@components/atoms/dimension-line';
 import { ThemedBackgroundImage } from '@components/molecules/general/themed-background-image';
 
 interface FaqEntry {
@@ -57,8 +58,9 @@ export const Faq = () => {
                     id="faq-title"
                     className="faq-eyebrow font-mono text-sm font-medium text-muted-foreground"
                 >
-                    Perguntas frequentes
+                    03 — Perguntas frequentes
                 </h2>
+                <DimensionLine className="mt-2 w-16" />
 
                 {/* .faq-list e .faq-eyebrow: as regras que escurecem as
                     demais perguntas (e o título) ao abrir ou passar o mouse
