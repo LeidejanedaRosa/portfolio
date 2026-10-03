@@ -2,6 +2,7 @@ import blueprintBgLight from '@assets/images/about-blueprint-bg-light.webp';
 import blueprintBgDark from '@assets/images/about-blueprint-bg.webp';
 import profilePhoto from '@assets/images/profile-cutout.webp';
 import { BlueprintFrame } from '@components/atoms/blueprint-frame';
+import { DimensionLine } from '@components/atoms/dimension-line';
 import { CourseList } from '@components/molecules/general/course-list';
 import { EducationList } from '@components/molecules/general/education-list';
 import { ExperienceTimeline } from '@components/molecules/general/experience-timeline';
@@ -30,8 +31,9 @@ export const AboutMe = () => {
                 <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
                     <div>
                         <p className="font-mono text-xs font-bold uppercase text-accent">
-                            Sobre mim
+                            01 — Sobre mim
                         </p>
+                        <DimensionLine className="mt-2 w-16" />
 
                         <h2
                             id="about-title"
