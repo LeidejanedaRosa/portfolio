@@ -3,6 +3,7 @@ import { useLayoutEffect, useRef, useState } from 'react';
 
 import projectsBgLight from '@assets/images/projects-blueprint-bg-light.webp';
 import projectsBgDark from '@assets/images/projects-blueprint-bg.webp';
+import { DimensionLine } from '@components/atoms/dimension-line';
 import { ThemedBackgroundImage } from '@components/molecules/general/themed-background-image';
 import { READING_LINE_OFFSET } from '@src/lib/reading-line';
 import { SECTION_PB, SECTION_PT } from '@src/lib/section-spacing';
@@ -107,9 +108,14 @@ export const Projects = () => {
             </div>
 
             <div className="mx-auto max-w-6xl">
+                <p className="font-mono text-xs font-bold uppercase text-accent">
+                    02
+                </p>
+                <DimensionLine className="mt-2 w-16" />
+
                 <h2
                     id="projects-title"
-                    className="font-mono text-3xl font-bold text-foreground"
+                    className="mt-3 font-mono text-3xl font-bold text-foreground"
                 >
                     Projetos
                 </h2>

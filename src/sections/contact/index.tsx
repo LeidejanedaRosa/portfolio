@@ -5,6 +5,7 @@ import { siGithub, siGmail, siWhatsapp, type SimpleIcon } from 'simple-icons';
 import contactBgLight from '@assets/images/contact-blueprint-bg-light.webp';
 import contactBgDark from '@assets/images/contact-blueprint-bg.webp';
 import { BlueprintFrame } from '@components/atoms/blueprint-frame';
+import { DimensionLine } from '@components/atoms/dimension-line';
 import { ThemedBackgroundImage } from '@components/molecules/general/themed-background-image';
 import { useConsent } from '@src/consent';
 import { brandHoverColor } from '@src/lib/brand-hover-color';
@@ -163,9 +164,14 @@ export const Contact = () => {
                 min-content) em vez de esticar até o max-w-6xl — mesmo bug
                 que não aparecia na Home porque lá o `w-full` já existia. */}
             <div className="mx-auto w-full max-w-6xl">
+                <p className="font-mono text-xs font-bold uppercase text-accent">
+                    04
+                </p>
+                <DimensionLine className="mt-2 w-16" />
+
                 <h2
                     id="contact-title"
-                    className="font-mono text-3xl font-bold text-foreground"
+                    className="mt-3 font-mono text-3xl font-bold text-foreground"
                 >
                     Contato
                 </h2>

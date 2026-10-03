@@ -34,7 +34,7 @@ interface StoryCardsProps {
 export const StoryCards = ({ entries }: StoryCardsProps) => {
     return (
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-            {entries.map((entry) => {
+            {entries.map((entry, index) => {
                 const Icon = entry.icon;
 
                 return (
@@ -42,6 +42,21 @@ export const StoryCards = ({ entries }: StoryCardsProps) => {
                         key={entry.id}
                         className="relative rounded-lg border border-accent/20 bg-surface p-3 lg:p-3.5"
                     >
+                        {/* Conector hairline até o card anterior — mesma
+                            fase da timeline de Projetos, mas estático (não é
+                            uma sequência "atual"/"próxima" guiada por
+                            scroll, é só a ordem cronológica da história). Só
+                            em lg+: abaixo disso os cards quebram linha
+                            (sm:grid-cols-2), e um traço preso à borda do
+                            grid ficaria solto no meio da tela em vez de
+                            encostado no card vizinho. w-4 = gap-4 (1rem):
+                            cobre exatamente o vão entre os cards. */}
+                        {index > 0 && (
+                            <span
+                                aria-hidden="true"
+                                className="absolute left-0 top-1/2 hidden h-px w-4 -translate-x-full -translate-y-1/2 bg-border lg:block"
+                            />
+                        )}
                         <div className="absolute inset-0 flex justify-end items-start pr-4 pt-4">
                             <span className="flex h-10 w-10 items-center justify-center rounded-full bg-accent/15 shadow-[0_0_12px_color-mix(in_srgb,var(--color-accent)_45%,transparent)]">
                                 <Icon className="h-8 w-8 text-accent" />
