@@ -5,7 +5,7 @@
 >
 > Legenda de prioridade: 🔴 alta · 🟡 média · 🟢 baixa
 
-Última atualização: 2026-10-02
+Última atualização: 2026-10-03
 
 ---
 
@@ -132,10 +132,10 @@
 
 - [x] Grade de logos de tecnologia (mono → cor no hover) — feito em `feat/about-me`, substituída por um diagrama animado (fluxo front-end → back-end → dados) em `feat/skills-flow`
 - [x] Vitrine de projetos reais — feito em `feat/projects`
-- [ ] `feat/blueprint` — levar o "blueprint" pra página toda: grade sutil no hero, conectores hairline entre cards, numeração de seções (01/02/03), linhas de cota
+- [x] `feat/blueprint` — levou o "blueprint" pra página toda, nos 3 pontos que couberam de verdade: **numeração de seções** (01 Sobre / 02 Projetos / 03 FAQ / 04 Contato, mesmo estilo `font-mono text-accent` já usado nos números de pergunta do FAQ e de card do Projetos, só promovido um nível acima); **linhas de cota** (`<DimensionLine />`, átomo novo — traço com marca nas pontas, tipo anotação de medida de desenho técnico — sob o número de cada seção); **conectores hairline entre cards** (os 5 `StoryCards` do Sobre Mim ganharam um traço fino entre si, mesmo vocabulário do `ConnectorTick` do Projetos, só que estático — é uma ordem cronológica, não uma sequência guiada por scroll). **Grade sutil no hero** foi tentada e descartada: testada com screenshot real, a `.blueprint-grid` (mesma classe do frame de Skills/Contato) ficava **invisível** por cima da foto do hero — ela já é, ela mesma, um desenho de caderno quadriculado, então uma 2ª grade em CSS não acrescentava nada, só código morto. Fecha também a parte "fundo com grade" do item `feat/hero-polish` abaixo, com a mesma resposta
 - [ ] `feat/motion` — scroll-reveal nas seções (framer-motion `whileInView`, stagger), hover trabalhado, respeitando `prefers-reduced-motion`
-- [x] `feat/hero-polish` — parallax perceptível: feito em `feat/hero-blueprint-motif` (cena + foto reagem ao scroll, `prefers-reduced-motion` desliga). "Pista de scroll" e "fundo com grade" **não** entraram nesse escopo — a direção do hero mudou (composição foto+papéis em vez de grade) — viram itens novos abaixo se ainda fizerem sentido
-- [ ] `feat/hero-polish` (sobras) — pista de scroll indicando "role para baixo"; textura de grade de fundo, se ainda fizer sentido com a composição atual do hero
+- [x] `feat/hero-polish` — parallax perceptível: feito em `feat/hero-blueprint-motif` (cena + foto reagem ao scroll, `prefers-reduced-motion` desliga). "Pista de scroll" ainda em aberto (ver item novo abaixo); "fundo com grade" testado e descartado em `feat/blueprint` (ver item acima) — a composição atual (foto+papéis) já tem a textura própria, uma grade em CSS por cima ficava invisível
+- [ ] "Pista de scroll" indicando "role para baixo" no hero — sobra de `feat/hero-polish`, ainda sem branch
 
 **As 5 seções de conteúdo estão completas** (Home, Sobre, Projetos, FAQ, Contato), a esteira de
 qualidade também: CI com branch protection, e2e (Playwright), Lighthouse CI, secret scan
