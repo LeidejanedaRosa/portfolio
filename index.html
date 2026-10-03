@@ -22,6 +22,19 @@
         </script>
 
         <!--
+          theme-color (chrome do navegador — barra de status mobile etc.):
+          uma meta só (antes eram 2 com `media`, que só seguiam a preferência
+          do SO — se o usuário escolhesse um tema diferente do SO dentro do
+          app, o chrome nativo ficava com a cor errada), com `id` pra
+          ThemeProvider atualizar o `content` toda vez que o tema mudar (ver
+          src/theme/index.tsx). Precisa vir ANTES do script anti-flash
+          abaixo: o parsing do HTML é sequencial, e o script roda síncrono —
+          se a meta viesse depois, `getElementById` não encontrava nada
+          ainda no carregamento inicial em tema escuro.
+        -->
+        <meta id="theme-color-meta" name="theme-color" content="#f8fafc" />
+
+        <!--
           Anti-flash: aplica o tema ANTES do primeiro paint, síncrono.
           Precisa espelhar a lógica de getInitialTheme() em src/theme/index.tsx.
         -->
@@ -42,23 +55,14 @@
                     if (dark) {
                         document.documentElement.classList.add('dark');
                         document.documentElement.style.colorScheme = 'dark';
+                        var meta = document.getElementById('theme-color-meta');
+                        if (meta) meta.setAttribute('content', '#0f172a');
                     }
                 } catch (e) {
                     /* sem matchMedia — mantém tema claro */
                 }
             })();
         </script>
-
-        <meta
-            name="theme-color"
-            content="#f8fafc"
-            media="(prefers-color-scheme: light)"
-        />
-        <meta
-            name="theme-color"
-            content="#0f172a"
-            media="(prefers-color-scheme: dark)"
-        />
         <!-- LCP é a imagem de fundo do hero (Home) — sem preload, o
              navegador só descobre que precisa dela depois de baixar e
              rodar o JS (ela é renderizada por um componente React, não um
