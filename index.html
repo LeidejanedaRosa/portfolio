@@ -92,6 +92,15 @@
         />
 
         <!--
+          Canônico: o site responde tanto em leidejanedarosa.dev.br quanto em
+          leidejanedarosa.vercel.app (o domínio da Vercel continua no ar,
+          redirecionando) — sem isso, buscadores podiam indexar os dois como
+          páginas diferentes com o mesmo conteúdo. Aponta sempre pro domínio
+          próprio, a versão "oficial" (achado da auditoria de 2026-10).
+        -->
+        <link rel="canonical" href="https://leidejanedarosa.dev.br/" />
+
+        <!--
           Open Graph: descreve ESTA página quando compartilhada (não o perfil externo do
           GitHub/LinkedIn — links pra eles ficam no conteúdo da seção de contato).
         -->
@@ -119,7 +128,7 @@
                 "url": "https://leidejanedarosa.dev.br/",
                 "sameAs": [
                     "https://github.com/LeidejanedaRosa",
-                    "https://www.linkedin.com/in/leidejane-da-rosa-a98544205/"
+                    "https://www.linkedin.com/in/leidejane/"
                 ]
             }
         </script>
