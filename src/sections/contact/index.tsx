@@ -130,7 +130,7 @@ function ContactLink({ channel }: { readonly channel: Channel }) {
                 <span className="font-mono text-sm font-medium text-foreground">
                     {channel.label}
                 </span>
-                <span className="break-words text-sm text-muted-foreground">
+                <span className="wrap-break-word text-sm text-muted-foreground">
                     {channel.handle}
                 </span>
             </span>

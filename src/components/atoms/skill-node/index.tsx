@@ -32,7 +32,7 @@ export const SkillNode = ({ icon, label, style }: SkillNodeProps) => {
                 <svg
                     aria-hidden="true"
                     viewBox="0 0 24 24"
-                    className="h-4 w-4 fill-muted-foreground transition-colors duration-200 group-hover:fill-[var(--skill-hover)] group-focus-within:fill-[var(--skill-hover)] sm:h-5 sm:w-5"
+                    className="h-4 w-4 fill-muted-foreground transition-colors duration-200 group-hover:fill-(--skill-hover) group-focus-within:fill-(--skill-hover) sm:h-5 sm:w-5"
                     style={
                         {
                             '--skill-hover': brandHoverColor(icon.hex),

@@ -33,7 +33,7 @@ function CarouselBadge({
                 <svg
                     aria-hidden="true"
                     viewBox="0 0 24 24"
-                    className="h-4 w-4 shrink-0 fill-muted-foreground transition-colors duration-200 group-hover:fill-[var(--brand-hover)]"
+                    className="h-4 w-4 shrink-0 fill-muted-foreground transition-colors duration-200 group-hover:fill-(--brand-hover)"
                     style={
                         {
                             '--brand-hover': brandHoverColor(item.icon.hex),

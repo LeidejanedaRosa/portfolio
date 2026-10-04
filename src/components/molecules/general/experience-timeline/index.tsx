@@ -69,7 +69,7 @@ function TimelineEntryRow({
             <span
                 ref={markerRef}
                 aria-hidden="true"
-                className="absolute -left-[1.80rem] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-accent bg-background"
+                className="absolute left-[-1.8rem] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-accent bg-background"
             >
                 {prefersReducedMotion ? (
                     <span className="absolute inset-0.5 rounded-full bg-accent" />

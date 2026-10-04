@@ -95,7 +95,7 @@ export const Faq = () => {
                                             className="h-5 w-5 shrink-0 text-muted-foreground transition-transform duration-200 group-open:rotate-180 motion-reduce:transition-none"
                                         />
                                     </summary>
-                                    <p className="mt-3 max-w-2xl pl-[3.25rem] text-muted-foreground">
+                                    <p className="mt-3 max-w-2xl pl-13 text-muted-foreground">
                                         {faq.answer}
                                     </p>
                                 </details>

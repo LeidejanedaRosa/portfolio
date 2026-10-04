@@ -242,6 +242,15 @@ dia de verdade; os achados reais viraram os itens abaixo, um por branch.
       conta própria). Não existe vulnerabilidade ativa por trás disso hoje (confirmado: zero
       `dangerouslySetInnerHTML`/`eval`/`innerHTML` de verdade no app), é hardening, não correção
       de um buraco
+- [x] `chore/tailwind-canonical-classes` — achado à parte da Leidejane, fora da varredura original
+      (SonarLint/extensão do Tailwind no VS Code): 11 declarações de classe em 9 arquivos ainda
+      usando sintaxe antiga de valor arbitrário quando o Tailwind v4 já tem forma canônica mais
+      curta — `fill-[var(--x)]` → `fill-(--x)` (4 ocorrências), `top-[var(--nav-height,4.5rem)]` →
+      `top-(--nav-height,4.5rem)`, `[&:not(:last-child)]:mb-12` → `not-last:mb-12` (2),
+      `break-words` → `wrap-break-word` (renomeado no v4, pra não confundir com
+      `break-all`/`word-break`), `max-w-[375px]` → `max-w-93.75`, `pl-[3.25rem]` → `pl-13`,
+      `-left-[1.80rem]` → `left-[-1.8rem]`. Confirmado que cada uma compila pro **mesmo** CSS final
+      de antes (`grep` no `dist/` depois do build) antes de seguir
 
 Fora da lista de propósito: o `<h2>` "pequeno" do FAQ (estilizado como eyebrow, diferente do
 tamanho grande das outras 3 seções) foi apontado como inconsistência pela auditoria, mas é decisão

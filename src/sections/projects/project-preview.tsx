@@ -41,11 +41,12 @@ export function ProjectPreview({
             </div>
             {/* min-h-0: um item flex não encolhe abaixo da altura natural
                 do conteúdo por padrão — sem isso, o flex-1 do iframe nunca
-                igualaria a altura do card ao lado. max-w-[375px]: largura
-                de viewport mobile (ex. iPhone SE/8), pro site carregar no
-                layout responsivo dele em vez de espremer o desktop. */}
+                igualaria a altura do card ao lado. max-w-93.75 (375px):
+                largura de viewport mobile (ex. iPhone SE/8), pro site
+                carregar no layout responsivo dele em vez de espremer o
+                desktop. */}
             <div
-                className={`min-h-0 w-full max-w-[375px] flex-1 overflow-hidden rounded-3xl border border-border ${
+                className={`min-h-0 w-full max-w-93.75 flex-1 overflow-hidden rounded-3xl border border-border ${
                     hugCenter === 'left' ? 'mr-auto' : 'ml-auto'
                 }`}
             >
