@@ -1,12 +1,19 @@
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
-import { m, useReducedMotion, useScroll, useTransform } from 'framer-motion';
+import { useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 
 import homeHeroBg from '@assets/images/home-hero-bg.webp';
 import { DuotoneBackgroundImage } from '@components/molecules/general/duotone-background-image';
+import { usePrefersReducedMotion } from '@src/lib/use-prefers-reduced-motion';
 
 export const HomePage = () => {
-    const prefersReducedMotion = useReducedMotion();
+    // Hook próprio do projeto, não o `useReducedMotion` do framer-motion:
+    // a lib cacheia o valor numa referência de módulo (só lê `matchMedia`
+    // uma vez por processo) — um `matchMedia` mockado DEPOIS desse
+    // primeiro mount não é reconsultado, então em teste o mock nunca
+    // "pega". Mesma razão documentada em `usePrefersReducedMotion`, já
+    // usado por SkillsFlow/Projects/ExperienceTimeline.
+    const prefersReducedMotion = usePrefersReducedMotion();
     const sectionRef = useRef<HTMLElement>(null);
 
     const { scrollYProgress } = useScroll({
@@ -101,32 +108,30 @@ export const HomePage = () => {
                 (redundante pra leitor de tela, que já navega por
                 landmark/heading, daí aria-hidden) — some sozinha ao rolar,
                 por estar dentro desta <section> (`overflow-clip`), sem
-                precisar de lógica extra pra escondê-la. Dois níveis: o de
-                fora cuida do posicionamento estático (Tailwind
-                `-translate-x-1/2`); o `m.div` de dentro só da animação do
-                "quique" — misturar os dois no mesmo elemento faria o
-                `style.transform` do Framer Motion substituir o transform
-                inteiro, apagando o -translate-x-1/2. */}
+                precisar de lógica extra pra escondê-la. Quique via CSS
+                puro (`@keyframes scroll-cue-bounce`, index.css) por um
+                utilitário arbitrário do Tailwind, não `animate` do
+                framer-motion — ver comentário do `@keyframes` pro motivo
+                (resumo: `animate` com keyframes não roda de forma síncrona
+                em jsdom, então nenhum teste conseguia provar que desligava
+                com prefers-reduced-motion). `motion-reduce:animate-none`
+                desliga sozinho, sem precisar ler `prefersReducedMotion` em
+                JS pra isso — mesmo padrão do hover dos CTAs acima. Dois
+                níveis ainda: o de fora cuida do posicionamento estático
+                (Tailwind `-translate-x-1/2`); o de dentro só da animação —
+                um `@keyframes` que anima `transform` substituiria o
+                transform inteiro do elemento se estivesse no mesmo nó,
+                apagando o -translate-x-1/2. */}
             <div
                 aria-hidden="true"
                 className="pointer-events-none absolute bottom-28 left-1/2 z-10 hidden -translate-x-1/2 lg:block"
             >
-                <m.div
-                    animate={
-                        prefersReducedMotion ? undefined : { y: [0, 8, 0] }
-                    }
-                    transition={{
-                        duration: 1.6,
-                        repeat: Infinity,
-                        ease: 'easeInOut',
-                    }}
-                    className="flex flex-col items-center gap-1 text-muted-foreground"
-                >
+                <div className="flex animate-[scroll-cue-bounce_1.6s_ease-in-out_infinite] flex-col items-center gap-1 text-muted-foreground motion-reduce:animate-none">
                     <span className="font-mono text-[0.65rem] uppercase tracking-[0.3em]">
                         Role
                     </span>
                     <ChevronDownIcon className="h-4 w-4" />
-                </m.div>
+                </div>
             </div>
         </section>
     );
