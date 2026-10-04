@@ -1,9 +1,29 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'vitest-axe';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { Faq } from './index';
+
+/** Força o <RevealList />/<RevealListItem /> do FAQ a renderizar estático
+ * (sem a transição de opacity do `whileInView`) — o jsdom não avança
+ * animações sozinho, então a resposta recém-aberta ainda estaria no meio da
+ * transição no instante do assert, mesmo com o `whileInView` já disparado. */
+function mockPrefersReducedMotion() {
+    vi.spyOn(window, 'matchMedia').mockImplementation(
+        (query) =>
+            ({
+                matches: query.includes('reduce'),
+                media: query,
+                onchange: null,
+                addListener: () => {},
+                removeListener: () => {},
+                addEventListener: () => {},
+                removeEventListener: () => {},
+                dispatchEvent: () => false,
+            }) as MediaQueryList,
+    );
+}
 
 describe('<Faq />', () => {
     it('é uma seção com título e id de âncora', () => {
@@ -34,6 +54,7 @@ describe('<Faq />', () => {
     });
 
     it('clicar numa pergunta revela a resposta (details nativo)', async () => {
+        mockPrefersReducedMotion();
         const user = userEvent.setup();
         render(<Faq />);
 
