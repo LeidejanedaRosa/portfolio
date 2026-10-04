@@ -1,5 +1,5 @@
 import { m, useScroll, useTransform } from 'framer-motion';
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 import projectsBgLight from '@assets/images/projects-blueprint-bg-light.webp';
 import projectsBgDark from '@assets/images/projects-blueprint-bg.webp';
@@ -9,6 +9,7 @@ import { ThemedBackgroundImage } from '@components/molecules/general/themed-back
 import { READING_LINE_OFFSET } from '@src/lib/reading-line';
 import { SECTION_PB, SECTION_PT } from '@src/lib/section-spacing';
 import { usePrefersReducedMotion } from '@src/lib/use-prefers-reduced-motion';
+import { useResizeObserver } from '@src/lib/use-resize-observer';
 
 import { PROJECTS } from './data';
 import { buildLightPath, type RowBounds } from './light-path';
@@ -44,48 +45,24 @@ export const Projects = () => {
 
     // Topo e base de cada <li> como fração 0–1 da altura da lista — mesmo
     // referencial do `scrollYProgress`, comparado direto em `TimelineRow` e
-    // em `buildLightPath`. `useLayoutEffect`: mede antes do primeiro
-    // paint, sem flash. ResizeObserver na <ul> (não só `resize` da window):
-    // a altura da lista também muda quando um <details> de código abre —
-    // mesmo padrão de <Layout /> pro --nav-height.
-    useLayoutEffect(() => {
-        const ul = timelineRef.current;
-        if (!ul) return;
+    // em `buildLightPath`. ResizeObserver na <ul> (não só `resize` da
+    // window): a altura da lista também muda quando um <details> de código
+    // abre — mesmo padrão de <Layout /> pro --nav-height.
+    useResizeObserver(timelineRef, (ul) => {
+        const ulHeight = ul.offsetHeight;
+        if (!ulHeight) return;
 
-        // `list` como parâmetro (não capturar `ul` direto): TypeScript não
-        // preserva o `if (!ul) return` acima dentro de uma function
-        // declaration — ela é hoisted e podia, na visão do compilador, ser
-        // chamada de qualquer lugar, então `ul` volta a ser
-        // `HTMLUListElement | null` lá dentro.
-        function measure(list: HTMLUListElement) {
-            const ulHeight = list.offsetHeight;
-            if (!ulHeight) return;
-
-            setRows(
-                liRefs.current.map((li) =>
-                    li
-                        ? {
-                              top: li.offsetTop / ulHeight,
-                              bottom:
-                                  (li.offsetTop + li.offsetHeight) / ulHeight,
-                          }
-                        : { top: 1, bottom: 1 },
-                ),
-            );
-        }
-
-        measure(ul);
-
-        if (typeof ResizeObserver === 'undefined') {
-            // Navegador sem suporte (raro hoje): mede uma vez no mount e
-            // segue sem observar — melhor que quebrar o app inteiro.
-            return;
-        }
-
-        const observer = new ResizeObserver(() => measure(ul));
-        observer.observe(ul);
-        return () => observer.disconnect();
-    }, []);
+        setRows(
+            liRefs.current.map((li) =>
+                li
+                    ? {
+                          top: li.offsetTop / ulHeight,
+                          bottom: (li.offsetTop + li.offsetHeight) / ulHeight,
+                      }
+                    : { top: 1, bottom: 1 },
+            ),
+        );
+    });
 
     return (
         <section
