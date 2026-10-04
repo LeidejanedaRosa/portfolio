@@ -4,7 +4,15 @@ module.exports = {
     ci: {
         collect: {
             staticDistDir: './dist',
-            numberOfRuns: 1,
+            // 3, não 1: achado real — o mesmo bundle (hash idêntico, zero
+            // mudança de código) passou numa execução e falhou na outra,
+            // tanto localmente quanto num runner limpo do GitHub Actions.
+            // Performance (TBT especialmente) é sensível a ruído de CPU
+            // entre execuções; com várias, o @lhci/cli compara contra a
+            // MEDIANA automaticamente, bem mais estável que uma amostra só
+            // (prática recomendada oficialmente). Custa ~3x mais tempo
+            // nesse step, troca aceitável por não quebrar PR sem motivo.
+            numberOfRuns: 3,
         },
         assert: {
             assertions: {
