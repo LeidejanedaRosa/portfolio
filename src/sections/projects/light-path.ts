@@ -5,7 +5,7 @@ export interface RowBounds {
     bottom: number;
 }
 
-export interface LightPath {
+interface LightPath {
     /** Progresso de scroll (0–1) de cada ponto de controle. */
     input: number[];
     /** Posição da luz (0–1 da altura da lista) em cada ponto de controle. */
