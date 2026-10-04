@@ -157,3 +157,75 @@ já é a stack confirmada (ver `CLAUDE.md`). Daqui pra frente: manter o hábito 
 componente novo (3.2 — 🔴 alta, mas é prática contínua, não um item que "fecha"), e os demais
 itens de menor prioridade que sobraram em §1/§2/§3/§5 — nenhum bloqueando, é manutenção/polimento
 a partir daqui.
+
+## Auditoria completa de qualidade (pedida pela Leidejane, 2026-10-04)
+
+Com a "Camada visual" fechada, varredura completa pedida pela Leidejane: boas práticas, code
+smells, clean code, hardcoded, HTML semântico, segurança, SOLID, SEO, validade real dos testes
+(não só cobertura), componentização e código morto. 4 pesquisas em paralelo (qualidade/SOLID,
+segurança, HTML/SEO, validade de testes), cada achado verificado contra o código atual antes de
+virar item aqui. Veredito geral: base genuinely bem construída — a maioria dos itens já estava em
+dia de verdade; os achados reais viraram os itens abaixo, um por branch.
+
+- [x] `fix/home-reduced-motion` — Home usava `useReducedMotion` do framer-motion (cacheia o valor
+      numa referência de módulo, só lê `matchMedia` uma vez por processo) em vez do
+      `usePrefersReducedMotion` compartilhado do projeto — o teste que "testava" o caso de
+      reduced-motion nunca pegava o mock de verdade, então passava mesmo que a lógica estivesse
+      quebrada (achado confirmado por dois agentes de auditoria independentes, de ângulos
+      diferentes). Troca pro hook compartilhado. No caminho: o quique da pista de scroll
+      (`feat/hero-scroll-cue`) também usava `animate` do framer-motion pra isso — descobri que
+      `animate` com array de keyframes não aplica estilo de forma síncrona no jsdom (provado com
+      um teste descartável, 3 variações, HTML idêntico nos três casos), então nenhum teste
+      conseguia provar que a animação desligava. Trocado por CSS puro
+      (`animate-[scroll-cue-bounce_...] motion-reduce:animate-none`, mesmo padrão já usado no
+      hover dos CTAs) — mais simples, não depende de JS, e testável de verdade. O parallax da
+      imagem de fundo continua impossível de provar em teste unitário (sem scroll real, o valor
+      calculado é o mesmo nos dois casos) — virou teste e2e novo (`e2e/home.spec.ts`), confirmado
+      que pega regressão de verdade (quebrei de propósito, o teste falhou, revertido)
+- [ ] `test/faq-accordion-e2e` — o teste do FAQ "só uma pergunta aberta por vez" só conferia o
+      atributo `name="faq"` em cada `<details>`, nunca abria duas pra confirmar a exclusão mútua —
+      e nem dava pra testar isso no jsdom (não implementa essa exclusividade nativa do HTML).
+      Nenhum teste, unitário ou e2e, cobria esse comportamento de verdade — exatamente o tipo de
+      "teste que não testava nada" que a Leidejane suspeitava existir
+- [ ] `test/reveal-reduced-motion-assertions` — `<Reveal />`/`<RevealList />`: teste de
+      reduced-motion checava só o nome da tag (`DIV`/`UL`/`LI`), que é igual nos dois branches
+      (`m.div` do framer-motion também renderiza como `<div>` de verdade) — passaria mesmo se a
+      branch de reduced-motion fosse apagada
+- [ ] `test/hardening-pass` — `ExperienceTimeline` não tem o mesmo teste de
+      `measure()`/fallback do `ResizeObserver` que `Projects` já tem (acrescentado depois de um
+      achado do CodeRabbit, nunca replicado); `ThemedBackgroundImage` não confirma qual classe
+      (`dark:hidden`/`dark:block`) está em qual elemento; `projects.spec.ts` usa
+      `waitForTimeout(300)` fixo em vez do padrão "N leituras seguidas estáveis" que
+      `navigation.spec.ts` já usa
+- [ ] `refactor/resize-observer-hook` — o padrão "medir elemento, observar resize, fallback se
+      `ResizeObserver` não existir" está duplicado quase palavra por palavra em 3 lugares
+      (`layout/index.tsx`, `projects/index.tsx`, `experience-timeline/index.tsx`, dois deles com o
+      mesmo comentário) — extrai um `useResizeObserver` compartilhado
+- [ ] `chore/dead-code-cleanup` — 3 exports não usados em lugar nenhum do projeto: `Theme`
+      (`theme/index.tsx`), `ConsentStatus` (`consent/index.tsx`), `LightPath` (`light-path.ts`)
+- [ ] `chore/npm-audit-fix` — `npm audit` real hoje é **23** vulnerabilidades, não as "14"
+      anotadas (uma nova entrou via `typescript-eslint`/`fast-glob`/`micromatch`/`braces`); 9 têm
+      correção segura disponível agora (`npm audit fix`, sem `--force`, não quebra o range do
+      `package.json`) — cairia pra 14. As 14 restantes continuam sem solução upstream
+      (`@lhci/cli`, já na versão mais recente publicada), como já era sabido. `npm audit --omit=dev`
+      confirmado em **0** — nada disso chega em produção
+- [ ] `chore/env-scaffolding` — falta `.env.example` na raiz (viola a própria regra padrão da
+      Leidejane, mesmo o projeto não tendo nenhuma variável de ambiente hoje) e o `.gitignore` não
+      tem nenhuma entrada `.env*` — nenhum `.env` real existe nem nunca existiu no histórico
+      (gitleaks escaneou os 200+ commits de novo, zero segredos), é só a scaffolding de precaução
+      que falta
+- [ ] `fix/seo-canonical-and-linkedin` — falta `<link rel="canonical">` (risco real de conteúdo
+      duplicado: o site resolve tanto em `leidejanedarosa.dev.br` quanto em
+      `leidejanedarosa.vercel.app`, sem indicar pra buscadores qual é a versão oficial); URL do
+      LinkedIn no JSON-LD (`/in/leidejane-da-rosa-a98544205/`) não batia com a do link visível no
+      Contato (`/in/leidejane/`) — confirmado com a Leidejane que a do Contato é a certa
+- [ ] `feat/csp-header` — `vercel.json` com Content-Security-Policy e outros headers de segurança
+      — defesa em profundidade pro GTM (que, pós-consentimento, pode injetar outras tags por
+      conta própria). Não existe vulnerabilidade ativa por trás disso hoje (confirmado: zero
+      `dangerouslySetInnerHTML`/`eval`/`innerHTML` de verdade no app), é hardening, não correção
+      de um buraco
+
+Fora da lista de propósito: o `<h2>` "pequeno" do FAQ (estilizado como eyebrow, diferente do
+tamanho grande das outras 3 seções) foi apontado como inconsistência pela auditoria, mas é decisão
+documentada da própria Leidejane (§ anterior, "Layout revisado depois, a pedido da Leidejane, pra
+bater mais com a referência" — michaelpumo.com) — não é bug, não entra na lista.

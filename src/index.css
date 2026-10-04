@@ -171,6 +171,26 @@
         }
     }
 
+    /* Quique da pista de scroll da Home (<HomePage />) — usado via
+       utilitário arbitrário do Tailwind (`animate-[scroll-cue-bounce_...]`
+       + `motion-reduce:animate-none`, mesmo padrão já usado no hover dos
+       CTAs do hero). CSS puro, não `animate` do framer-motion: um
+       `animate` com array de keyframes só aplica estilo de verdade via
+       requestAnimationFrame — em teste (jsdom), isso nunca roda de forma
+       síncrona, então nenhum assert conseguia provar que a animação
+       ligava/desligava com prefers-reduced-motion (achado da auditoria de
+       2026-10). CSS puro também responde à mudança de preferência do SO ao
+       vivo, sem precisar de JS pra isso. */
+    @keyframes scroll-cue-bounce {
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(8px);
+        }
+    }
+
     /* Esmaece as duas pontas da faixa (mask-image, não uma cor sólida por
        cima) — funciona igual em qualquer fundo/tema, sem precisar cravar
        uma cor que teria que ser trocada no dark mode. */

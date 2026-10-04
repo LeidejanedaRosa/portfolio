@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { axe } from 'vitest-axe';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { HomePage } from './index';
 
@@ -52,28 +52,31 @@ describe('<HomePage />', () => {
         expect(await axe(container)).toHaveNoViolations();
     });
 
-    it('renderiza com prefers-reduced-motion sem quebrar', () => {
-        vi.spyOn(window, 'matchMedia').mockImplementation(
-            (query) =>
-                ({
-                    matches: query.includes('reduce'),
-                    media: query,
-                    onchange: null,
-                    addListener: () => {},
-                    removeListener: () => {},
-                    addEventListener: () => {},
-                    removeEventListener: () => {},
-                    dispatchEvent: () => false,
-                }) as MediaQueryList,
-        );
-
+    // `motion-reduce:animate-none` (Tailwind, CSS puro — ver comentário em
+    // index.tsx) desliga o quique sozinho via media query; não depende de
+    // `prefersReducedMotion` em JS pra isso, então não há uma branch pra
+    // testar aqui além de confirmar que a classe está sempre presente.
+    it('o quique da pista de scroll desliga sozinho em prefers-reduced-motion (classe motion-reduce:animate-none)', () => {
         render(<HomePage />);
 
-        expect(
-            screen.getByRole('heading', {
-                level: 1,
-                name: /leidejane da rosa/i,
-            }),
-        ).toBeInTheDocument();
+        const cue = screen.getByText('Role').parentElement;
+        expect(cue).toHaveClass(
+            'animate-[scroll-cue-bounce_1.6s_ease-in-out_infinite]',
+            'motion-reduce:animate-none',
+        );
     });
+
+    // Achado da auditoria de 2026-10: antes a Home usava o
+    // `useReducedMotion` do framer-motion (não o hook compartilhado do
+    // projeto), que cacheia o valor numa referência de módulo — um
+    // `matchMedia` mockado aqui nunca era reconsultado, e um teste unitário
+    // "passava" mesmo com o parallax sempre ligado de verdade. Trocar pro
+    // `usePrefersReducedMotion` (que relê a cada montagem) resolve a causa,
+    // mas o EFEITO (o parallax de verdade ligar/desligar) continua
+    // impossível de provar aqui: sem scroll real, `useTransform` sempre
+    // calcula o mesmo valor (0) nos dois casos no instante da renderização
+    // — só diverge depois que a página rola de verdade, o que o jsdom não
+    // simula. Esse caso virou teste e2e (`e2e/home.spec.ts`, navegador
+    // real, scroll de verdade) em vez de um unitário que fingiria provar
+    // algo que não prova.
 });
