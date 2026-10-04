@@ -239,11 +239,16 @@ dia de verdade; os achados reais viraram os itens abaixo, um por branch.
       8.24.1 → 8.71.0 (só `package-lock.json` mudou, `package.json` nem precisou — a versão nova já
       cabe no range `^8.22.0`), **23 → 14** confirmado, `npm run build` + suíte inteira passando
       depois do bump
-- [ ] `chore/env-scaffolding` — falta `.env.example` na raiz (viola a própria regra padrão da
+- [x] `chore/env-scaffolding` — falta `.env.example` na raiz (viola a própria regra padrão da
       Leidejane, mesmo o projeto não tendo nenhuma variável de ambiente hoje) e o `.gitignore` não
       tem nenhuma entrada `.env*` — nenhum `.env` real existe nem nunca existiu no histórico
       (gitleaks escaneou os 200+ commits de novo, zero segredos), é só a scaffolding de precaução
-      que falta
+      que falta. `.env.example` criado (hoje só documenta que não há variável real nenhuma);
+      `.gitignore` ganhou `.env`/`.env.local`/`.env.*.local` — mesmo padrão oficial do Vite, que
+      ignora os arquivos que podem guardar segredo mas mantém rastreável um `.env.[modo]` sem
+      `.local` (por convenção, não guarda segredo). Confirmado nos dois sentidos: `.env.example`
+      continua rastreável (`git check-ignore` não bate em nenhuma regra), um `.env` de teste real
+      É ignorado. README ganhou uma linha em "Como rodar" apontando pro arquivo
 - [ ] `fix/seo-canonical-and-linkedin` — falta `<link rel="canonical">` (risco real de conteúdo
       duplicado: o site resolve tanto em `leidejanedarosa.dev.br` quanto em
       `leidejanedarosa.vercel.app`, sem indicar pra buscadores qual é a versão oficial); URL do
