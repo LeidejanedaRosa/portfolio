@@ -1,8 +1,9 @@
 import { m, useScroll, useTransform, type MotionValue } from 'framer-motion';
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { READING_LINE_OFFSET } from '@src/lib/reading-line';
 import { usePrefersReducedMotion } from '@src/lib/use-prefers-reduced-motion';
+import { useResizeObserver } from '@src/lib/use-resize-observer';
 
 export interface TimelineEntry {
     id: string;
@@ -136,46 +137,31 @@ export const ExperienceTimeline = ({ entries }: ExperienceTimelineProps) => {
         { clamp: true },
     );
 
-    // Mesmo padrão de `<Projects />`: mede antes do primeiro paint
-    // (`useLayoutEffect`) e reage a mudança de altura da lista via
-    // `ResizeObserver`, não só ao resize da janela.
-    useLayoutEffect(() => {
-        const list = listRef.current;
-        if (!list) return;
+    // Mesmo padrão de `<Projects />`: mede antes do primeiro paint e reage
+    // a mudança de altura da lista via `ResizeObserver`, não só ao resize
+    // da janela.
+    useResizeObserver(listRef, (ol) => {
+        const listHeight = ol.offsetHeight;
+        if (!listHeight) return;
 
-        function measure(ol: HTMLOListElement) {
-            const listHeight = ol.offsetHeight;
-            if (!listHeight) return;
-
-            // Centro do marcador, não do <li>: o marcador fica no topo da
-            // entrada, e é ali que a luz precisa cruzar pra acender. Os
-            // `offsetTop` somados (marcador dentro do <li>, <li> dentro da
-            // <ol>) ignoram transform de animação, ao contrário de
-            // `getBoundingClientRect`.
-            setThresholds(
-                markerRefs.current.map((marker) => {
-                    const li = marker?.offsetParent;
-                    if (!marker || !(li instanceof HTMLElement)) return 1;
-                    return (
-                        (li.offsetTop +
-                            marker.offsetTop +
-                            marker.offsetHeight / 2) /
-                        listHeight
-                    );
-                }),
-            );
-        }
-
-        measure(list);
-
-        if (typeof ResizeObserver === 'undefined') {
-            return;
-        }
-
-        const observer = new ResizeObserver(() => measure(list));
-        observer.observe(list);
-        return () => observer.disconnect();
-    }, []);
+        // Centro do marcador, não do <li>: o marcador fica no topo da
+        // entrada, e é ali que a luz precisa cruzar pra acender. Os
+        // `offsetTop` somados (marcador dentro do <li>, <li> dentro da
+        // <ol>) ignoram transform de animação, ao contrário de
+        // `getBoundingClientRect`.
+        setThresholds(
+            markerRefs.current.map((marker) => {
+                const li = marker?.offsetParent;
+                if (!marker || !(li instanceof HTMLElement)) return 1;
+                return (
+                    (li.offsetTop +
+                        marker.offsetTop +
+                        marker.offsetHeight / 2) /
+                    listHeight
+                );
+            }),
+        );
+    });
 
     return (
         <ol ref={listRef} className="relative border-l border-border pl-6">

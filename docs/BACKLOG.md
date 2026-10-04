@@ -215,10 +215,16 @@ dia de verdade; os achados reais viraram os itens abaixo, um por branch.
       comum por disputa de CPU — igual o `skills-flow/index.test.tsx` que a auditoria já tinha
       apontado como o único teste pesado sem o tratamento que `about-me`/`projects` já tinham —
       os dois ganharam o mesmo timeout estendido (15s)
-- [ ] `refactor/resize-observer-hook` — o padrão "medir elemento, observar resize, fallback se
-      `ResizeObserver` não existir" está duplicado quase palavra por palavra em 3 lugares
+- [x] `refactor/resize-observer-hook` — o padrão "medir elemento, observar resize, fallback se
+      `ResizeObserver` não existir" estava duplicado quase palavra por palavra em 3 lugares
       (`layout/index.tsx`, `projects/index.tsx`, `experience-timeline/index.tsx`, dois deles com o
-      mesmo comentário) — extrai um `useResizeObserver` compartilhado
+      mesmo comentário) — extraído pra `src/lib/use-resize-observer.ts`, testado isoladamente (5
+      testes: mede no mount, remede quando o observer dispara, desconecta ao desmontar, sempre usa
+      a versão mais recente do callback — sem closure velha —, e o fallback sem `ResizeObserver`).
+      `onMeasure` não entra nas dependências do efeito (só a ref, estável entre renders): guardar a
+      versão mais recente numa ref interna evita que quem chama precise memoizar o callback com
+      `useCallback` só pra não disparar o efeito de novo a cada render — um jeito de o hook
+      "vazar" complexidade pra quem usa que a extração deveria eliminar, não introduzir
 - [ ] `chore/dead-code-cleanup` — 3 exports não usados em lugar nenhum do projeto: `Theme`
       (`theme/index.tsx`), `ConsentStatus` (`consent/index.tsx`), `LightPath` (`light-path.ts`)
 - [ ] `chore/npm-audit-fix` — `npm audit` real hoje é **23** vulnerabilidades, não as "14"
