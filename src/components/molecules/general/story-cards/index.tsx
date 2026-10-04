@@ -1,5 +1,7 @@
 import { type ComponentType, type SVGProps } from 'react';
 
+import { RevealList, RevealListItem } from '@components/atoms/reveal/list';
+
 export interface StoryCardEntry {
     id: string;
     title: string;
@@ -33,12 +35,12 @@ interface StoryCardsProps {
  */
 export const StoryCards = ({ entries }: StoryCardsProps) => {
     return (
-        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        <RevealList className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
             {entries.map((entry, index) => {
                 const Icon = entry.icon;
 
                 return (
-                    <li
+                    <RevealListItem
                         key={entry.id}
                         className="relative rounded-lg border border-accent/20 bg-surface p-3 lg:p-3.5"
                     >
@@ -75,9 +77,9 @@ export const StoryCards = ({ entries }: StoryCardsProps) => {
                         <p className="mt-0.5 text-xs leading-snug text-muted-foreground">
                             {entry.text}
                         </p>
-                    </li>
+                    </RevealListItem>
                 );
             })}
-        </ul>
+        </RevealList>
     );
 };
