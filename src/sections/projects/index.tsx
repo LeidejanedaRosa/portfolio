@@ -4,6 +4,7 @@ import { useLayoutEffect, useRef, useState } from 'react';
 import projectsBgLight from '@assets/images/projects-blueprint-bg-light.webp';
 import projectsBgDark from '@assets/images/projects-blueprint-bg.webp';
 import { DimensionLine } from '@components/atoms/dimension-line';
+import { Reveal } from '@components/atoms/reveal';
 import { ThemedBackgroundImage } from '@components/molecules/general/themed-background-image';
 import { READING_LINE_OFFSET } from '@src/lib/reading-line';
 import { SECTION_PB, SECTION_PT } from '@src/lib/section-spacing';
@@ -108,25 +109,30 @@ export const Projects = () => {
             </div>
 
             <div className="mx-auto max-w-6xl">
-                <p className="font-mono text-xs font-bold uppercase text-accent">
-                    02
-                </p>
-                <DimensionLine className="mt-2 w-16" />
+                <Reveal>
+                    <p className="font-mono text-xs font-bold uppercase text-accent">
+                        02
+                    </p>
+                    <DimensionLine className="mt-2 w-16" />
 
-                <h2
-                    id="projects-title"
-                    className="mt-3 font-mono text-3xl font-bold text-foreground"
-                >
-                    Projetos
-                </h2>
-                <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-                    Os seis projetos abaixo são reais — a maioria é trabalho de
-                    cliente ou de impacto social. Nos que ainda são privados,
-                    você encontra um trecho real de código ou um link pra testar
-                    ao vivo; nos que já são públicos, dá pra ver o código e o
-                    site no ar.
-                </p>
+                    <h2
+                        id="projects-title"
+                        className="mt-3 font-mono text-3xl font-bold text-foreground"
+                    >
+                        Projetos
+                    </h2>
+                    <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
+                        Os seis projetos abaixo são reais — a maioria é trabalho
+                        de cliente ou de impacto social. Nos que ainda são
+                        privados, você encontra um trecho real de código ou um
+                        link pra testar ao vivo; nos que já são públicos, dá pra
+                        ver o código e o site no ar.
+                    </p>
+                </Reveal>
 
+                {/* Timeline fora do <Reveal />: ela já tem a própria
+                    animação sincronizada ao scroll (a "luz" percorrendo os
+                    cards) — um segundo fade por cima duplicaria o efeito. */}
                 <ul ref={timelineRef} className="relative mt-16">
                     {/* Linha central: só existe em telas médias+ (é ela que faz
                     os cards alternarem lado a lado; em coluna única, no
