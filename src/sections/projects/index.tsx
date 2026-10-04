@@ -100,7 +100,7 @@ export const Projects = () => {
                 enquanto Projetos está na tela. `sticky` em vez de
                 `background-attachment: fixed`, que o Safari do iOS ignora. */}
             <div className="pointer-events-none absolute inset-0 -z-10">
-                <div className="sticky top-[var(--nav-height,4.5rem)] h-[calc(100svh-var(--nav-height,4.5rem))]">
+                <div className="sticky top-(--nav-height,4.5rem) h-[calc(100svh-var(--nav-height,4.5rem))]">
                     <ThemedBackgroundImage
                         lightSrc={projectsBgLight}
                         darkSrc={projectsBgDark}

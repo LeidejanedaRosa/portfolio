@@ -100,7 +100,7 @@ export function TimelineRow({
             ref={liRef}
             // Sem `items-start`: o padrão do grid (`stretch`) é o que faz
             // o card e o preview terem a mesma altura na mesma linha.
-            className="relative md:grid md:grid-cols-2 md:gap-x-12 [&:not(:last-child)]:mb-12 md:[&:not(:last-child)]:mb-16"
+            className="relative md:grid md:grid-cols-2 md:gap-x-12 not-last:mb-12 md:not-last:mb-16"
         >
             <span
                 aria-hidden="true"

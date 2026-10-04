@@ -17,7 +17,7 @@ export const TechIcon = ({ icon, label }: TechIconProps) => {
             <svg
                 aria-hidden="true"
                 viewBox="0 0 24 24"
-                className="h-8 w-8 fill-muted-foreground transition-colors duration-200 group-hover:fill-[var(--tech-hover)]"
+                className="h-8 w-8 fill-muted-foreground transition-colors duration-200 group-hover:fill-(--tech-hover)"
                 style={
                     {
                         '--tech-hover': brandHoverColor(icon.hex),
