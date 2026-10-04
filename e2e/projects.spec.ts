@@ -118,13 +118,13 @@ test('rolar a timeline estende o traço que liga a bolinha ao card (sincronizado
     await page
         .getByRole('heading', { level: 3, name: 'EMR International' })
         .scrollIntoViewIfNeeded();
-    await page.waitForTimeout(300);
 
-    const afterTransform = await tick.evaluate(
-        (el) => getComputedStyle(el).transform,
-    );
-
-    expect(afterTransform).not.toBe(beforeTransform);
+    // poll em vez de waitForTimeout fixo (achado da auditoria de 2026-10):
+    // espera o `transform` de verdade mudar, em vez de um tempo fixo
+    // adivinhado — mesmo padrão já usado em home.spec.ts.
+    await expect
+        .poll(() => tick.evaluate((el) => getComputedStyle(el).transform))
+        .not.toBe(beforeTransform);
 });
 
 test('mobile: a seção inteira cabe sem gerar scroll horizontal (regressão — o código de teste do FCR já causou isso)', async ({
