@@ -230,12 +230,15 @@ dia de verdade; os achados reais viraram os itens abaixo, um por branch.
       `export` removido dos três (continuam existindo, só pararam de fingir ser API pública de um
       módulo que não tem nenhum consumidor de verdade) — `RowBounds`, no mesmo arquivo de
       `LightPath`, ficou export mesmo, é consumido de verdade por `projects/index.tsx`
-- [ ] `chore/npm-audit-fix` — `npm audit` real hoje é **23** vulnerabilidades, não as "14"
+- [x] `chore/npm-audit-fix` — `npm audit` real hoje é **23** vulnerabilidades, não as "14"
       anotadas (uma nova entrou via `typescript-eslint`/`fast-glob`/`micromatch`/`braces`); 9 têm
       correção segura disponível agora (`npm audit fix`, sem `--force`, não quebra o range do
       `package.json`) — cairia pra 14. As 14 restantes continuam sem solução upstream
       (`@lhci/cli`, já na versão mais recente publicada), como já era sabido. `npm audit --omit=dev`
-      confirmado em **0** — nada disso chega em produção
+      confirmado em **0** — nada disso chega em produção. `npm audit fix` rodado: `typescript-eslint`
+      8.24.1 → 8.71.0 (só `package-lock.json` mudou, `package.json` nem precisou — a versão nova já
+      cabe no range `^8.22.0`), **23 → 14** confirmado, `npm run build` + suíte inteira passando
+      depois do bump
 - [ ] `chore/env-scaffolding` — falta `.env.example` na raiz (viola a própria regra padrão da
       Leidejane, mesmo o projeto não tendo nenhuma variável de ambiente hoje) e o `.gitignore` não
       tem nenhuma entrada `.env*` — nenhum `.env` real existe nem nunca existiu no histórico
