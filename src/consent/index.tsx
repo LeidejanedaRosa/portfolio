@@ -11,7 +11,7 @@ import {
 import { gtag } from '@src/lib/gtag';
 import { loadGTM } from '@src/lib/load-gtm';
 
-export type ConsentStatus = 'accepted' | 'rejected' | null;
+type ConsentStatus = 'accepted' | 'rejected' | null;
 
 const STORAGE_KEY = 'cookie-consent';
 const GTM_CONTAINER_ID = 'GTM-KLCNXQQ';
