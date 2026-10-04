@@ -202,12 +202,19 @@ dia de verdade; os achados reais viraram os itens abaixo, um por branch.
       sozinha não reproduz o bug (sem o `<RevealList />` pai fornecendo contexto de animação do
       framer-motion, o `m.li` solto não tem estado pra herdar) — só falha quando as duas ficam
       erradas juntas, que é como são usadas na prática (sempre em par)
-- [ ] `test/hardening-pass` — `ExperienceTimeline` não tem o mesmo teste de
+- [x] `test/hardening-pass` — `ExperienceTimeline` não tem o mesmo teste de
       `measure()`/fallback do `ResizeObserver` que `Projects` já tem (acrescentado depois de um
       achado do CodeRabbit, nunca replicado); `ThemedBackgroundImage` não confirma qual classe
       (`dark:hidden`/`dark:block`) está em qual elemento; `projects.spec.ts` usa
       `waitForTimeout(300)` fixo em vez do padrão "N leituras seguidas estáveis" que
-      `navigation.spec.ts` já usa
+      `navigation.spec.ts` já usa. Os três corrigidos, com o mesmo cuidado dos itens anteriores
+      (achado real no caminho: a `ExperienceTimeline` não tinha NENHUM teste de reduced-motion —
+      resolvido com um assert de presença/ausência real da "luz" no DOM, diferente do caso da
+      Home, porque aqui é um `{condição && <JSX>}`, não um `animate` do framer-motion). Achado
+      extra fora do escopo original: `app.test.tsx` deu timeout de verdade (5s) num `git push`
+      comum por disputa de CPU — igual o `skills-flow/index.test.tsx` que a auditoria já tinha
+      apontado como o único teste pesado sem o tratamento que `about-me`/`projects` já tinham —
+      os dois ganharam o mesmo timeout estendido (15s)
 - [ ] `refactor/resize-observer-hook` — o padrão "medir elemento, observar resize, fallback se
       `ResizeObserver` não existir" está duplicado quase palavra por palavra em 3 lugares
       (`layout/index.tsx`, `projects/index.tsx`, `experience-timeline/index.tsx`, dois deles com o

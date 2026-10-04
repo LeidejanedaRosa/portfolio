@@ -9,6 +9,12 @@ import { App } from './app';
  * que a página tem os landmarks, as 5 seções montadas e zero violação de a11y.
  */
 describe('<App />', () => {
+    // Timeout maior que o padrão (5s): montar a <App /> inteira (mesmo
+    // custo do `render` usado no teste de a11y abaixo, só sem o axe-core
+    // escaneando em cima) já é pesado o bastante pra passar de 5s quando a
+    // suíte inteira roda em paralelo disputando CPU — achado real: esse
+    // teste deu timeout sozinho (sem nenhuma mudança de código relacionada)
+    // durante um `git push` comum, auditoria de 2026-10.
     it('monta as cinco seções com seus títulos', () => {
         render(<App />);
 
@@ -36,7 +42,7 @@ describe('<App />', () => {
         expect(
             screen.getByRole('heading', { level: 2, name: /contato/i }),
         ).toBeInTheDocument();
-    });
+    }, 15000);
 
     it('mostra o aviso de cookies quando ainda não há escolha salva', () => {
         render(<App />);
