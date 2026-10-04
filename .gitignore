@@ -38,3 +38,9 @@ coverage
 
 # Lighthouse CI
 /.lighthouseci/
+
+# Variáveis de ambiente — nunca committar valores reais (ver .env.example,
+# que continua rastreado: não bate em nenhum destes três padrões)
+.env
+.env.local
+.env.*.local

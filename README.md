@@ -41,6 +41,7 @@ Cada componente/seção tem seu teste colocado ao lado (`index.test.tsx`).
 ## Como rodar
 
 ```bash
+cp .env.example .env   # hoje não tem nenhuma variável de verdade — ver comentário no arquivo
 npm install
 npm run dev       # http://localhost:5173
 ```
