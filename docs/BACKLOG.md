@@ -182,11 +182,15 @@ dia de verdade; os achados reais viraram os itens abaixo, um por branch.
       imagem de fundo continua impossível de provar em teste unitário (sem scroll real, o valor
       calculado é o mesmo nos dois casos) — virou teste e2e novo (`e2e/home.spec.ts`), confirmado
       que pega regressão de verdade (quebrei de propósito, o teste falhou, revertido)
-- [ ] `test/faq-accordion-e2e` — o teste do FAQ "só uma pergunta aberta por vez" só conferia o
+- [x] `test/faq-accordion-e2e` — o teste do FAQ "só uma pergunta aberta por vez" só conferia o
       atributo `name="faq"` em cada `<details>`, nunca abria duas pra confirmar a exclusão mútua —
       e nem dava pra testar isso no jsdom (não implementa essa exclusividade nativa do HTML).
       Nenhum teste, unitário ou e2e, cobria esse comportamento de verdade — exatamente o tipo de
-      "teste que não testava nada" que a Leidejane suspeitava existir
+      "teste que não testava nada" que a Leidejane suspeitava existir. Resolvido com um teste e2e
+      novo (`e2e/faq.spec.ts`, navegador real — único jeito de provar a exclusividade nativa do
+      HTML): abre a 1ª pergunta, confirma que abriu; abre a 2ª, confirma que a 1ª fechou sozinha.
+      Verificado que pega regressão de verdade — removi o `name="faq"` de propósito, vi o teste
+      falhar, revertido
 - [ ] `test/reveal-reduced-motion-assertions` — `<Reveal />`/`<RevealList />`: teste de
       reduced-motion checava só o nome da tag (`DIV`/`UL`/`LI`), que é igual nos dois branches
       (`m.div` do framer-motion também renderiza como `<div>` de verdade) — passaria mesmo se a
