@@ -1,4 +1,6 @@
-import { useEffect, useRef, type ReactNode } from 'react';
+import { useRef, type ReactNode } from 'react';
+
+import { useResizeObserver } from '@src/lib/use-resize-observer';
 
 import { Navigation } from '../navigation';
 
@@ -30,29 +32,12 @@ export function Layout({ children }: LayoutProps) {
     // medir o header junto faria a altura publicada "inflar" enquanto o menu
     // está aberto — ver o comentário em `barRef` na Navigation pro bug real
     // que isso causava.
-    useEffect(() => {
-        const bar = navBarRef.current;
-        if (!bar) return;
-
-        const updateHeight = () => {
-            document.documentElement.style.setProperty(
-                '--nav-height',
-                `${bar.getBoundingClientRect().height}px`,
-            );
-        };
-
-        updateHeight();
-
-        if (typeof ResizeObserver === 'undefined') {
-            // Navegador sem suporte (raro hoje): mede uma vez no mount e
-            // segue sem observar — melhor que quebrar o app inteiro.
-            return;
-        }
-
-        const observer = new ResizeObserver(updateHeight);
-        observer.observe(bar);
-        return () => observer.disconnect();
-    }, []);
+    useResizeObserver(navBarRef, (bar) => {
+        document.documentElement.style.setProperty(
+            '--nav-height',
+            `${bar.getBoundingClientRect().height}px`,
+        );
+    });
 
     return (
         <>
