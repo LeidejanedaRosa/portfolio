@@ -7,15 +7,33 @@ import * as axeMatchers from 'vitest-axe/matchers';
 // vitest-axe 0.1 não registra o matcher sozinho — fazemos manualmente.
 expect.extend(axeMatchers);
 
-// jsdom não implementa IntersectionObserver — stub no-op para componentes que o
-// usam (scroll spy, lazy load) montarem sem quebrar. Testes que precisam do
-// callback substituem este stub localmente (ex.: use-active-section.test).
+// jsdom não implementa IntersectionObserver — stub para componentes que o
+// usam (scroll spy, `whileInView` do Framer Motion em `<Reveal />`) montarem
+// sem quebrar. `observe()` dispara o callback na hora com isIntersecting:true
+// — sem layout real no jsdom pra decidir "está na tela", assumimos que já
+// está: senão `whileInView` nunca dispara em teste, e conteúdo revelado por
+// scroll fica preso em opacity:0 pra sempre. Testes que precisam de controle
+// fino sobre quando/quais seções intersectam substituem este stub localmente
+// (ex.: use-active-section.test, que registra seu próprio mock via
+// `vi.stubGlobal` — não depende deste default).
 if (typeof window.IntersectionObserver === 'undefined') {
     class IntersectionObserverStub {
         readonly root = null;
         readonly rootMargin = '';
         readonly thresholds: ReadonlyArray<number> = [];
-        observe() {}
+        constructor(private readonly callback: IntersectionObserverCallback) {}
+        observe(target: Element) {
+            this.callback(
+                [
+                    {
+                        target,
+                        isIntersecting: true,
+                        intersectionRatio: 1,
+                    } as IntersectionObserverEntry,
+                ],
+                this as unknown as IntersectionObserver,
+            );
+        }
         unobserve() {}
         disconnect() {}
         takeRecords(): IntersectionObserverEntry[] {

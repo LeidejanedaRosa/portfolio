@@ -3,6 +3,8 @@ import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import faqBgLight from '@assets/images/faq-blueprint-bg-light.webp';
 import faqBgDark from '@assets/images/faq-blueprint-bg.webp';
 import { DimensionLine } from '@components/atoms/dimension-line';
+import { Reveal } from '@components/atoms/reveal';
+import { RevealList, RevealListItem } from '@components/atoms/reveal/list';
 import { ThemedBackgroundImage } from '@components/molecules/general/themed-background-image';
 
 interface FaqEntry {
@@ -54,25 +56,27 @@ export const Faq = () => {
             {/* O fundo acima cobre a seção inteira (largura cheia); o bloco
                 de conteúdo continua estreito e centralizado por dentro. */}
             <div className="mx-auto max-w-2xl">
-                <h2
-                    id="faq-title"
-                    className="faq-eyebrow font-mono text-sm font-medium text-muted-foreground"
-                >
-                    03 — Perguntas frequentes
-                </h2>
-                <DimensionLine className="mt-2 w-16" />
+                <Reveal>
+                    <h2
+                        id="faq-title"
+                        className="faq-eyebrow font-mono text-sm font-medium text-muted-foreground"
+                    >
+                        03 — Perguntas frequentes
+                    </h2>
+                    <DimensionLine className="mt-2 w-16" />
+                </Reveal>
 
                 {/* .faq-list e .faq-eyebrow: as regras que escurecem as
                     demais perguntas (e o título) ao abrir ou passar o mouse
                     moram no index.css (:has() não tem variante pronta no
                     Tailwind pra "irmã com [open]/:hover", só pra
                     ancestral/descendente). */}
-                <ul className="faq-list mt-6">
+                <RevealList className="faq-list mt-6">
                     {FAQS.map((faq, index) => {
                         const number = String(index + 1).padStart(2, '0');
 
                         return (
-                            <li key={faq.id}>
+                            <RevealListItem key={faq.id}>
                                 <details name="faq" className="group py-5">
                                     {/* Sem justify-between: a seta fica logo
                                         depois da pergunta, não esticada até a
@@ -95,10 +99,10 @@ export const Faq = () => {
                                         {faq.answer}
                                     </p>
                                 </details>
-                            </li>
+                            </RevealListItem>
                         );
                     })}
-                </ul>
+                </RevealList>
             </div>
         </section>
     );

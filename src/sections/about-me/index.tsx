@@ -3,6 +3,7 @@ import blueprintBgDark from '@assets/images/about-blueprint-bg.webp';
 import profilePhoto from '@assets/images/profile-cutout.webp';
 import { BlueprintFrame } from '@components/atoms/blueprint-frame';
 import { DimensionLine } from '@components/atoms/dimension-line';
+import { Reveal } from '@components/atoms/reveal';
 import { CourseList } from '@components/molecules/general/course-list';
 import { EducationList } from '@components/molecules/general/education-list';
 import { ExperienceTimeline } from '@components/molecules/general/experience-timeline';
@@ -28,7 +29,7 @@ export const AboutMe = () => {
             />
 
             <div className={`mx-auto max-w-6xl pb-12 lg:pb-16 ${SECTION_PT}`}>
-                <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
+                <Reveal className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
                     <div>
                         <p className="font-mono text-xs font-bold uppercase text-accent">
                             01 — Sobre mim
@@ -57,7 +58,7 @@ export const AboutMe = () => {
                         src={profilePhoto}
                         alt="Retrato de Leidejane da Rosa"
                     />
-                </div>
+                </Reveal>
 
                 <StoryCards entries={STORY} />
 
@@ -70,7 +71,7 @@ export const AboutMe = () => {
             </div>
 
             <div className={`mx-auto max-w-6xl pt-8 lg:pt-4 ${SECTION_PB}`}>
-                <div className="grid gap-10 md:grid-cols-2 lg:gap-12 xl:grid-cols-3">
+                <Reveal className="grid gap-10 md:grid-cols-2 lg:gap-12 xl:grid-cols-3">
                     <div className="col-span-1">
                         <h3 className="font-mono text-xl font-bold text-foreground">
                             Experiência
@@ -107,7 +108,7 @@ export const AboutMe = () => {
                             <SkillsFlow />
                         </BlueprintFrame>
                     </div>
-                </div>
+                </Reveal>
                 <div className="mt-4 min-w-0 lg:mt-5">
                     <TechCarousel
                         items={TOOLING}

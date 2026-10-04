@@ -65,16 +65,19 @@ export const HomePage = () => {
                         projetos e um pouco da minha trajetória.
                     </p>
 
+                    {/* hover:scale + active:scale: feedback de "clicável"
+                        além da cor (já existia) — motion-reduce neutraliza
+                        só o scale, a cor continua mudando normalmente. */}
                     <div className="mt-4 flex flex-wrap gap-4 lg:mt-8">
                         <a
                             href="#projects"
-                            className="rounded-lg bg-accent px-5 py-3 font-medium text-accent-foreground transition-colors duration-200 hover:bg-accent/50"
+                            className="rounded-lg bg-accent px-5 py-3 font-medium text-accent-foreground transition-[color,background-color,transform] duration-200 hover:scale-[1.02] hover:bg-accent/50 active:scale-[0.98] motion-reduce:hover:scale-100 motion-reduce:active:scale-100"
                         >
                             Ver projetos
                         </a>
                         <a
                             href="#contact"
-                            className="rounded-lg border border-border px-5 py-3 font-medium text-foreground transition-colors duration-200 hover:bg-muted"
+                            className="rounded-lg border border-border px-5 py-3 font-medium text-foreground transition-[color,background-color,transform] duration-200 hover:scale-[1.02] hover:bg-muted active:scale-[0.98] motion-reduce:hover:scale-100 motion-reduce:active:scale-100"
                         >
                             Entrar em contato
                         </a>
