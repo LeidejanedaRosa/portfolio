@@ -225,8 +225,11 @@ dia de verdade; os achados reais viraram os itens abaixo, um por branch.
       versão mais recente numa ref interna evita que quem chama precise memoizar o callback com
       `useCallback` só pra não disparar o efeito de novo a cada render — um jeito de o hook
       "vazar" complexidade pra quem usa que a extração deveria eliminar, não introduzir
-- [ ] `chore/dead-code-cleanup` — 3 exports não usados em lugar nenhum do projeto: `Theme`
-      (`theme/index.tsx`), `ConsentStatus` (`consent/index.tsx`), `LightPath` (`light-path.ts`)
+- [x] `chore/dead-code-cleanup` — 3 exports não usados em lugar nenhum do projeto: `Theme`
+      (`theme/index.tsx`), `ConsentStatus` (`consent/index.tsx`), `LightPath` (`light-path.ts`).
+      `export` removido dos três (continuam existindo, só pararam de fingir ser API pública de um
+      módulo que não tem nenhum consumidor de verdade) — `RowBounds`, no mesmo arquivo de
+      `LightPath`, ficou export mesmo, é consumido de verdade por `projects/index.tsx`
 - [ ] `chore/npm-audit-fix` — `npm audit` real hoje é **23** vulnerabilidades, não as "14"
       anotadas (uma nova entrou via `typescript-eslint`/`fast-glob`/`micromatch`/`braces`); 9 têm
       correção segura disponível agora (`npm audit fix`, sem `--force`, não quebra o range do
