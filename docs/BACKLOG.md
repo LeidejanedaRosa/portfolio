@@ -191,10 +191,17 @@ dia de verdade; os achados reais viraram os itens abaixo, um por branch.
       HTML): abre a 1ª pergunta, confirma que abriu; abre a 2ª, confirma que a 1ª fechou sozinha.
       Verificado que pega regressão de verdade — removi o `name="faq"` de propósito, vi o teste
       falhar, revertido
-- [ ] `test/reveal-reduced-motion-assertions` — `<Reveal />`/`<RevealList />`: teste de
+- [x] `test/reveal-reduced-motion-assertions` — `<Reveal />`/`<RevealList />`: teste de
       reduced-motion checava só o nome da tag (`DIV`/`UL`/`LI`), que é igual nos dois branches
       (`m.div` do framer-motion também renderiza como `<div>` de verdade) — passaria mesmo se a
-      branch de reduced-motion fosse apagada
+      branch de reduced-motion fosse apagada. Corrigido com o assert real: `initial`/`variants`
+      do framer-motion aplicam `style="opacity: 0; transform: translateY(16px)"` de forma
+      síncrona no jsdom (diferente do `animate` com keyframes do caso da Home, que não aplica —
+      achado separado, ver `fix/home-reduced-motion`), então checar esse `style` distingue as
+      branches de verdade. Verificado quebrando de propósito: a branch de `<RevealListItem />`
+      sozinha não reproduz o bug (sem o `<RevealList />` pai fornecendo contexto de animação do
+      framer-motion, o `m.li` solto não tem estado pra herdar) — só falha quando as duas ficam
+      erradas juntas, que é como são usadas na prática (sempre em par)
 - [ ] `test/hardening-pass` — `ExperienceTimeline` não tem o mesmo teste de
       `measure()`/fallback do `ResizeObserver` que `Projects` já tem (acrescentado depois de um
       achado do CodeRabbit, nunca replicado); `ThemedBackgroundImage` não confirma qual classe

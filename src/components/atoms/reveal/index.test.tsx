@@ -31,7 +31,30 @@ describe('<Reveal />', () => {
         expect(screen.getByText('conteúdo')).toBeInTheDocument();
     });
 
-    it('com prefers-reduced-motion, renderiza estático (sem depender de whileInView disparar)', () => {
+    // Achado da auditoria de 2026-10: a versão anterior deste teste conferia
+    // só `container.firstChild?.nodeName === 'DIV'` — mas `m.div` do
+    // framer-motion TAMBÉM renderiza como `<div>` de verdade, então esse
+    // assert passaria igual mesmo se a branch de reduced-motion fosse
+    // apagada (confirmado: provei com um teste descartável que `initial`/
+    // `variants` aplicam `style` de forma síncrona no jsdom — diferente de
+    // `animate` com array de keyframes, que não aplica — então checar o
+    // `style` é o sinal real que distingue as duas branches aqui).
+    it('sem prefers-reduced-motion, começa com opacity/transform do estado "hidden" (whileInView ainda não disparou)', () => {
+        mockPrefersReducedMotion(false);
+
+        const { container } = render(
+            <Reveal>
+                <p>conteúdo</p>
+            </Reveal>,
+        );
+
+        expect(container.firstChild).toHaveStyle({
+            opacity: '0',
+            transform: 'translateY(16px)',
+        });
+    });
+
+    it('com prefers-reduced-motion, renderiza estático — sem opacity/transform nenhum, não depende de whileInView disparar', () => {
         mockPrefersReducedMotion(true);
 
         const { container } = render(
@@ -42,6 +65,7 @@ describe('<Reveal />', () => {
 
         expect(screen.getByText('conteúdo')).toBeInTheDocument();
         expect(container.firstChild?.nodeName).toBe('DIV');
+        expect(container.firstChild).not.toHaveAttribute('style');
     });
 
     it('aceita className extra pro caller controlar layout', () => {
