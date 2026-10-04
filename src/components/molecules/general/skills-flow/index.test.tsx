@@ -72,8 +72,13 @@ describe('<SkillsFlow />', () => {
         ).toHaveLength(4);
     });
 
+    // Timeout maior que o padrão (5s): 14 nós + SVG animado + axe-core
+    // escaneando em cima pode passar de 5s quando a suíte inteira roda em
+    // paralelo disputando CPU — mesmo tratamento que app.test.tsx,
+    // about-me/index.test.tsx e projects/index.test.tsx já tinham, nunca
+    // replicado aqui (achado da auditoria de 2026-10).
     it('não tem violações de acessibilidade', async () => {
         const { container } = render(<SkillsFlow />);
         expect(await axe(container)).toHaveNoViolations();
-    });
+    }, 15000);
 });
