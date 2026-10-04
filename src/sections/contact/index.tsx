@@ -6,6 +6,8 @@ import contactBgLight from '@assets/images/contact-blueprint-bg-light.webp';
 import contactBgDark from '@assets/images/contact-blueprint-bg.webp';
 import { BlueprintFrame } from '@components/atoms/blueprint-frame';
 import { DimensionLine } from '@components/atoms/dimension-line';
+import { Reveal } from '@components/atoms/reveal';
+import { RevealList, RevealListItem } from '@components/atoms/reveal/list';
 import { ThemedBackgroundImage } from '@components/molecules/general/themed-background-image';
 import { useConsent } from '@src/consent';
 import { brandHoverColor } from '@src/lib/brand-hover-color';
@@ -102,7 +104,11 @@ function ContactLink({ channel }: { readonly channel: Channel }) {
             // `/20` translúcido) — opacidade deixa o quadriculado do fundo da
             // seção vazar por trás do card (o `bg-background` da base é
             // sólido só na base; o hover TROCA essa cor, não soma por cima).
-            className={`group flex items-center gap-4 rounded-lg border border-border bg-background p-4 transition-colors duration-200 hover:border-(--brand-hover-light) hover:bg-[color-mix(in_srgb,var(--color-muted)_20%,var(--color-background))] dark:hover:border-(--brand-hover-dark) ${githubDarkHalo}`}
+            // Hover "trabalhado": além da cor de marca (já existia), um
+            // leve lift (-translate-y) — motion-reduce neutraliza só o
+            // deslocamento, a cor continua mudando normalmente (reduced
+            // motion pede sem movimento, não sem feedback nenhum).
+            className={`group flex items-center gap-4 rounded-lg border border-border bg-background p-4 transition-[color,background-color,border-color,transform] duration-200 hover:-translate-y-0.5 hover:border-(--brand-hover-light) hover:bg-[color-mix(in_srgb,var(--color-muted)_20%,var(--color-background))] motion-reduce:hover:translate-y-0 dark:hover:border-(--brand-hover-dark) ${githubDarkHalo}`}
             style={
                 {
                     '--brand-hover-light': hoverLight,
@@ -164,20 +170,22 @@ export const Contact = () => {
                 min-content) em vez de esticar até o max-w-6xl — mesmo bug
                 que não aparecia na Home porque lá o `w-full` já existia. */}
             <div className="mx-auto w-full max-w-6xl">
-                <p className="font-mono text-xs font-bold uppercase text-accent">
-                    04
-                </p>
-                <DimensionLine className="mt-2 w-16" />
+                <Reveal>
+                    <p className="font-mono text-xs font-bold uppercase text-accent">
+                        04
+                    </p>
+                    <DimensionLine className="mt-2 w-16" />
 
-                <h2
-                    id="contact-title"
-                    className="mt-3 font-mono text-3xl font-bold text-foreground"
-                >
-                    Contato
-                </h2>
-                <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-                    Esses são os melhores caminhos pra me encontrar.
-                </p>
+                    <h2
+                        id="contact-title"
+                        className="mt-3 font-mono text-3xl font-bold text-foreground"
+                    >
+                        Contato
+                    </h2>
+                    <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
+                        Esses são os melhores caminhos pra me encontrar.
+                    </p>
+                </Reveal>
 
                 <BlueprintFrame grid className="mt-10 p-6">
                     {/* grid-cols-1 explícito: sem ele, a coluna única
@@ -185,13 +193,13 @@ export const Contact = () => {
                         (min-content), não pela largura disponível — o card
                         do e-mail estourava a tela em 320px mesmo com o
                         texto já quebrando linha. */}
-                    <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <RevealList className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         {CHANNELS.map((channel) => (
-                            <li key={channel.id}>
+                            <RevealListItem key={channel.id}>
                                 <ContactLink channel={channel} />
-                            </li>
+                            </RevealListItem>
                         ))}
-                    </ul>
+                    </RevealList>
                 </BlueprintFrame>
 
                 {/* flex (não inline-flex): a seção não é mais flex-col (ver
