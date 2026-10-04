@@ -1,4 +1,5 @@
-import { useReducedMotion, useScroll, useTransform } from 'framer-motion';
+import { ChevronDownIcon } from '@heroicons/react/24/outline';
+import { m, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 
 import homeHeroBg from '@assets/images/home-hero-bg.webp';
@@ -83,6 +84,49 @@ export const HomePage = () => {
                         </a>
                     </div>
                 </div>
+            </div>
+
+            {/* Pista de scroll: só em lg+ (não responde por breakpoint
+                menor — testado com screenshot real em 320×568 e 375×667, e
+                em telas baixas o texto do hero já usa quase toda a altura:
+                um offset alto o bastante pra escapar do banner de cookies
+                (fixed, bottom-0, medido com Playwright — 147px de altura em
+                320px de largura, 127px em 375px, caindo pra ~88px só a
+                partir de 640px, onde os botões do banner saem de baixo do
+                texto e vão pro lado) ficava sobrepondo o parágrafo/CTA do
+                hero. Em lg+ sobra espaço de verdade, então os dois
+                problemas somem junto — também combina com a "pista de
+                scroll" ser convenção mais de desktop (no touch, rolar já é
+                o gesto óbvio, sem precisar de dica). Puramente decorativa
+                (redundante pra leitor de tela, que já navega por
+                landmark/heading, daí aria-hidden) — some sozinha ao rolar,
+                por estar dentro desta <section> (`overflow-clip`), sem
+                precisar de lógica extra pra escondê-la. Dois níveis: o de
+                fora cuida do posicionamento estático (Tailwind
+                `-translate-x-1/2`); o `m.div` de dentro só da animação do
+                "quique" — misturar os dois no mesmo elemento faria o
+                `style.transform` do Framer Motion substituir o transform
+                inteiro, apagando o -translate-x-1/2. */}
+            <div
+                aria-hidden="true"
+                className="pointer-events-none absolute bottom-28 left-1/2 z-10 hidden -translate-x-1/2 lg:block"
+            >
+                <m.div
+                    animate={
+                        prefersReducedMotion ? undefined : { y: [0, 8, 0] }
+                    }
+                    transition={{
+                        duration: 1.6,
+                        repeat: Infinity,
+                        ease: 'easeInOut',
+                    }}
+                    className="flex flex-col items-center gap-1 text-muted-foreground"
+                >
+                    <span className="font-mono text-[0.65rem] uppercase tracking-[0.3em]">
+                        Role
+                    </span>
+                    <ChevronDownIcon className="h-4 w-4" />
+                </m.div>
             </div>
         </section>
     );

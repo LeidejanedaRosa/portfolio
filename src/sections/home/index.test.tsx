@@ -39,6 +39,13 @@ describe('<HomePage />', () => {
         expect(photo).toHaveAttribute('height', '720');
     });
 
+    it('pista de scroll é decorativa (redundante pro leitor de tela, que já navega por landmark/heading)', () => {
+        render(<HomePage />);
+
+        const cue = screen.getByText('Role');
+        expect(cue.closest('[aria-hidden="true"]')).toBeInTheDocument();
+    });
+
     it('não tem violações de acessibilidade', async () => {
         const { container } = render(<HomePage />);
 
