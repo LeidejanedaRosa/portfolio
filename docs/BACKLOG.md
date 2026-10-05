@@ -258,11 +258,29 @@ dia de verdade; os achados reais viraram os itens abaixo, um por branch.
       existia NENHUM teste tocando o `<head>` da página antes (não faz parte da árvore React, os
       testes unitários nunca o veem), e foi exatamente essa lacuna que deixou a URL do LinkedIn
       divergir sem ninguém notar. Verificado que os dois testes pegam regressão de verdade
-- [ ] `feat/csp-header` — `vercel.json` com Content-Security-Policy e outros headers de segurança
+- [x] `feat/csp-header` — `vercel.json` com Content-Security-Policy e outros headers de segurança
       — defesa em profundidade pro GTM (que, pós-consentimento, pode injetar outras tags por
       conta própria). Não existe vulnerabilidade ativa por trás disso hoje (confirmado: zero
       `dangerouslySetInnerHTML`/`eval`/`innerHTML` de verdade no app), é hardening, não correção
-      de um buraco
+      de um buraco. `script-src` travado num allowlist de 2 hashes sha256 (os dois `<script>`
+      inline de `index.html` — Consent Mode default e anti-flash do tema) **sem** `unsafe-inline`,
+      mais `googletagmanager.com` pro GTM; `style-src` precisou de `unsafe-inline` mesmo (inevitável
+      — framer-motion e vários componentes usam `style={{...}}` com valor calculado em runtime, não
+      dá pra hashear o que muda a cada render); `frame-src` restrito aos 4 domínios reais dos
+      previews ao vivo de Projetos (não um wildcard); `object-src 'none'`, `base-uri 'self'`,
+      `frame-ancestors 'none'` — mais `X-Content-Type-Options`, `X-Frame-Options`,
+      `Referrer-Policy`, `Permissions-Policy`. Script novo (`scripts/compute-csp-hashes.mjs`,
+      `npm run csp:hashes`) pra recalcular os hashes depois de qualquer edição nesses 2 scripts —
+      sem isso, o CSP bloqueia o script em silêncio na primeira mudança. Achado no processo: minha
+      primeira tentativa de verificar os hashes por regex deu falso positivo porque o PRÓPRIO
+      comentário de aviso, com um trecho de código de exemplo, continha a substring literal
+      `<script>...</script>` — o script final ignora conteúdo dentro de comentários HTML antes de
+      procurar scripts de verdade, e o comentário em `index.html` foi reescrito sem embutir essa
+      armadilha
+      ⚠️ **Pendente**: CSP real só existe no deploy da Vercel (headers não aparecem em
+      `vite preview`/Lighthouse local) — preciso verificar ao vivo depois do deploy preview do PR
+      (curl nos headers + teste manual: aceitar cookies carrega o GTM, trocar tema funciona, sem
+      erro de CSP no console) antes de confiar que não quebrou nada
 - [x] `chore/tailwind-canonical-classes` — achado à parte da Leidejane, fora da varredura original
       (SonarLint/extensão do Tailwind no VS Code): 11 declarações de classe em 9 arquivos ainda
       usando sintaxe antiga de valor arbitrário quando o Tailwind v4 já tem forma canônica mais
