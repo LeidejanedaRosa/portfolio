@@ -82,6 +82,10 @@ npm run preview # serve o build de /dist localmente
 - Padrão de engenharia completo (arquitetura por tier, Definition of Done, PR template,
   auditoria) segue o padrão pessoal da autora. Especificidades deste projeto (tier, stack,
   design system, pendências) estão versionadas em [`CLAUDE.md`](CLAUDE.md), na raiz.
+- `vercel.json` declara Content-Security-Policy e outros headers de segurança (defesa em
+  profundidade pro GTM pós-consentimento). `script-src` trava num allowlist de hashes sha256 dos
+  2 `<script>` inline de `index.html` — editou um deles? Rode `npm run build && npm run csp:hashes`
+  e atualize os hashes em `vercel.json`, senão o CSP bloqueia o script em silêncio.
 
 ## Backlog e decisões
 
