@@ -249,11 +249,15 @@ dia de verdade; os achados reais viraram os itens abaixo, um por branch.
       `.local` (por convenção, não guarda segredo). Confirmado nos dois sentidos: `.env.example`
       continua rastreável (`git check-ignore` não bate em nenhuma regra), um `.env` de teste real
       É ignorado. README ganhou uma linha em "Como rodar" apontando pro arquivo
-- [ ] `fix/seo-canonical-and-linkedin` — falta `<link rel="canonical">` (risco real de conteúdo
+- [x] `fix/seo-canonical-and-linkedin` — falta `<link rel="canonical">` (risco real de conteúdo
       duplicado: o site resolve tanto em `leidejanedarosa.dev.br` quanto em
       `leidejanedarosa.vercel.app`, sem indicar pra buscadores qual é a versão oficial); URL do
       LinkedIn no JSON-LD (`/in/leidejane-da-rosa-a98544205/`) não batia com a do link visível no
-      Contato (`/in/leidejane/`) — confirmado com a Leidejane que a do Contato é a certa
+      Contato (`/in/leidejane/`) — confirmado com a Leidejane que a do Contato é a certa. Os dois
+      corrigidos em `index.html`; ganhou também cobertura e2e nova (`e2e/seo.spec.ts`) — não
+      existia NENHUM teste tocando o `<head>` da página antes (não faz parte da árvore React, os
+      testes unitários nunca o veem), e foi exatamente essa lacuna que deixou a URL do LinkedIn
+      divergir sem ninguém notar. Verificado que os dois testes pegam regressão de verdade
 - [ ] `feat/csp-header` — `vercel.json` com Content-Security-Policy e outros headers de segurança
       — defesa em profundidade pro GTM (que, pós-consentimento, pode injetar outras tags por
       conta própria). Não existe vulnerabilidade ativa por trás disso hoje (confirmado: zero
