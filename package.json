@@ -14,6 +14,7 @@
     "test:types": "tsc -p tsconfig.test.json --noEmit",
     "test:e2e": "playwright test",
     "test:lighthouse": "lhci autorun",
+    "csp:hashes": "node scripts/compute-csp-hashes.mjs",
     "format": "prettier --write .",
     "prepare": "husky"
   },

@@ -258,11 +258,42 @@ dia de verdade; os achados reais viraram os itens abaixo, um por branch.
       existia NENHUM teste tocando o `<head>` da página antes (não faz parte da árvore React, os
       testes unitários nunca o veem), e foi exatamente essa lacuna que deixou a URL do LinkedIn
       divergir sem ninguém notar. Verificado que os dois testes pegam regressão de verdade
-- [ ] `feat/csp-header` — `vercel.json` com Content-Security-Policy e outros headers de segurança
+- [x] `feat/csp-header` — `vercel.json` com Content-Security-Policy e outros headers de segurança
       — defesa em profundidade pro GTM (que, pós-consentimento, pode injetar outras tags por
       conta própria). Não existe vulnerabilidade ativa por trás disso hoje (confirmado: zero
       `dangerouslySetInnerHTML`/`eval`/`innerHTML` de verdade no app), é hardening, não correção
-      de um buraco
+      de um buraco. `script-src` travado num allowlist de 2 hashes sha256 (os dois `<script>`
+      inline de `index.html` — Consent Mode default e anti-flash do tema) **sem** `unsafe-inline`,
+      mais `googletagmanager.com` pro GTM; `style-src` precisou de `unsafe-inline` mesmo (inevitável
+      — framer-motion e vários componentes usam `style={{...}}` com valor calculado em runtime, não
+      dá pra hashear o que muda a cada render); `frame-src` restrito aos 4 domínios reais dos
+      previews ao vivo de Projetos (não um wildcard); `object-src 'none'`, `base-uri 'self'`,
+      `frame-ancestors 'none'` — mais `X-Content-Type-Options`, `X-Frame-Options`,
+      `Referrer-Policy`, `Permissions-Policy`. Script novo (`scripts/compute-csp-hashes.mjs`,
+      `npm run csp:hashes`) pra recalcular os hashes depois de qualquer edição nesses 2 scripts —
+      sem isso, o CSP bloqueia o script em silêncio na primeira mudança. Achado no processo: minha
+      primeira tentativa de verificar os hashes por regex deu falso positivo porque o PRÓPRIO
+      comentário de aviso, com um trecho de código de exemplo, continha a substring literal
+      `<script>...</script>` — o script final ignora conteúdo dentro de comentários HTML antes de
+      procurar scripts de verdade, e o comentário em `index.html` foi reescrito sem embutir essa
+      armadilha
+      Verificação ao vivo no preview (curl bateu numa parede: preview fica atrás de SSO da própria
+      Vercel, sem ferramenta de navegador disponível nesta sessão pra contornar) — a Leidejane
+      testou manualmente no console e achou 3 erros reais de CSP, 2 deles exclusivos do preview
+      (não aconteceriam em produção) e 1 real: (1) `https://vercel.live/_next-live/feedback/feedback.js`
+      bloqueado — é a barra de feedback/comentário da própria Vercel, só existe em preview, nunca
+      roda em produção; adicionado mesmo assim (`script-src`/`style-src`/`connect-src`/`font-src`/
+      `frame-src`), baixo custo de segurança (domínio confiável da própria Vercel) pra manter o
+      fluxo de revisão por preview funcionando; (2) manifesto bloqueado vindo de
+      `vercel.com/sso-api?url=...manifest.json` — artefato do proxy de SSO do preview protegido
+      (toda requisição passa por ali), não vai acontecer em produção (sem proteção SSO lá), CSP
+      não tem como nem devia liberar isso; (3) **achado real, afeta produção de verdade**: fonte
+      `data:font/woff2;base64,...` bloqueada por `font-src 'self'` — o `@fontsource-variable`
+      embute alguns subconjuntos pequenos da fonte (abaixo do limite de inline do Vite, 4KB) como
+      `data:` URI direto no CSS, não como arquivo `.woff2` separado — `font-src` ganhou `data:`.
+      Confirmado que os hashes dos 2 scripts inline continuam batendo depois do ajuste. Merge
+      decidido antes da checagem final ao vivo (opção escolhida pela Leidejane: verificar contra o
+      domínio de produção real depois do deploy, sem a proteção SSO do preview atrapalhando)
 - [x] `chore/tailwind-canonical-classes` — achado à parte da Leidejane, fora da varredura original
       (SonarLint/extensão do Tailwind no VS Code): 11 declarações de classe em 9 arquivos ainda
       usando sintaxe antiga de valor arbitrário quando o Tailwind v4 já tem forma canônica mais
