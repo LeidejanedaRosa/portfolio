@@ -272,6 +272,18 @@ dia de verdade; os achados reais viraram os itens abaixo, um por branch.
       `break-all`/`word-break`), `max-w-[375px]` → `max-w-93.75`, `pl-[3.25rem]` → `pl-13`,
       `-left-[1.80rem]` → `left-[-1.8rem]`. Confirmado que cada uma compila pro **mesmo** CSS final
       de antes (`grep` no `dist/` depois do build) antes de seguir
+- [x] `chore/lighthouse-ci-stability` — achado no meio do caminho (não fazia parte da lista
+      original): o CI do PR #60 falhou no Lighthouse (`categories.performance`, 0.71 < 0.8).
+      Bisect no histórico (5 pontos testados, incluindo logo depois de `feat/motion` e
+      `fix/home-reduced-motion`) não achou nenhuma regressão real — todos passaram limpo. Prova
+      final: rodei Lighthouse duas vezes seguidas no **mesmo bundle JS** (hash idêntico, zero
+      mudança de código) — uma vez falhou (0.56), a outra passou limpo. Era variância de execução
+      (TBT é sensível a ruído de CPU entre execuções), não código quebrado — confirmado que
+      aconteceu tanto localmente quanto num runner limpo do GitHub Actions. `lighthouserc.cjs`
+      tinha `numberOfRuns: 1` (uma amostra só); subiu pra 3 — o `@lhci/cli` compara contra a
+      MEDIANA automaticamente com múltiplas execuções, prática recomendada oficialmente pra
+      estabilidade em CI. Re-rodei o CI do PR #60 sem mudar nada no código dele — passou limpo,
+      confirmando a causa raiz de vez
 
 Fora da lista de propósito: o `<h2>` "pequeno" do FAQ (estilizado como eyebrow, diferente do
 tamanho grande das outras 3 seções) foi apontado como inconsistência pela auditoria, mas é decisão
