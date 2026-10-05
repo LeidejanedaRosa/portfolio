@@ -277,10 +277,23 @@ dia de verdade; os achados reais viraram os itens abaixo, um por branch.
       `<script>...</script>` — o script final ignora conteúdo dentro de comentários HTML antes de
       procurar scripts de verdade, e o comentário em `index.html` foi reescrito sem embutir essa
       armadilha
-      ⚠️ **Pendente**: CSP real só existe no deploy da Vercel (headers não aparecem em
-      `vite preview`/Lighthouse local) — preciso verificar ao vivo depois do deploy preview do PR
-      (curl nos headers + teste manual: aceitar cookies carrega o GTM, trocar tema funciona, sem
-      erro de CSP no console) antes de confiar que não quebrou nada
+      Verificação ao vivo no preview (curl bateu numa parede: preview fica atrás de SSO da própria
+      Vercel, sem ferramenta de navegador disponível nesta sessão pra contornar) — a Leidejane
+      testou manualmente no console e achou 3 erros reais de CSP, 2 deles exclusivos do preview
+      (não aconteceriam em produção) e 1 real: (1) `https://vercel.live/_next-live/feedback/feedback.js`
+      bloqueado — é a barra de feedback/comentário da própria Vercel, só existe em preview, nunca
+      roda em produção; adicionado mesmo assim (`script-src`/`style-src`/`connect-src`/`font-src`/
+      `frame-src`), baixo custo de segurança (domínio confiável da própria Vercel) pra manter o
+      fluxo de revisão por preview funcionando; (2) manifesto bloqueado vindo de
+      `vercel.com/sso-api?url=...manifest.json` — artefato do proxy de SSO do preview protegido
+      (toda requisição passa por ali), não vai acontecer em produção (sem proteção SSO lá), CSP
+      não tem como nem devia liberar isso; (3) **achado real, afeta produção de verdade**: fonte
+      `data:font/woff2;base64,...` bloqueada por `font-src 'self'` — o `@fontsource-variable`
+      embute alguns subconjuntos pequenos da fonte (abaixo do limite de inline do Vite, 4KB) como
+      `data:` URI direto no CSS, não como arquivo `.woff2` separado — `font-src` ganhou `data:`.
+      Confirmado que os hashes dos 2 scripts inline continuam batendo depois do ajuste. Merge
+      decidido antes da checagem final ao vivo (opção escolhida pela Leidejane: verificar contra o
+      domínio de produção real depois do deploy, sem a proteção SSO do preview atrapalhando)
 - [x] `chore/tailwind-canonical-classes` — achado à parte da Leidejane, fora da varredura original
       (SonarLint/extensão do Tailwind no VS Code): 11 declarações de classe em 9 arquivos ainda
       usando sintaxe antiga de valor arbitrário quando o Tailwind v4 já tem forma canônica mais
