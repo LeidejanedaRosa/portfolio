@@ -12,6 +12,14 @@
           reject()/reset() em src/consent atualizam isso via gtag('consent',
           'update', ...) — inclusive DEPOIS do GTM já estar rodando, pra
           revogar consentimento no meio da sessão sem precisar recarregar.
+
+          ⚠️ CSP (vercel.json): script-src trava num allowlist de hashes
+          sha256 (não `unsafe-inline`) — esse script só roda porque o hash
+          do conteúdo dele está nesse allowlist. Editou aqui dentro? O hash
+          não bate mais e o CSP bloqueia o script em silêncio (sem erro
+          visível pra quem usa o site). Depois de editar, rode
+          `npm run build && npm run csp:hashes` e cole os hashes novos em
+          `script-src` no vercel.json.
         -->
         <script>
             window.dataLayer = window.dataLayer || [];
@@ -37,6 +45,10 @@
         <!--
           Anti-flash: aplica o tema ANTES do primeiro paint, síncrono.
           Precisa espelhar a lógica de getInitialTheme() em src/theme/index.tsx.
+
+          ⚠️ CSP: mesmo aviso do script de Consent Mode acima — editar isto
+          exige recalcular o hash sha256 e atualizar `script-src` no
+          vercel.json, senão o CSP bloqueia o script em silêncio.
         -->
         <script>
             (function () {
