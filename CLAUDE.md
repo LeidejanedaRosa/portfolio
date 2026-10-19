@@ -22,9 +22,9 @@ qualquer tier.
 - Framer Motion — motion ~200ms, sempre respeitando `prefers-reduced-motion`
 - Vitest + Testing Library + vitest-axe (unitário/componente + a11y)
 - Playwright — chromium, firefox, webkit (`e2e/`)
-- Lighthouse CI (`lighthouserc.cjs`) — a11y/SEO/best-practices ≥ 90 falha o build;
-  performance ainda só avisa (nota real hoje ~60, otimizar bundle/fonts é trabalho
-  futuro, não travado ainda)
+- Lighthouse CI (`lighthouserc.cjs`) — a11y/SEO/best-practices ≥ 90 e performance
+  ≥ 80, as 4 categorias falham o build (ver "Pré-renderização" abaixo — performance
+  passou a travar depois da auditoria de 2026-10-19)
 - Husky + lint-staged + gitleaks (**binário real**, não pacote npm — precisa
   instalar à parte, ver README)
 - ESLint + Prettier
@@ -66,9 +66,21 @@ Hospedado no Vercel: [leidejanedarosa.dev.br](https://leidejanedarosa.dev.br/)
 `main`, preview automático por PR. `leidejanedarosa.vercel.app` continua
 funcionando, mas redireciona (307) pro domínio próprio.
 
+## Pré-renderização (build-time, não SSR por requisição)
+
+`npm run build` roda `vite build --ssr src/entry-server.tsx` além do build normal
+e injeta o HTML já renderizado (`react-dom/server`) em `dist/index.html` via
+`scripts/prerender.mjs` — `src/index.tsx` hidrata (`hydrateRoot`) em vez de montar
+do zero. Resolve tela em branco sem JS + boa parte do LCP (achado de
+2026-10-19, `docs/BACKLOG.md`). Pegadinha pra quem mexer em `ThemeProvider`/
+`ConsentProvider`: o PRIMEIRO render do cliente precisa ser idêntico ao do
+servidor (sem acesso a `window`/`localStorage` reais) — ler a escolha real do
+usuário só depois, em efeito (`useLayoutEffect` se afetar algo visível
+imediatamente, tipo o `aria-pressed` do botão de tema; `useEffect` basta pro
+resto) — senão vira mismatch de hidratação que o React não corrige sozinho em
+produção.
+
 ## Pendências conhecidas
 
-- **Performance do Lighthouse (~60) não otimizada ainda** — bundle JS (~365KB) e
-  as imagens de fundo/hero são os suspeitos mais prováveis.
 - Histórico completo de decisões de produto/design e outras pendências:
   [`docs/BACKLOG.md`](docs/BACKLOG.md).
