@@ -27,11 +27,11 @@ export const DuotoneBackgroundImage = ({
             />
             <div
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-r from-background via-background/70 to-background/25"
+                className="pointer-events-none absolute inset-0 -z-10 bg-linear-to-r from-background via-background/70 to-background/25"
             />
             <div
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br from-accent/0 via-accent/10 to-accent/25"
+                className="pointer-events-none absolute inset-0 -z-10 bg-linear-to-br from-accent/0 via-accent/10 to-accent/25"
             />
         </>
     );
