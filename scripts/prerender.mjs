@@ -24,4 +24,11 @@ if (!template.includes('<!--app-html-->')) {
     process.exit(1);
 }
 
-writeFileSync('dist/index.html', template.replace('<!--app-html-->', appHtml));
+// Replacer function, não `appHtml` direto como 2º argumento: string como
+// substituição interpreta `$&`/`$$`/etc. como padrões especiais do
+// `replace` — um "R$" no conteúdo renderizado corromperia o HTML em
+// silêncio. A função devolve `appHtml` sempre literal.
+writeFileSync(
+    'dist/index.html',
+    template.replace('<!--app-html-->', () => appHtml),
+);
