@@ -17,7 +17,6 @@ const STORAGE_KEY = 'theme';
 interface ThemeContextValue {
     theme: Theme;
     toggleTheme: () => void;
-    setTheme: (theme: Theme) => void;
 }
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
@@ -75,7 +74,7 @@ function applyThemeColorMeta(theme: Theme) {
         ?.setAttribute('content', THEME_COLOR[theme]);
 }
 
-export function ThemeProvider({ children }: { children: ReactNode }) {
+export function ThemeProvider({ children }: Readonly<{ children: ReactNode }>) {
     // Sempre 'light' na primeira renderização — nos dois lados (servidor E
     // cliente), igual ao ConsentProvider (ver src/consent): ler o tema real
     // já de cara faria a primeira renderização do cliente divergir do HTML
@@ -87,16 +86,16 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     // useLayoutEffect — não useEffect: roda síncrono, ANTES do navegador
     // pintar, então não pisca o ícone errado (mesma urgência do script
     // anti-flash de index.html, que já cuida da classe do <html>).
-    const [theme, setThemeState] = useState<Theme>('light');
+    const [theme, setTheme] = useState<Theme>('light');
 
     useLayoutEffect(() => {
-        setThemeState(getInitialTheme());
+        setTheme(getInitialTheme());
     }, []);
 
     // Escolha manual (desta sessão OU persistida de uma sessão anterior):
     // decide se o listener de preferência do SO (abaixo) pode sobrescrever
     // o tema. Ref, não só checar o localStorage no momento do evento —
-    // setTheme/toggleTheme marcam a escolha manual AQUI, na hora, mesmo que
+    // toggleTheme marca a escolha manual AQUI, na hora, mesmo que
     // `persist()` falhe (modo privado etc.); se checássemos só o
     // localStorage, uma escolha manual que não persistiu (por falha) seria
     // tratada como "sem escolha" e o SO sobrescreveria ela na sessão atual.
@@ -127,7 +126,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
         const handleChange = (event: MediaQueryListEvent) => {
             if (!hasManualChoiceRef.current) {
-                setThemeState(event.matches ? 'dark' : 'light');
+                setTheme(event.matches ? 'dark' : 'light');
             }
         };
 
@@ -135,25 +134,16 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         return () => media.removeEventListener('change', handleChange);
     }, []);
 
-    const setTheme = useCallback((next: Theme) => {
-        hasManualChoiceRef.current = true;
-        persist(next);
-        setThemeState(next);
-    }, []);
-
     const toggleTheme = useCallback(() => {
         hasManualChoiceRef.current = true;
-        setThemeState((prev) => {
+        setTheme((prev) => {
             const next: Theme = prev === 'dark' ? 'light' : 'dark';
             persist(next);
             return next;
         });
     }, []);
 
-    const value = useMemo(
-        () => ({ theme, toggleTheme, setTheme }),
-        [theme, toggleTheme, setTheme],
-    );
+    const value = useMemo(() => ({ theme, toggleTheme }), [theme, toggleTheme]);
 
     return (
         <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
