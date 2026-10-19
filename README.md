@@ -6,7 +6,8 @@ scroll-spy e diagrama animado de skills.
 ## Stack
 
 - **React 19** + **TypeScript** + **Vite 6**
-- **Tailwind CSS 3** (tokens em `src/theme`)
+- **Tailwind CSS 4** (config CSS-first via `@theme`, plugin oficial `@tailwindcss/vite`) —
+  tokens de tema (dark mode) em `src/theme`
 - **Framer Motion** para animação (respeitando `prefers-reduced-motion`)
 - **Vitest** + **Testing Library** + **vitest-axe** para testes unitários/componente e a11y
 - **ESLint** + **Prettier** + **Husky/lint-staged**
@@ -19,12 +20,17 @@ seção da página (não existe camada `templates`/`pages` separada — ver `doc
 ```
 src/
   components/
-    atoms/        # blueprint-frame, code-snippet, skill-node, tech-icon
-    molecules/    # dark-mode, skills-flow
-    organisms/    # layout, navigation
-  sections/       # home, about-me, projects, contact
+    atoms/        # blueprint-frame, code-snippet, dimension-line, reveal, skill-node,
+                  # tech-icon
+    molecules/general/ # cookie-consent, course-list, dark-mode, duotone-background-image,
+                  # education-list, experience-timeline, glow-portrait, privacy-dialog,
+                  # skills-flow, story-cards, tech-carousel, themed-background-image
+    organisms/general/ # layout, navigation
+  sections/       # home, about-me, projects, faq, contact
   theme/          # ThemeProvider/useTheme (dark mode)
-  lib/            # utilitários (ex: brand-hover-color)
+  consent/        # ConsentProvider/useConsent (LGPD — ver seção de Qualidade)
+  lib/            # utilitários (ex: brand-hover-color, use-resize-observer)
+  entry-server.tsx # pré-renderização em build (ver seção Build abaixo)
   test/           # setup global de testes
 ```
 
@@ -63,9 +69,17 @@ npm run format          # Prettier --write
 ## Build
 
 ```bash
-npm run build   # tsc -b && vite build
+npm run build   # tsc -b && vite build (cliente) && vite build --ssr (entry-server.tsx) &&
+                 # scripts/prerender.mjs injeta o HTML já renderizado em dist/index.html
 npm run preview # serve o build de /dist localmente
 ```
+
+`npm run build` pré-renderiza a página em build-time (`react-dom/server`, ver
+`src/entry-server.tsx` e `scripts/prerender.mjs`): o `<div id="root">` de `dist/index.html`
+já chega com o HTML real, e o cliente hidrata (`hydrateRoot`) em vez de montar do zero — sem
+isso, a página fica em branco sem JavaScript e o LCP espera o React montar tudo (achado da
+auditoria de 2026-10). `src/index.tsx` decide `hydrateRoot` vs `createRoot` sozinho (olha se
+`#root` já tem conteúdo) — funciona em dev (`vite dev`) sem esse passo também.
 
 ## Qualidade
 
@@ -76,9 +90,10 @@ npm run preview # serve o build de /dist localmente
   automaticamente — preencher, ou marcar `N/A` na seção que não se aplicar.
 - CI (GitHub Actions, `.github/workflows/ci.yml`): scan de segredos (`gitleaks`), lint,
   type-check, testes, build, e2e (Playwright, 3 browsers) e Lighthouse CI em todo push/PR pra
-  `main`. Thresholds do Lighthouse (`lighthouserc.cjs`): a11y/SEO/best-practices ≥ 90 (falha o
-  build); performance ainda só avisa (nota real ~60 hoje — otimizar é trabalho futuro, travar o
-  build nisso agora só bloquearia PRs sem ninguém ter mexido em performance ainda).
+  `main`. Thresholds do Lighthouse (`lighthouserc.cjs`): a11y/SEO/best-practices ≥ 90 e
+  performance ≥ 80 — as 4 categorias travam o build (`error`). Performance passou a travar
+  depois da pré-renderização + lazy-loading das imagens de fundo abaixo da dobra (achado da
+  auditoria de 2026-10: nota real foi de ~60 pra ~85).
 - Padrão de engenharia completo (arquitetura por tier, Definition of Done, PR template,
   auditoria) segue o padrão pessoal da autora. Especificidades deste projeto (tier, stack,
   design system, pendências) estão versionadas em [`CLAUDE.md`](CLAUDE.md), na raiz.
