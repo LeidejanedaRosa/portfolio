@@ -17,12 +17,14 @@ export const ThemedBackgroundImage = ({
                 src={lightSrc}
                 alt=""
                 aria-hidden="true"
+                loading="lazy"
                 className="pointer-events-none absolute inset-0 -z-20 h-full w-full object-cover dark:hidden"
             />
             <img
                 src={darkSrc}
                 alt=""
                 aria-hidden="true"
+                loading="lazy"
                 className="pointer-events-none absolute inset-0 -z-20 hidden h-full w-full object-cover dark:block"
             />
             <div

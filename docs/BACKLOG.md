@@ -321,3 +321,44 @@ Fora da lista de propósito: o `<h2>` "pequeno" do FAQ (estilizado como eyebrow,
 tamanho grande das outras 3 seções) foi apontado como inconsistência pela auditoria, mas é decisão
 documentada da própria Leidejane (§ anterior, "Layout revisado depois, a pedido da Leidejane, pra
 bater mais com a referência" — michaelpumo.com) — não é bug, não entra na lista.
+
+## Performance + pré-renderização (revisão externa de portfólio + Lighthouse real, 2026-10-19)
+
+Revisão de portfólio (IA externa, colada pela Leidejane) trouxe 7 pontos — 1–3 e 5 são de
+narrativa/posicionamento (título único, público-alvo do hero, frase de abertura, copy de cards),
+ficaram pendentes da Leidejane pensar; 4 (portfólio como project card) também depende do escopo que
+ela decidir. Os itens técnicos (6 e 7) ficaram pra mim, junto com os números reais que ela mediu no
+Chrome (desktop 88, mobile 66, abaixo do threshold de 80 do CI).
+
+- [x] `perf/prerender-lazy-images` — dois achados reais confirmados via Lighthouse local (3
+      execuções, `.lighthouseci/lhr-*.json`) antes de qualquer mudança: (1) 337KB+ em imagens de
+      fundo abaixo da dobra (About/Projects/FAQ/Contact, variantes clara+escura) 100% desperdiçadas
+      no load inicial (audit `offscreen-images`) — nenhum componente usava `loading="lazy"`,
+      confirmado por grep; corrigido em `themed-background-image`. (2) LCP com 88%/3405ms de
+      "Render Delay" — o `<img>` do hero (`m.img` do framer-motion) só existia no DOM depois do
+      React montar a página inteira (todas as seções de uma vez, mesmo as abaixo da dobra). Raiz:
+      renderização 100% client-side. Decisão da Leidejane (ofereci "ajuste leve" vs "raiz" — ela
+      escolheu a raiz): pré-renderização em build-time via `react-dom/server` — `vite build --ssr
+    src/entry-server.tsx`, `scripts/prerender.mjs` injeta o HTML em `dist/index.html`,
+      `src/index.tsx` decide `hydrateRoot`/`createRoot` sozinho. Dois guards de SSR precisaram
+      entrar: `theme/index.tsx` lia `window.matchMedia` direto no corpo do componente (quebrava em
+      Node); `consent/index.tsx` decidia se o banner aparecia lendo `localStorage` já na primeira
+      renderização, o que divergiria entre servidor (sem localStorage) e cliente de quem já tinha
+      decidido antes — virou mismatch de hidratação. Resultado medido: performance 0.76 (mediana,
+      falhava o gate de 0.8) → **0.85**, TBT de >1000ms numa das execuções → 34–54ms, página sem JS
+      deixou de ficar em branco (confirmado com Playwright, `javaScriptEnabled: false`). Achado
+      lateral real descoberto só depois do fix: `ThemeProvider` tinha o MESMO problema de mismatch
+      que corrigi no `consent` — lia o tema real já na 1ª renderização do cliente, e o React em
+      produção não autocorrige esse tipo de mismatch de atributo (só em dev) — o botão de dark mode
+      ficava com `aria-pressed` errado pra sempre depois de um reload (pego pelo e2e existente,
+      `navigation.spec.ts`, não por mim olhando). Corrigido com o mesmo padrão (estado SSR-safe +
+      correção em `useLayoutEffect`, síncrono, sem o flash que `useEffect` deixaria passar).
+      Comentário de revisão separado sugeriu carregar a variante ativa do tema sem lazy — verificado
+      e descartado: nenhuma instância atual fica acima da dobra (grep), e testei o toggle de tema
+      com a seção já visível nos 3 engines (Playwright) — a imagem oculta carrega em ~50ms, sem
+      flash perceptível; não reproduziu, não mudei
+- [x] `docs/readme-tailwind-faq-tree` — README citava Tailwind 3 (projeto está em v4 desde antes) e
+      a árvore de arquitetura documentada não tinha a seção FAQ nem a maioria dos molecules
+      reais (cookie-consent, duotone/themed-background-image, experience-timeline,
+      glow-portrait, privacy-dialog, story-cards, tech-carousel...). Corrigido junto com a
+      descrição do passo novo de build (pré-renderização)
