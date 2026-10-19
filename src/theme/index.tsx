@@ -3,6 +3,7 @@ import {
     useCallback,
     useContext,
     useEffect,
+    useLayoutEffect,
     useMemo,
     useRef,
     useState,
@@ -38,6 +39,12 @@ function readStoredTheme(): Theme | null {
  * Deve espelhar o script inline em index.html (que evita o flash).
  */
 function getInitialTheme(): Theme {
+    // Sem `window` (pré-renderização no build, rodando em Node): usa 'light'
+    // como padrão — o script anti-flash de index.html já corrige a classe
+    // do <html> antes do primeiro paint real no navegador, então isso nunca
+    // chega a ser visível.
+    if (typeof window === 'undefined') return 'light';
+
     return (
         readStoredTheme() ??
         (window.matchMedia('(prefers-color-scheme: dark)').matches
@@ -69,7 +76,22 @@ function applyThemeColorMeta(theme: Theme) {
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-    const [theme, setThemeState] = useState<Theme>(getInitialTheme);
+    // Sempre 'light' na primeira renderização — nos dois lados (servidor E
+    // cliente), igual ao ConsentProvider (ver src/consent): ler o tema real
+    // já de cara faria a primeira renderização do cliente divergir do HTML
+    // pré-renderizado (que não tem acesso ao localStorage de quem visita) —
+    // e, ao contrário do que o React faz em DEV, em produção ele NÃO
+    // corrige esse tipo de mismatch de atributo sozinho (só avisa em dev);
+    // o `aria-pressed` do botão de tema ficava travado no valor errado pro
+    // resto da sessão. A correção de verdade entra logo abaixo, em
+    // useLayoutEffect — não useEffect: roda síncrono, ANTES do navegador
+    // pintar, então não pisca o ícone errado (mesma urgência do script
+    // anti-flash de index.html, que já cuida da classe do <html>).
+    const [theme, setThemeState] = useState<Theme>('light');
+
+    useLayoutEffect(() => {
+        setThemeState(getInitialTheme());
+    }, []);
 
     // Escolha manual (desta sessão OU persistida de uma sessão anterior):
     // decide se o listener de preferência do SO (abaixo) pode sobrescrever
@@ -83,7 +105,12 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     // Efeito colateral único: refletir o estado na classe do <html> e na
     // meta theme-color. Tailwind (darkMode: 'class') e os tokens de
     // index.css leem a classe; o chrome nativo do navegador lê a meta.
-    useEffect(() => {
+    // useLayoutEffect, não useEffect: no load inicial o script anti-flash
+    // de index.html já cobre esse paint (roda antes do React existir), mas
+    // numa troca manual de tema ou de preferência do SO em pleno uso, isso
+    // evita um frame em que o ícone do botão já mudou e a classe do <html>
+    // (cores de fundo) ainda não.
+    useLayoutEffect(() => {
         const root = document.documentElement;
         root.classList.toggle('dark', theme === 'dark');
         root.style.colorScheme = theme;

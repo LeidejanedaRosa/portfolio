@@ -51,7 +51,19 @@ function persist(status: ConsentStatus) {
 }
 
 export function ConsentProvider({ children }: { children: ReactNode }) {
-    const [status, setStatus] = useState<ConsentStatus>(getInitialConsent);
+    // Sempre começa como `null` (banner "aberto") no primeiro render, tanto
+    // no servidor (pré-renderização, sem acesso a localStorage) quanto no
+    // primeiro render do cliente — ler o localStorage real já na primeira
+    // renderização do cliente faria o HTML divergir do HTML pré-renderizado
+    // (hydration mismatch) pra quem já decidiu antes: o banner apareceria
+    // no HTML do servidor e sumiria no react, gerando o aviso do React e um
+    // possível flash. A escolha real entra logo em seguida, no efeito
+    // abaixo — roda antes do usuário notar.
+    const [status, setStatus] = useState<ConsentStatus>(null);
+
+    useEffect(() => {
+        setStatus(getInitialConsent());
+    }, []);
 
     // Só injeta o GTM depois do aceite explícito — nunca antes.
     useEffect(() => {
