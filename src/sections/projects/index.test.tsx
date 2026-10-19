@@ -225,12 +225,12 @@ describe('<Projects />', () => {
 
         try {
             expect(() => render(<Projects />)).not.toThrow();
-            // mede de verdade, não só "não quebrou": os 6 projetos continuam
+            // mede de verdade, não só "não quebrou": os 7 projetos continuam
             // todos renderizados depois do measure() rodar com valores
             // reais (getAllByRole('listitem') pegaria também as listas de
             // tech stack dentro de cada card, por isso os headings).
             expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(
-                6,
+                7,
             );
         } finally {
             if (originalOffsetHeight) {
@@ -266,7 +266,7 @@ describe('<Projects />', () => {
         try {
             expect(() => render(<Projects />)).not.toThrow();
             expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(
-                6,
+                7,
             );
         } finally {
             window.ResizeObserver = originalWindowRO;

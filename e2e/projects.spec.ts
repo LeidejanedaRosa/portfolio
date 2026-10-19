@@ -22,10 +22,11 @@ function cardFor(page: import('@playwright/test').Page, title: string) {
         .filter({ has: page.getByRole('heading', { level: 3, name: title }) });
 }
 
-test('lista os seis projetos', async ({ page }) => {
+test('lista os sete projetos', async ({ page }) => {
     const section = page.locator('#projects');
 
     for (const title of [
+        'Portfólio (este site)',
         'Faladoria — Backend',
         'Faladoria — Frontend',
         'FCR — Backend',
@@ -37,6 +38,8 @@ test('lista os seis projetos', async ({ page }) => {
             section.getByRole('heading', { level: 3, name: title }),
         ).toBeVisible();
     }
+
+    await expect(section.getByRole('heading', { level: 3 })).toHaveCount(7);
 });
 
 test('projeto privado sem demo (Faladoria — Backend) expande o trecho de código real ao clicar', async ({

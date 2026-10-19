@@ -99,11 +99,11 @@ export const Projects = () => {
                         Projetos
                     </h2>
                     <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-                        Os seis projetos abaixo são reais — a maioria é trabalho
+                        Os sete projetos abaixo são reais — a maioria é trabalho
                         de cliente ou de impacto social. Nos que ainda são
                         privados, você encontra um trecho real de código ou um
-                        link pra testar ao vivo; nos que já são públicos, dá pra
-                        ver o código e o site no ar.
+                        link para testar ao vivo; nos que já são públicos, dá
+                        para ver o código e o site no ar.
                     </p>
                 </Reveal>
 
