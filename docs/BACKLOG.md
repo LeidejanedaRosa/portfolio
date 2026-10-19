@@ -339,7 +339,7 @@ Chrome (desktop 88, mobile 66, abaixo do threshold de 80 do CI).
       React montar a página inteira (todas as seções de uma vez, mesmo as abaixo da dobra). Raiz:
       renderização 100% client-side. Decisão da Leidejane (ofereci "ajuste leve" vs "raiz" — ela
       escolheu a raiz): pré-renderização em build-time via `react-dom/server` — `vite build --ssr
-    src/entry-server.tsx`, `scripts/prerender.mjs` injeta o HTML em `dist/index.html`,
+  src/entry-server.tsx`, `scripts/prerender.mjs` injeta o HTML em `dist/index.html`,
       `src/index.tsx` decide `hydrateRoot`/`createRoot` sozinho. Dois guards de SSR precisaram
       entrar: `theme/index.tsx` lia `window.matchMedia` direto no corpo do componente (quebrava em
       Node); `consent/index.tsx` decidia se o banner aparecia lendo `localStorage` já na primeira
@@ -362,3 +362,49 @@ Chrome (desktop 88, mobile 66, abaixo do threshold de 80 do CI).
       reais (cookie-consent, duotone/themed-background-image, experience-timeline,
       glow-portrait, privacy-dialog, story-cards, tech-carousel...). Corrigido junto com a
       descrição do passo novo de build (pré-renderização)
+
+## Narrativa e posicionamento (itens 1–5 da revisão externa de portfólio, 2026-10-19)
+
+Continuação da revisão externa (itens 6–7 já fechados acima) — os pontos de narrativa, que a
+Leidejane decidiu em conversa direta, um a um, em vez de eu escrever e aplicar sozinho.
+
+- [x] **Item 1 — título único**: "Desenvolvedora Full Stack" em todo lugar (hero, `<title>`,
+      meta description/og, JSON-LD) — decisão da Leidejane: comunicar onde ela está agora, não a
+      aspiração (ela troca pra "Engenheira de Software" quando se formar). O bacharelado já
+      aparecia como "(cursando)" na seção Educação, sem mudança necessária ali.
+- [x] **Item 2 + 3 — hero fala pros dois públicos + frase de abertura própria**: rascunhei 3
+      opções de parágrafo; a Leidejane questionou se valia mencionar os 7 anos de empreendedora
+      (medo de afastar recrutador) — resolvido reformulando: lidera com stack + disponibilidade
+      (resolve o item 2 sozinho), menciona o negócio próprio como prova de raciocínio, não como
+      justificativa do passado. Texto final por ela aprovado: "Desenvolvo com React, TypeScript e
+      Python — aberta a uma vaga remota ou a projetos freelance. Sete anos empreendendo antes da
+      tecnologia me ensinaram a pensar no problema do cliente, não só no código."
+- [x] **Item 4 — portfólio como project card**: adicionado na posição 01 (evidência pública mais
+      forte, por decisão dela). Achado técnico no caminho: `links.demo` também controla o preview
+      em iframe (`timeline-row.tsx`) — apontar pro próprio site tentaria embutir a página dentro
+      dela mesma, e o CSP (`frame-ancestors`) nem permite auto-enquadramento. Resolvido com
+      `links: { code }` só, sem `demo`.
+- [x] **Item 5 — copy dos cards**: destaque do Espaço Saúde Bem-Estar trocado por dado técnico
+      real (rodei Lighthouse contra o site ao vivo: 100 acessibilidade/boas práticas/SEO, 98
+      performance — não inventei número); os 5 "Teste técnico" da Coodesh viraram um bloco
+      "Avaliações técnicas" à parte (não cursos de verdade, não deviam diluir os 10 cursos reais);
+      "pra"→"para" em todo texto visível de projeto/experiência (achei 2 ocorrências extras que
+      escaparam de uma busca anterior — "textos de projeto" não é só `data.ts`, tinha string solta
+      em `project-card.tsx` e `projects/index.tsx` também)
+- [x] Curso novo registrado no caminho (fora da revisão, pedido direto da Leidejane): Escola da
+      Nuvem, Computação em Nuvem (certificação AWS), out 2026 – mar 2027, cursando — primeiro da
+      lista de Cursos por ser o mais atual/relevante
+- [x] **Achado real, fora de todo o escopo original — "iframe do Espaço Saúde Bem-Estar quebrado"**:
+      o site manda `frame-ancestors 'none'` + `X-Frame-Options: DENY` (confirmado por
+      `curl -I`) — bloqueio do lado DELE, não deste portfólio. Dois fixes: (1) aqui,
+      `ProjectPreview` ganhou um fallback (`blocked` prop) que mostra aviso + link em vez de
+      iframe em branco quando um site bloqueia embed — proteção geral contra qualquer projeto
+      futuro que fizer o mesmo endurecimento; (2) no repositório
+      `landing-espaco-saude-bemestar` (PR #53, já mergeado), `frame-ancestors` passou a permitir
+      nomeadamente `https://leidejanedarosa.dev.br` (não abriu geral — qualquer outra origem
+      continua bloqueada) e o `X-Frame-Options: DENY` foi removido (não suporta origem
+      específica, ficaria conflitante com o CSP). O preview ao vivo só volta a aparecer de
+      verdade depois deste portfólio ser publicado no domínio real — `frame-ancestors` valida a
+      origem exata de quem embute, então não dá pra confirmar via `localhost` nem em preview.
+- [x] Achado à parte do SonarLint no caminho: `max-w-[40rem]` → `max-w-160` (mesmo padrão do
+      `chore/tailwind-canonical-classes` anterior — confirmado CSS compilado idêntico)
