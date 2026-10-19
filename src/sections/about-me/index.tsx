@@ -14,7 +14,14 @@ import { TechCarousel } from '@components/molecules/general/tech-carousel';
 import { ThemedBackgroundImage } from '@components/molecules/general/themed-background-image';
 import { SECTION_PB, SECTION_PT } from '@src/lib/section-spacing';
 
-import { COURSES, EDUCATION, EXPERIENCE, STORY, TOOLING } from './data';
+import {
+    COURSES,
+    EDUCATION,
+    EXPERIENCE,
+    STORY,
+    TECHNICAL_ASSESSMENTS,
+    TOOLING,
+} from './data';
 
 export const AboutMe = () => {
     return (
@@ -38,7 +45,7 @@ export const AboutMe = () => {
 
                         <h2
                             id="about-title"
-                            className="mt-3 max-w-[40rem] font-mono text-3xl font-bold leading-relaxed text-foreground sm:text-4xl"
+                            className="mt-3 max-w-160 font-mono text-3xl font-bold leading-relaxed text-foreground sm:text-4xl"
                         >
                             <span className="block">Eu sou a Leidejane,</span>
                             <span className="block text-accent">
@@ -60,7 +67,9 @@ export const AboutMe = () => {
                     />
                 </Reveal>
 
-                <StoryCards entries={STORY} />
+                <div className="mt-8">
+                    <StoryCards entries={STORY} />
+                </div>
 
                 <div className="mt-8 border-y border-border py-4 text-center">
                     <p className="font-mono text-xs font-bold uppercase tracking-[0.3em] text-muted-foreground sm:text-sm">
@@ -99,6 +108,18 @@ export const AboutMe = () => {
                                 <CourseList
                                     entries={COURSES}
                                     initialCount={2}
+                                />
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 className="font-mono text-xl font-bold text-foreground">
+                                Avaliações técnicas
+                            </h3>
+                            <div className="mt-5">
+                                <CourseList
+                                    entries={TECHNICAL_ASSESSMENTS}
+                                    initialCount={TECHNICAL_ASSESSMENTS.length}
                                 />
                             </div>
                         </div>
