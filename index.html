@@ -154,8 +154,14 @@
         -->
     </head>
     <body>
-        <noscript>You need to enable JavaScript to run this app.</noscript>
-        <div id="root"></div>
+        <noscript
+            >Você precisa habilitar o JavaScript para executar esta
+            aplicação.</noscript
+        >
+        <!-- Preenchido em build por scripts/prerender.mjs (substitui este
+             comentário pelo HTML já renderizado) — ver src/entry-server.tsx.
+             Em dev (`vite dev`), continua vazio: o React monta do zero. -->
+        <div id="root"><!--app-html--></div>
         <script type="module" src="/src/index.tsx"></script>
     </body>
 </html>
