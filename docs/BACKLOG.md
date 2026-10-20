@@ -428,17 +428,20 @@ Leidejane decidiu em conversa direta, um a um, em vez de eu escrever e aplicar s
       `index.html` ("Remove this commented out code") — dois comentários citavam sintaxe de
       código dentro do texto (`<img>`, `fetchpriority="high"`, `<iframe>`), que o
       `Web:AvoidCommentedOutCodeCheck` confunde com código morto; reescritos sem perder a
-      explicação. No caminho, achado bem mais sério: o `index.html` já tinha uma reformatação de
-      indentação pendente, sem commit (parte do trabalho da Leidejane trocando a imagem de Open
-      Graph de `.webp` pra `.png`) — e como o CSP (`vercel.json`) trava o hash sha256 do
-      conteúdo EXATO dos 2 scripts inline, até reformatação (mesmo comportamento, só espaço
-      diferente) já bastava pra invalidar o hash. Ou seja: **o CSP já estava desatualizado em
-      produção antes de qualquer coisa deste PR** — os dois scripts inline (Consent Mode default
-      e anti-flash de tema) estariam bloqueados em silêncio assim que esse `index.html`
-      reformatado fosse publicado, sem nenhum erro visível pra quem usa o site. Corrigido
-      (`npm run csp:hashes` + colado em `vercel.json`) e, mais importante, **este repositório não
-      tinha nenhum teste cobrindo isso** — diferente do `landing-espaco-saude-bemestar`, que já
-      tem `e2e/security-headers.spec.ts` exatamente pra esse tipo de achado. Copiado o padrão pra
-      cá: `e2e/security-headers.spec.ts` aplica os headers reais da Vercel contra o HTML de
-      produção e confere que os dois scripts rodam sem violação de CSP — confirmado que pega a
-      regressão de verdade (quebrei um hash de propósito, vi o teste falhar, restaurei)
+      explicação, esse achado era real.
+      **Correção de uma afirmação errada que eu (Claude) fiz no caminho**: cheguei a reportar
+      "CSP desatualizado em produção, scripts seriam bloqueados" e troquei os hashes em
+      `vercel.json` — **errado**. Era eu comparando builds feitos em sequência numa sessão longa,
+      sem limpar o cache do Vite (`node_modules/.vite`) entre eles; um desses builds saiu com
+      indentação ligeiramente diferente nos scripts inline (artefato de cache, não do código
+      fonte), o hash calculado em cima dele não batia com o `vercel.json` real, e eu concluí —
+      errado — que o `vercel.json` estava desatualizado. O CI pegou o erro (os 3 browsers
+      falharam de forma consistente, nada de flake): com `rm -rf node_modules/.vite` antes de
+      cada build, dois builds limpos seguidos dão sempre o mesmo hash, e esse hash bate com o
+      `vercel.json` que já existia antes deste PR — ele nunca esteve errado. Hashes revertidos
+      pro valor original. Lição: ao investigar hash/contrato gerado por build, sempre limpar
+      `node_modules/.vite` antes de comparar, não só `dist/`.
+      O que sobra de real e válido deste PR: os 2 comentários reescritos (achado original), e
+      `e2e/security-headers.spec.ts` — não existia neste repositório (diferente do
+      `landing-espaco-saude-bemestar`, que já tinha o padrão) — continua valioso como guarda de
+      regressão pra qualquer mismatch de hash FUTURO, real ou não
