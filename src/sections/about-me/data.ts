@@ -39,7 +39,7 @@ export const STORY: readonly StoryCardEntry[] = [
         title: 'Cubos Academy',
         icon: RefreshIcon,
         period: '2022',
-        text: 'Voltei pra tecnologia pelo bootcamp da Cubos Academy; também atuei como monitora, ajudando pessoas em transição de carreira.',
+        text: 'Voltei para a tecnologia pelo bootcamp da Cubos Academy; também atuei como monitora, ajudando pessoas em transição de carreira.',
     },
     {
         id: 'estacao-festas',
@@ -108,6 +108,12 @@ export const EDUCATION: readonly EducationEntry[] = [
 
 export const COURSES: readonly CourseEntry[] = [
     {
+        id: 'escola-da-nuvem-computacao-nuvem',
+        course: 'Computação em Nuvem (certificação AWS)',
+        institution: 'Escola da Nuvem',
+        period: 'out 2026 – mar 2027 (cursando)',
+    },
+    {
         id: 'cubos-academy-fullstack',
         course: 'Desenvolvimento de Software - Full Stack (960h)',
         institution: 'Cubos Academy',
@@ -161,35 +167,41 @@ export const COURSES: readonly CourseEntry[] = [
         institution: 'Solyd Offensive Security',
         period: 'mai 2023',
     },
+] as const;
+
+// Avaliações técnicas (Coodesh), não cursos — entram numa lista à parte pra
+// não diluir os cursos de verdade (achado da revisão de portfólio de
+// 2026-10-19).
+export const TECHNICAL_ASSESSMENTS: readonly CourseEntry[] = [
+    {
+        id: 'coodesh-react',
+        course: 'React',
+        institution: 'Coodesh',
+        period: 'mar 2023',
+    },
     {
         id: 'coodesh-node',
-        course: 'Teste técnico: Node',
+        course: 'Node',
         institution: 'Coodesh',
         period: 'fev 2024',
     },
     {
         id: 'coodesh-javascript',
-        course: 'Teste técnico: JavaScript',
-        institution: 'Coodesh',
-        period: 'fev 2024',
-    },
-    {
-        id: 'coodesh-github',
-        course: 'Teste técnico: GitHub',
+        course: 'JavaScript',
         institution: 'Coodesh',
         period: 'fev 2024',
     },
     {
         id: 'coodesh-git',
-        course: 'Teste técnico: Git',
+        course: 'Git',
         institution: 'Coodesh',
         period: 'fev 2024',
     },
     {
-        id: 'coodesh-react',
-        course: 'Teste técnico: React',
+        id: 'coodesh-github',
+        course: 'GitHub',
         institution: 'Coodesh',
-        period: 'mar 2023',
+        period: 'fev 2024',
     },
 ] as const;
 

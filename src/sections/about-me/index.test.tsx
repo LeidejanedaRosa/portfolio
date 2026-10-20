@@ -82,7 +82,7 @@ describe('<AboutMe />', () => {
         ).toBeInTheDocument();
     });
 
-    it('mostra só os 2 cursos de mais peso, com botão pra expandir os outros 12', async () => {
+    it('mostra só os 2 cursos de mais peso, com botão pra expandir os outros 8', async () => {
         const user = userEvent.setup();
         render(<AboutMe />);
 
@@ -90,28 +90,50 @@ describe('<AboutMe />', () => {
             screen.getByRole('heading', { name: 'Cursos' }),
         ).toBeInTheDocument();
 
-        // 14 cursos confirmados (Coodesh consolidado só na data mais
-        // recente de cada teste, a pedido dela) — só 2 visíveis até
-        // expandir (a coluna de Educação ganhou uma 3ª entrada — a
-        // faculdade em andamento —, então Cursos mostra menos por padrão
-        // pra continuar alinhada com a altura da coluna Experiência).
+        // 10 cursos de verdade (os testes técnicos da Coodesh viraram um
+        // bloco "Avaliações técnicas" à parte — achado da revisão de
+        // portfólio de 2026-10-19, não diluem mais a lista de cursos) —
+        // só 2 visíveis até expandir (a coluna de Educação ganhou uma 3ª
+        // entrada — a faculdade em andamento —, então Cursos mostra menos
+        // por padrão pra continuar alinhada com a altura da coluna
+        // Experiência).
         const lists = screen.getAllByRole('list');
         const courseList = lists.find((list) =>
-            within(list).queryByText(/desenvolvimento de software/i),
+            within(list).queryByText(/computação em nuvem/i),
         ) as HTMLElement;
         expect(courseList).toBeTruthy();
         expect(within(courseList).getAllByRole('listitem')).toHaveLength(2);
         expect(
             within(courseList).getAllByRole('listitem')[0],
-        ).toHaveTextContent('Cubos Academy');
+        ).toHaveTextContent('Escola da Nuvem');
 
         const expandButton = screen.getByRole('button', {
-            name: 'Ver todos os cursos (14)',
+            name: 'Ver todos os cursos (10)',
         });
         await user.click(expandButton);
 
-        expect(within(courseList).getAllByRole('listitem')).toHaveLength(14);
+        expect(within(courseList).getAllByRole('listitem')).toHaveLength(10);
         expect(screen.getByText('Curso Básico de Python')).toBeInTheDocument();
+    });
+
+    it('mostra as 5 avaliações técnicas da Coodesh num bloco à parte dos cursos', () => {
+        render(<AboutMe />);
+
+        expect(
+            screen.getByRole('heading', { name: 'Avaliações técnicas' }),
+        ).toBeInTheDocument();
+
+        const lists = screen.getAllByRole('list');
+        const assessmentList = lists.find((list) =>
+            within(list).queryByText(/^react$/i),
+        ) as HTMLElement;
+        expect(assessmentList).toBeTruthy();
+        // Todas visíveis de cara, sem botão "ver todos" — lista curta o
+        // bastante pra não precisar.
+        expect(within(assessmentList).getAllByRole('listitem')).toHaveLength(5);
+        expect(
+            screen.queryByRole('button', { name: /ver todos.*avalia/i }),
+        ).not.toBeInTheDocument();
     });
 
     it('mostra o fluxo de tecnologias com as 3 colunas', () => {

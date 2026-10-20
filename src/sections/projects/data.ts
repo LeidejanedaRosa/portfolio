@@ -24,6 +24,12 @@ export interface Project {
     stack: SimpleIcon[];
     visibility: 'private' | 'public';
     links?: { code?: string; demo?: string };
+    /** `true` quando o próprio site de destino manda `frame-ancestors`/
+     * `X-Frame-Options` bloqueando ser embutido em iframe (fora do nosso
+     * controle — é o CSP DAQUELE projeto, não deste portfólio). O botão
+     * "Ver site" continua funcionando normal (abre em nova aba, não
+     * embute); só o preview ao vivo embutido é que não dá pra mostrar. */
+    previewBlocked?: boolean;
     /** Contexto curto sobre o estado da demo (ex.: ainda não é pública). */
     demoNote?: string;
     /** Código de exemplo pra testar a demo (ex.: certificado). Campo à
@@ -33,6 +39,25 @@ export interface Project {
 }
 
 export const PROJECTS: readonly Project[] = [
+    {
+        id: 'portfolio',
+        title: 'Portfólio (este site)',
+        summary:
+            'Este mesmo portfólio — single-page em React 19, pré-renderizado em build-time, com 97% de cobertura de testes.',
+        highlight:
+            'CSP com allowlist de hashes (sem unsafe-inline), consentimento de cookies LGPD-compliant, e2e em 3 engines e CI com Lighthouse, testes e scan de segredos.',
+        stack: [siReact, siTypescript, siVite, siTailwindcss],
+        visibility: 'public',
+        // Sem `demo`: esse campo também controla o preview ao vivo em
+        // iframe (ver timeline-row.tsx) — apontar pro próprio site
+        // tentaria embutir a página dentro dela mesma, e o CSP
+        // (`frame-src`) nem permite auto-enquadramento. O link de código
+        // já é a evidência que importa aqui — quem está lendo isto já
+        // está olhando o site.
+        links: {
+            code: 'https://github.com/LeidejanedaRosa/portfolio',
+        },
+    },
     {
         id: 'faladoria-backend',
         title: 'Faladoria — Backend',
@@ -134,7 +159,7 @@ export const PROJECTS: readonly Project[] = [
         links: {
             demo: 'https://validar-certificado.fcrcursosetreinamentos.com.br/',
         },
-        demoNote: 'Ainda em desenvolvimento pra ficar público — use o código',
+        demoNote: 'Ainda em desenvolvimento para ficar público — use o código',
         demoCode:
             'b749b0f0631029f8bd426b736ee7debd9e208e0911119bb7fb13a9ea8f8ed7b2',
     },
@@ -178,7 +203,7 @@ export const PROJECTS: readonly Project[] = [
         summary:
             'Site institucional para apresentar serviços, valores e diferenciais de um espaço de bem-estar.',
         highlight:
-            'Responsivo e acessível, do zero ao ar — o primeiro desta lista a ganhar repositório e demo abertos.',
+            'Lighthouse 100 em acessibilidade, boas práticas e SEO; 98 em performance — site enxuto, do design ao deploy.',
         stack: [siTypescript, siVite, siTailwindcss, siVercel],
         visibility: 'public',
         links: {

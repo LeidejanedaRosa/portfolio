@@ -14,7 +14,9 @@ describe('<HomePage />', () => {
                 name: /leidejane da rosa/i,
             }),
         ).toBeInTheDocument();
-        expect(screen.getByText(/engenheira de software/i)).toBeInTheDocument();
+        expect(
+            screen.getByText(/desenvolvedora full stack/i),
+        ).toBeInTheDocument();
     });
 
     it('tem CTA primário apontando para a seção de projetos', () => {
