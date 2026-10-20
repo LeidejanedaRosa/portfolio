@@ -424,3 +424,21 @@ Leidejane decidiu em conversa direta, um a um, em vez de eu escrever e aplicar s
       de fundo no jsdom) — só visível num print real, por isso o teste novo só confere que as
       classes `dark:via-background/90`/`dark:to-background/60` continuam lá, não o contraste em
       si. Efeito colateral bom: o hero inteiro ficou mais coeso no modo escuro, não só o texto
+- [x] `fix/csp-stale-hash` — pedido inicial era só resolver um achado do SonarLint em
+      `index.html` ("Remove this commented out code") — dois comentários citavam sintaxe de
+      código dentro do texto (`<img>`, `fetchpriority="high"`, `<iframe>`), que o
+      `Web:AvoidCommentedOutCodeCheck` confunde com código morto; reescritos sem perder a
+      explicação. No caminho, achado bem mais sério: o `index.html` já tinha uma reformatação de
+      indentação pendente, sem commit (parte do trabalho da Leidejane trocando a imagem de Open
+      Graph de `.webp` pra `.png`) — e como o CSP (`vercel.json`) trava o hash sha256 do
+      conteúdo EXATO dos 2 scripts inline, até reformatação (mesmo comportamento, só espaço
+      diferente) já bastava pra invalidar o hash. Ou seja: **o CSP já estava desatualizado em
+      produção antes de qualquer coisa deste PR** — os dois scripts inline (Consent Mode default
+      e anti-flash de tema) estariam bloqueados em silêncio assim que esse `index.html`
+      reformatado fosse publicado, sem nenhum erro visível pra quem usa o site. Corrigido
+      (`npm run csp:hashes` + colado em `vercel.json`) e, mais importante, **este repositório não
+      tinha nenhum teste cobrindo isso** — diferente do `landing-espaco-saude-bemestar`, que já
+      tem `e2e/security-headers.spec.ts` exatamente pra esse tipo de achado. Copiado o padrão pra
+      cá: `e2e/security-headers.spec.ts` aplica os headers reais da Vercel contra o HTML de
+      produção e confere que os dois scripts rodam sem violação de CSP — confirmado que pega a
+      regressão de verdade (quebrei um hash de propósito, vi o teste falhar, restaurei)
