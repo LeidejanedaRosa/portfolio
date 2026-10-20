@@ -424,3 +424,24 @@ Leidejane decidiu em conversa direta, um a um, em vez de eu escrever e aplicar s
       de fundo no jsdom) — só visível num print real, por isso o teste novo só confere que as
       classes `dark:via-background/90`/`dark:to-background/60` continuam lá, não o contraste em
       si. Efeito colateral bom: o hero inteiro ficou mais coeso no modo escuro, não só o texto
+- [x] `fix/csp-stale-hash` — pedido inicial era só resolver um achado do SonarLint em
+      `index.html` ("Remove this commented out code") — dois comentários citavam sintaxe de
+      código dentro do texto (`<img>`, `fetchpriority="high"`, `<iframe>`), que o
+      `Web:AvoidCommentedOutCodeCheck` confunde com código morto; reescritos sem perder a
+      explicação, esse achado era real.
+      **Correção de uma afirmação errada que eu (Claude) fiz no caminho**: cheguei a reportar
+      "CSP desatualizado em produção, scripts seriam bloqueados" e troquei os hashes em
+      `vercel.json` — **errado**. Era eu comparando builds feitos em sequência numa sessão longa,
+      sem limpar o cache do Vite (`node_modules/.vite`) entre eles; um desses builds saiu com
+      indentação ligeiramente diferente nos scripts inline (artefato de cache, não do código
+      fonte), o hash calculado em cima dele não batia com o `vercel.json` real, e eu concluí —
+      errado — que o `vercel.json` estava desatualizado. O CI pegou o erro (os 3 browsers
+      falharam de forma consistente, nada de flake): com `rm -rf node_modules/.vite` antes de
+      cada build, dois builds limpos seguidos dão sempre o mesmo hash, e esse hash bate com o
+      `vercel.json` que já existia antes deste PR — ele nunca esteve errado. Hashes revertidos
+      pro valor original. Lição: ao investigar hash/contrato gerado por build, sempre limpar
+      `node_modules/.vite` antes de comparar, não só `dist/`.
+      O que sobra de real e válido deste PR: os 2 comentários reescritos (achado original), e
+      `e2e/security-headers.spec.ts` — não existia neste repositório (diferente do
+      `landing-espaco-saude-bemestar`, que já tinha o padrão) — continua valioso como guarda de
+      regressão pra qualquer mismatch de hash FUTURO, real ou não

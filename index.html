@@ -77,10 +77,10 @@
         </script>
         <!-- LCP é a imagem de fundo do hero (Home) — sem preload, o
              navegador só descobre que precisa dela depois de baixar e
-             rodar o JS (ela é renderizada por um componente React, não um
-             <img> cru no HTML). Lighthouse mediu ~3,1s de LCP só por causa
-             disso. fetchpriority="high" reforça a prioridade além do
-             preload em si. -->
+             rodar o JS (ela é renderizada por um componente React, não
+             um elemento de imagem já presente no HTML). Lighthouse mediu
+             ~3,1s de LCP só por causa disso. A prioridade alta do link
+             abaixo reforça isso além do preload em si. -->
         <link
             rel="preload"
             as="image"
@@ -128,8 +128,15 @@
         />
         <meta
             property="og:image"
-            content="https://leidejanedarosa.dev.br/og-image.webp"
+            content="https://leidejanedarosa.dev.br/og-image.png"
         />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta
+            property="og:image:alt"
+            content="Leidejane da Rosa, Desenvolvedora Full Stack"
+        />
+        <meta name="twitter:card" content="summary_large_image" />
 
         <script type="application/ld+json">
             {
@@ -149,10 +156,11 @@
           O GTM NÃO carrega mais aqui. Ele só é injetado via JS depois do
           aceite explícito no banner de cookies (ver src/consent e
           src/lib/load-gtm) — exigência da LGPD. Por isso também não há mais
-          o <iframe> de fallback pra no-script: sem JS não tem como pedir
+          o quadro de fallback pra no-script: sem JS não tem como pedir
           consentimento, então sem JS não há rastreamento nenhum.
         -->
     </head>
+
     <body>
         <noscript
             >Você precisa habilitar o JavaScript para executar esta
