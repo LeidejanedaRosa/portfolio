@@ -28,9 +28,40 @@ if (!rule) {
     );
 }
 const HEADERS = rule.headers;
-if (!HEADERS.some((header) => header.key === 'Content-Security-Policy')) {
+const cspHeader = HEADERS.find(
+    (header) => header.key === 'Content-Security-Policy',
+);
+if (!cspHeader) {
     throw new Error(
         "vercel.json não tem mais 'Content-Security-Policy' na regra '/(.*)' — teste desatualizado.",
+    );
+}
+
+// Confere o `script-src` em si, não só "existe um CSP": `'unsafe-inline'`
+// junto dos hashes não muda o comportamento em navegador moderno (CSP2+
+// ignora unsafe-inline quando há hash-source — é assim que o fallback pra
+// navegador antigo funciona), mas os testes de comportamento abaixo não
+// pegariam alguém adicionando unsafe-inline por engano, já que o resultado
+// observável seria o mesmo. Essa checagem garante que a política escrita
+// continua correta, não só o comportamento nos browsers que o Playwright usa.
+const scriptSrc =
+    cspHeader.value
+        .split(';')
+        .map((directive) => directive.trim())
+        .find((directive) => directive.startsWith('script-src '))
+        ?.split(/\s+/)
+        .slice(1) ?? [];
+const scriptHashes = scriptSrc.filter((source) =>
+    source.startsWith("'sha256-"),
+);
+if (scriptHashes.length < 2) {
+    throw new Error(
+        `script-src deveria ter os 2 hashes dos scripts inline, achei ${scriptHashes.length} — teste desatualizado.`,
+    );
+}
+if (scriptSrc.includes("'unsafe-inline'")) {
+    throw new Error(
+        "script-src tem 'unsafe-inline' — isso bypassa a proteção por hash.",
     );
 }
 
