@@ -413,3 +413,14 @@ Leidejane decidiu em conversa direta, um a um, em vez de eu escrever e aplicar s
       entradas da Coodesh (React, Node, JavaScript, Git, GitHub) saem do site, não voltam a se
       misturar com os 10 cursos de verdade (opção que ela recusou explicitamente, preferiu tirar
       tudo a diluir a lista de novo)
+- [x] `fix/hero-dark-mode-text-contrast` — achado real da Leidejane ao preparar prints do hero
+      pra divulgar no LinkedIn (dark mode, de propósito — "a página ganha mais destaque"): o
+      parágrafo ficava quase ilegível por cima da ilustração do fundo, pior ainda no mobile.
+      Causa raiz: a imagem do hero é uma só (sem par claro/escuro como as outras seções — ela é
+      clara, papel+lápis), e o véu de escurecimento (`DuotoneBackgroundImage`) só tinha ajuste
+      pro modo claro; no escuro, a partir de 70%/25% de opacidade a ilustração clara vazava
+      atrás do texto escuro. Pior no mobile porque o parágrafo ocupa quase a largura toda,
+      entrando mais na parte fraca do gradiente. `axe-core` não pega isso (não renderiza imagem
+      de fundo no jsdom) — só visível num print real, por isso o teste novo só confere que as
+      classes `dark:via-background/90`/`dark:to-background/60` continuam lá, não o contraste em
+      si. Efeito colateral bom: o hero inteiro ficou mais coeso no modo escuro, não só o texto
