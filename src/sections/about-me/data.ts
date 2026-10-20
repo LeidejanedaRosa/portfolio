@@ -169,42 +169,6 @@ export const COURSES: readonly CourseEntry[] = [
     },
 ] as const;
 
-// Avaliações técnicas (Coodesh), não cursos — entram numa lista à parte pra
-// não diluir os cursos de verdade (achado da revisão de portfólio de
-// 2026-10-19).
-export const TECHNICAL_ASSESSMENTS: readonly CourseEntry[] = [
-    {
-        id: 'coodesh-react',
-        course: 'React',
-        institution: 'Coodesh',
-        period: 'mar 2023',
-    },
-    {
-        id: 'coodesh-node',
-        course: 'Node',
-        institution: 'Coodesh',
-        period: 'fev 2024',
-    },
-    {
-        id: 'coodesh-javascript',
-        course: 'JavaScript',
-        institution: 'Coodesh',
-        period: 'fev 2024',
-    },
-    {
-        id: 'coodesh-git',
-        course: 'Git',
-        institution: 'Coodesh',
-        period: 'fev 2024',
-    },
-    {
-        id: 'coodesh-github',
-        course: 'GitHub',
-        institution: 'Coodesh',
-        period: 'fev 2024',
-    },
-] as const;
-
 export const TOOLING: readonly TechCarouselItem[] = [
     { icon: siCypress, label: 'Cypress' },
     { icon: siPytest, label: 'Pytest' },

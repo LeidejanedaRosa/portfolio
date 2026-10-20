@@ -90,10 +90,10 @@ describe('<AboutMe />', () => {
             screen.getByRole('heading', { name: 'Cursos' }),
         ).toBeInTheDocument();
 
-        // 10 cursos de verdade (os testes técnicos da Coodesh viraram um
-        // bloco "Avaliações técnicas" à parte — achado da revisão de
-        // portfólio de 2026-10-19, não diluem mais a lista de cursos) —
-        // só 2 visíveis até expandir (a coluna de Educação ganhou uma 3ª
+        // 10 cursos de verdade (os testes técnicos da Coodesh — React, Node,
+        // JavaScript, Git, GitHub — não são cursos; removidos da lista,
+        // achado da revisão de portfólio de 2026-10-19) — só 2 visíveis até
+        // expandir (a coluna de Educação ganhou uma 3ª
         // entrada — a faculdade em andamento —, então Cursos mostra menos
         // por padrão pra continuar alinhada com a altura da coluna
         // Experiência).
@@ -114,26 +114,6 @@ describe('<AboutMe />', () => {
 
         expect(within(courseList).getAllByRole('listitem')).toHaveLength(10);
         expect(screen.getByText('Curso Básico de Python')).toBeInTheDocument();
-    });
-
-    it('mostra as 5 avaliações técnicas da Coodesh num bloco à parte dos cursos', () => {
-        render(<AboutMe />);
-
-        expect(
-            screen.getByRole('heading', { name: 'Avaliações técnicas' }),
-        ).toBeInTheDocument();
-
-        const lists = screen.getAllByRole('list');
-        const assessmentList = lists.find((list) =>
-            within(list).queryByText(/^react$/i),
-        ) as HTMLElement;
-        expect(assessmentList).toBeTruthy();
-        // Todas visíveis de cara, sem botão "ver todos" — lista curta o
-        // bastante pra não precisar.
-        expect(within(assessmentList).getAllByRole('listitem')).toHaveLength(5);
-        expect(
-            screen.queryByRole('button', { name: /ver todos.*avalia/i }),
-        ).not.toBeInTheDocument();
     });
 
     it('mostra o fluxo de tecnologias com as 3 colunas', () => {

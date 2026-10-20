@@ -14,14 +14,7 @@ import { TechCarousel } from '@components/molecules/general/tech-carousel';
 import { ThemedBackgroundImage } from '@components/molecules/general/themed-background-image';
 import { SECTION_PB, SECTION_PT } from '@src/lib/section-spacing';
 
-import {
-    COURSES,
-    EDUCATION,
-    EXPERIENCE,
-    STORY,
-    TECHNICAL_ASSESSMENTS,
-    TOOLING,
-} from './data';
+import { COURSES, EDUCATION, EXPERIENCE, STORY, TOOLING } from './data';
 
 export const AboutMe = () => {
     return (
@@ -108,18 +101,6 @@ export const AboutMe = () => {
                                 <CourseList
                                     entries={COURSES}
                                     initialCount={2}
-                                />
-                            </div>
-                        </div>
-
-                        <div>
-                            <h3 className="font-mono text-xl font-bold text-foreground">
-                                Avaliações técnicas
-                            </h3>
-                            <div className="mt-5">
-                                <CourseList
-                                    entries={TECHNICAL_ASSESSMENTS}
-                                    initialCount={TECHNICAL_ASSESSMENTS.length}
                                 />
                             </div>
                         </div>
