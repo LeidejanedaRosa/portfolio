@@ -99,7 +99,7 @@ export const PROJECTS: readonly Project[] = [
         id: 'faladoria-web',
         title: 'Faladoria — Frontend',
         summary:
-            'Landing page institucional da Faladoria — Guia do SUS e fluxo completo de conversão pro canal de atendimento via WhatsApp.',
+            'Landing page institucional da Faladoria — Guia do SUS e fluxo completo de conversão para o canal de atendimento via WhatsApp.',
         highlight:
             'React 19 + React Router 7, WCAG 2.2 AA, Web Vitals reais e Sentry monitorando produção; testes unitários (Vitest), e2e (Playwright) e Lighthouse CI no pipeline.',
         stack: [
@@ -120,7 +120,7 @@ export const PROJECTS: readonly Project[] = [
         id: 'fcr-backend',
         title: 'FCR — Backend',
         summary:
-            'Geração de certificados em lote (CSV) para cursos e treinamentos, com QR Code de verificação e upload automático pro Google Drive.',
+            'Geração de certificados em lote (CSV) para cursos e treinamentos, com QR Code de verificação e upload automático para o Google Drive.',
         highlight:
             'API REST em Flask + MongoDB, Clean Architecture (repositórios, use cases, validação com Marshmallow) — a mesma base usada pelo CLI de geração em massa.',
         stack: [siPython, siFlask, siMongodb],
