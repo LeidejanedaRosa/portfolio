@@ -339,7 +339,7 @@ Chrome (desktop 88, mobile 66, abaixo do threshold de 80 do CI).
       React montar a página inteira (todas as seções de uma vez, mesmo as abaixo da dobra). Raiz:
       renderização 100% client-side. Decisão da Leidejane (ofereci "ajuste leve" vs "raiz" — ela
       escolheu a raiz): pré-renderização em build-time via `react-dom/server` — `vite build --ssr
-  src/entry-server.tsx`, `scripts/prerender.mjs` injeta o HTML em `dist/index.html`,
+src/entry-server.tsx`, `scripts/prerender.mjs` injeta o HTML em `dist/index.html`,
       `src/index.tsx` decide `hydrateRoot`/`createRoot` sozinho. Dois guards de SSR precisaram
       entrar: `theme/index.tsx` lia `window.matchMedia` direto no corpo do componente (quebrava em
       Node); `consent/index.tsx` decidia se o banner aparecia lendo `localStorage` já na primeira
@@ -408,3 +408,8 @@ Leidejane decidiu em conversa direta, um a um, em vez de eu escrever e aplicar s
       origem exata de quem embute, então não dá pra confirmar via `localhost` nem em preview.
 - [x] Achado à parte do SonarLint no caminho: `max-w-[40rem]` → `max-w-160` (mesmo padrão do
       `chore/tailwind-canonical-classes` anterior — confirmado CSS compilado idêntico)
+- [x] `fix/remove-technical-assessments` — reversão rápida, mesmo dia: a Leidejane viu o bloco
+      "Avaliações técnicas" no ar (PR #67) e achou o visual ruim. Removido por completo — as 5
+      entradas da Coodesh (React, Node, JavaScript, Git, GitHub) saem do site, não voltam a se
+      misturar com os 10 cursos de verdade (opção que ela recusou explicitamente, preferiu tirar
+      tudo a diluir a lista de novo)
