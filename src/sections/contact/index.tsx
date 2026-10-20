@@ -183,7 +183,7 @@ export const Contact = () => {
                         Contato
                     </h2>
                     <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-                        Esses são os melhores caminhos pra me encontrar.
+                        Esses são os melhores caminhos para me encontrar.
                     </p>
                 </Reveal>
 
