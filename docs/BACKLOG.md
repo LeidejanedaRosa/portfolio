@@ -445,3 +445,61 @@ Leidejane decidiu em conversa direta, um a um, em vez de eu escrever e aplicar s
       `e2e/security-headers.spec.ts` — não existia neste repositório (diferente do
       `landing-espaco-saude-bemestar`, que já tinha o padrão) — continua valioso como guarda de
       regressão pra qualquer mismatch de hash FUTURO, real ou não
+
+## Foto de perfil (`content/update-profile-photo`, 2026-10-31)
+
+- [x] Pedido da Leidejane: avaliar uma foto casual (ângulo de webcam, fundo com
+      quadro/mesa/teclado à mostra, headphone grande, ângulo abaixo da linha dos olhos) pra
+      substituir a foto da seção Sobre, e gerar um prompt de edição se precisasse de ajuste.
+      Avaliação: luz e sorriso bons, mas fundo incompatível com o tratamento `GlowPortrait`
+      (recorte circular com brilho), ângulo baixo e headphone passando impressão de "em
+      chamada". Prompt de edição escrito (fundo neutro, remover headphone, corrigir ângulo,
+      enquadramento vertical com respiro) — a Leidejane rodou numa ferramenta de IA externa e
+      trouxe o resultado.
+- [x] Resultado aprovado como ponto de partida, mas sem fundo transparente (foto retangular
+      comum) — incompatível com o `GlowPortrait`, que foi desenhado pra um recorte alfa de
+      verdade (`profile-cutout.webp` original, confirmado via `git show` como RGBA com
+      transparência real), não uma foto retangular encaixada atrás de um anel decorativo.
+      Fundo removido com `rembg` (modelo `isnet-general-use`, matting alfa ligado —
+      `alpha_matting_foreground_threshold=270`/`background_threshold=20`/`erode_size=10` —
+      sem isso sobrava uma franja cinza visível no cabelo contra fundo de teste saturado).
+- [x] Achado técnico no caminho, sem relação com a foto em si: o delegate `webp` do
+      ImageMagick deste sistema (`convert`) tem um bug — falta a flag `-q` no comando que
+      chama `cwebp`, então `-quality` do `convert` é ignorado em silêncio e o `cwebp` cai no
+      padrão dele (~75) não importa o que se peça (confirmado: dois valores de qualidade
+      diferentes geraram arquivos idênticos byte a byte). Resolvido trocando para
+      Python/Pillow pra essa conversão, que respeita o parâmetro corretamente.
+- [x] Duas rodadas de ajuste visual no `GlowPortrait`
+      (`src/components/molecules/general/glow-portrait/index.tsx`), cada uma a partir de
+      print real da Leidejane: 1. Foto quadrada "flutuando" dentro do anel redondo, sem recorte próprio — `rounded-full`
+      também na própria `<img>` (antes só o anel decorativo tinha), senão os ombros vazam
+      pelos cantos do quadrado, por fora do círculo do anel. 2. Vão visível entre o círculo da foto e o anel — `-inset-3` na imagem (igual ao anel) em
+      vez de `inset-0`. Pegadinha: `h-auto w-auto` não funciona aqui porque o `<img>` tem
+      `width`/`height` intrínsecos (atributos HTML) — "auto" usa esse tamanho fixo em vez de
+      esticar conforme o inset, e a foto vazou pro card seguinte ("Estação Festas") antes de
+      eu perceber e trocar para `h-[calc(100%+1.5rem)] w-[calc(100%+1.5rem)]`.
+- [x] Terceiro ajuste: o anel parecia "cortar" a foto perto do topo. Causa raiz: o recorte
+      alfa tinha ~8,3% de margem transparente acima do cabelo (sobra do `rembg`), e
+      `object-top` ancora no pixel zero da imagem, não em onde o conteúdo visível começa — a
+      margem vazia caía dentro do círculo e deixava o anel (atrás, em z-index menor) aparecer
+      através da transparência. Corrigido recortando essa margem na imagem de origem (mantendo
+      ~1,5% de respiro) antes de redimensionar para o asset final (`640×794`, antes
+      `640×854` — a proporção mudou com o corte, então os atributos `width`/`height` do `<img>`
+      também foram atualizados, senão o layout reserva o espaço errado e gera CLS).
+- [x] Falso alarme no caminho: a Leidejane viu a composição "zoomada" (cabeça quase
+      encostando no anel) depois do ajuste acima. Print automatizado direto do servidor (sem
+      cache) mostrava a composição correta — confirmado como cache do navegador (mesmo
+      sintoma já visto antes nesta sessão, "não mudou nada pra mim"), resolvido testando em
+      aba anônima. Nenhuma mudança de código foi necessária aqui.
+- [x] Quarto ajuste, achado real: a foto ficava visivelmente mais estreita que o anel, com um
+      vão só de um lado (não centralizada). Causa raiz, confirmada medindo as caixas via
+      Playwright (`boundingBox()`), não só por print: o preflight do Tailwind aplica
+      `img, video { max-width: 100%; height: auto }` em todo `<img>` do projeto. Isso não
+      conflita com `height` (a classe `h-[calc(100%+1.5rem)]` vence por ordem no cascade), mas
+      `max-width` é uma restrição à parte que continua valendo por cima de `width` — a largura
+      calculada (maior que o container) era sempre cortada de volta pros 100%, enquanto a
+      altura (sem `max-height` equivalente no preflight) escapava ilesa. Corrigido com
+      `max-w-none` na imagem. Lição: ajuste de layout em `<img>` que envolve estourar o
+      container de propósito (como aqui) precisa checar `max-width`/`max-height` do preflight,
+      não só a classe que parece a responsável — print visual sozinho não pega esse tipo de
+      corte de 1 lado só quando o enquadramento geral da página ainda parece "ok" de longe.
