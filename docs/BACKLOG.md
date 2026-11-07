@@ -128,6 +128,7 @@
 - ✅ `chore/activate-custom-domain` — DNS do domínio próprio confirmado resolvendo (registro A pro IP do Vercel, configurado no registro.br) e servindo o site de verdade; as 5 URLs (`og:url`/`og:image`/JSON-LD/sitemap/robots.txt) trocadas de volta pra `leidejanedarosa.dev.br`, fechando a pendência §6.2 de vez
 - ✅ `www.leidejanedarosa.dev.br` adicionado como domínio no Vercel, redirecionando (307) pro domínio principal com certificado SSL válido — achado real: o `www` resolvia por DNS (o registro.br aplica o registro `A` da raiz pro `www` automaticamente), mas sem o domínio cadastrado no Vercel o certificado não existia, quem acessasse `https://www...` caía num erro de certificado em vez de carregar o site. Pura configuração, nenhum código mudou
 - ✅ `chore/update-resume` — currículo em PDF (`public/leidejane-da-rosa-curriculo.pdf`) substituído pela versão de 2026-10-10, mantendo o mesmo nome de arquivo: é o mesmo endereço usado pelo botão "Baixar currículo" do Contato e pelo link do README do perfil no GitHub, então trocar o arquivo atualiza os dois downloads sem mexer em código
+- ✅ `chore/update-resume-november` — currículo substituído pela versão de 2026-11-07 (novo modelo, com objetivo profissional, Escola da Nuvem/AWS e Estação Festas). Antes de publicar, os links clicáveis do PDF foram conferidos: o `mailto:` tinha um "l" a mais (`gmail.coml`), corrigido pela Leidejane na origem antes da troca
 
 ## Camada visual ("dar vida" — direção Swiss + craft, decidido 2026-09-10)
 
