@@ -38,7 +38,7 @@ export const AboutMe = () => {
 
                         <h2
                             id="about-title"
-                            className="mt-3 max-w-[40rem] font-mono text-3xl font-bold leading-relaxed text-foreground sm:text-4xl"
+                            className="mt-3 max-w-160 font-mono text-3xl font-bold leading-relaxed text-foreground sm:text-4xl"
                         >
                             <span className="block">Eu sou a Leidejane,</span>
                             <span className="block text-accent">
@@ -60,7 +60,9 @@ export const AboutMe = () => {
                     />
                 </Reveal>
 
-                <StoryCards entries={STORY} />
+                <div className="mt-8">
+                    <StoryCards entries={STORY} />
+                </div>
 
                 <div className="mt-8 border-y border-border py-4 text-center">
                     <p className="font-mono text-xs font-bold uppercase tracking-[0.3em] text-muted-foreground sm:text-sm">

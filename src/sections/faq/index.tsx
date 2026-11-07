@@ -17,7 +17,7 @@ const FAQS: readonly FaqEntry[] = [
     {
         id: 'privado',
         question: 'Por que alguns projetos são privados?',
-        answer: 'A maioria é trabalho de cliente ou de impacto social, com código sob confidencialidade. Nesses casos deixo um trecho real (sem segredos) ou um link pra testar ao vivo, em vez do repositório inteiro.',
+        answer: 'A maioria é trabalho de cliente ou de impacto social, com código sob confidencialidade. Nesses casos deixo um trecho real (sem segredos) ou um link para testar ao vivo, em vez do repositório inteiro.',
     },
     {
         id: 'duracao',

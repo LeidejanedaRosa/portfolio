@@ -143,6 +143,7 @@ export function TimelineRow({
                         title={project.title}
                         url={project.links.demo}
                         hugCenter={isEven ? 'left' : 'right'}
+                        blocked={project.previewBlocked}
                     />
                 </m.div>
             )}

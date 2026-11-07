@@ -86,7 +86,7 @@ export function ProjectCard({
                             </code>
                         </>
                     )}
-                    {project.demoCode && ' pra testar a verificação.'}
+                    {project.demoCode && ' para testar a verificação.'}
                 </p>
             )}
         </BlueprintFrame>

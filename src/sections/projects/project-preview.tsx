@@ -7,6 +7,7 @@ export function ProjectPreview({
     title,
     url,
     hugCenter,
+    blocked,
 }: {
     title: string;
     url: string;
@@ -14,6 +15,10 @@ export function ProjectPreview({
      * nela (em vez de `mx-auto`) pro traço de comprimento fixo sempre
      * alcançar a borda de verdade do iframe. */
     hugCenter: 'left' | 'right';
+    /** `true` quando o site de destino bloqueia ser embutido (CSP/X-Frame-
+     * Options dele, não nosso) — mostra um aviso no lugar do iframe quebrado
+     * em vez de uma caixa em branco sem explicação. */
+    blocked?: boolean;
 }) {
     return (
         // Altura fixa (não min-h-*) abaixo de md: sem `md:grid` (ver
@@ -50,22 +55,32 @@ export function ProjectPreview({
                     hugCenter === 'left' ? 'mr-auto' : 'ml-auto'
                 }`}
             >
-                {/* loading="lazy": evita carregar 4 sites externos inteiros
-                    junto com a Home (impacto de performance conhecido, ver
-                    docs/BACKLOG.md). */}
-                <iframe
-                    src={url}
-                    title={`Pré-visualização ao vivo de ${title}`}
-                    loading="lazy"
-                    // allow-same-origin: o Verificador do FCR é
-                    // offline-first via Service Worker, que exige o mesmo
-                    // origin do iframe pra registrar. Sem allow-top-navigation
-                    // nem allow-popups: o site embutido não pode redirecionar
-                    // a aba inteira nem abrir popups. Sem allow-downloads:
-                    // nenhum dos sites embutidos oferece download.
-                    sandbox="allow-scripts allow-same-origin allow-forms"
-                    className="h-full w-full"
-                />
+                {blocked ? (
+                    <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-muted p-6 text-center">
+                        <p className="text-sm text-muted-foreground">
+                            Este site bloqueia pré-visualização embutida
+                            (CSP/X-Frame-Options dele, não deste portfólio) —
+                            use o link acima para ver ao vivo.
+                        </p>
+                    </div>
+                ) : (
+                    // loading="lazy": evita carregar 4 sites externos inteiros
+                    // junto com a Home (impacto de performance conhecido, ver
+                    // docs/BACKLOG.md).
+                    <iframe
+                        src={url}
+                        title={`Pré-visualização ao vivo de ${title}`}
+                        loading="lazy"
+                        // allow-same-origin: o Verificador do FCR é
+                        // offline-first via Service Worker, que exige o mesmo
+                        // origin do iframe pra registrar. Sem allow-top-navigation
+                        // nem allow-popups: o site embutido não pode redirecionar
+                        // a aba inteira nem abrir popups. Sem allow-downloads:
+                        // nenhum dos sites embutidos oferece download.
+                        sandbox="allow-scripts allow-same-origin allow-forms"
+                        className="h-full w-full"
+                    />
+                )}
             </div>
         </div>
     );
