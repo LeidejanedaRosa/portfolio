@@ -57,7 +57,7 @@ export function PrivacyDialog({
                 Este site só carrega o Google Tag Manager (analytics) depois que
                 você aceita, na notificação de cookies. Se você recusar, nenhum
                 script de rastreamento é carregado — só os arquivos necessários
-                pro site funcionar (HTML, CSS, JS, fontes).
+                para o site funcionar (HTML, CSS, JS, fontes).
             </p>
             <p className="mt-3 text-sm text-muted-foreground">
                 Sua escolha fica salva no seu navegador (

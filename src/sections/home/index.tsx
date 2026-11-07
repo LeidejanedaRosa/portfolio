@@ -64,13 +64,14 @@ export const HomePage = () => {
                         Leidejane da Rosa
                     </h1>
                     <p className="mt-2 text-xl font-medium text-muted-foreground sm:text-2xl">
-                        Engenheira de Software
+                        Desenvolvedora Full Stack
                     </p>
 
                     <p className="mt-3 text-lg leading-relaxed text-muted-foreground lg:mt-6">
-                        Construo software com foco em arquitetura,
-                        acessibilidade e boas práticas. Aqui você encontra meus
-                        projetos e um pouco da minha trajetória.
+                        Desenvolvo com React, TypeScript e Python — aberta a uma
+                        vaga remota ou a projetos freelance. Sete anos
+                        empreendendo antes da tecnologia me ensinaram a pensar
+                        no problema do cliente, não só no código.
                     </p>
 
                     {/* hover:scale + active:scale: feedback de "clicável"
