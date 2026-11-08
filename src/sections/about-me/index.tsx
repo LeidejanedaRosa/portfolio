@@ -9,6 +9,7 @@ import { EducationList } from '@components/molecules/general/education-list';
 import { ExperienceTimeline } from '@components/molecules/general/experience-timeline';
 import { GlowPortrait } from '@components/molecules/general/glow-portrait';
 import { SkillsFlow } from '@components/molecules/general/skills-flow';
+import { TechBadgeList } from '@components/molecules/general/tech-badge-list';
 import { StoryCards } from '@components/molecules/general/story-cards';
 import { TechCarousel } from '@components/molecules/general/tech-carousel';
 import { ThemedBackgroundImage } from '@components/molecules/general/themed-background-image';
@@ -101,6 +102,7 @@ export const AboutMe = () => {
                                 <CourseList
                                     entries={COURSES}
                                     initialCount={2}
+                                    expandedFromMd
                                 />
                             </div>
                         </div>
@@ -109,9 +111,28 @@ export const AboutMe = () => {
                         <BlueprintFrame grid className="p-3 sm:p-6">
                             <SkillsFlow />
                         </BlueprintFrame>
+
+                        {/* Só a partir de xl a 3ª coluna fica ao lado de
+                            Experiência e Cursos — e sobra altura embaixo do
+                            quadro. Ali as ferramentas aparecem paradas; abaixo
+                            de xl continuam no carrossel. */}
+                        <div className="mt-10 hidden xl:block">
+                            <h3
+                                id="about-tools-title"
+                                className="font-mono text-xl font-bold text-foreground"
+                            >
+                                Outras ferramentas
+                            </h3>
+                            <div className="mt-5">
+                                <TechBadgeList
+                                    items={TOOLING}
+                                    labelledBy="about-tools-title"
+                                />
+                            </div>
+                        </div>
                     </div>
                 </Reveal>
-                <div className="mt-4 min-w-0 lg:mt-5">
+                <div className="mt-4 min-w-0 lg:mt-5 xl:hidden">
                     <TechCarousel
                         items={TOOLING}
                         label="Outras ferramentas do dia a dia"

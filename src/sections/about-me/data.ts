@@ -25,7 +25,7 @@ export const STORY: readonly StoryCardEntry[] = [
         title: 'Hoje',
         icon: CompassIcon,
         period: '2025–atual',
-        text: 'Freelancer em projetos próprios e de impacto social — buscando uma posição plena remota.',
+        text: 'Desenvolvedora full stack autônoma e voluntária na Faladoria, estudando computação em nuvem (AWS) na Escola da Nuvem — buscando uma posição plena remota.',
     },
     {
         id: 'clarke-energia',
@@ -38,15 +38,15 @@ export const STORY: readonly StoryCardEntry[] = [
         id: 'cubos-academy',
         title: 'Cubos Academy',
         icon: RefreshIcon,
-        period: '2022',
-        text: 'Voltei para a tecnologia pelo bootcamp da Cubos Academy; também atuei como monitora, ajudando pessoas em transição de carreira.',
+        period: '2022–2024',
+        text: 'Voltei para a tecnologia pelo bootcamp da Cubos Academy e, em 2024, atuei como monitora, ajudando pessoas em transição de carreira.',
     },
     {
         id: 'estacao-festas',
-        title: 'Estação Festas',
+        title: 'Estação Festas Infantis',
         icon: GiftIcon,
         period: '2013–2020',
-        text: 'Empreendedora: da captação de clientes à logística, decoração do tema, marketing e gestão financeira — tocando o negócio do início ao fim.',
+        text: 'Proprietária e gestora: da captação de clientes à logística, decoração do tema, marketing e gestão financeira — tocando o negócio do início ao fim.',
     },
     {
         id: 'formacao',
@@ -59,15 +59,37 @@ export const STORY: readonly StoryCardEntry[] = [
 
 export const EXPERIENCE: readonly TimelineEntry[] = [
     {
-        id: 'freelancer',
+        id: 'faladoria',
+        period: 'set 2025 – atual',
+        role: 'Desenvolvedora Full Stack voluntária',
+        org: 'Faladoria',
+        description:
+            'Plataforma de mediação entre usuários do SUS e a gestão pública',
+    },
+    {
+        id: 'autonoma',
         period: 'mar 2025 – atual',
-        role: 'Freelancer',
-        org: 'Projetos próprios e de impacto social',
+        role: 'Desenvolvedora Full Stack',
+        org: 'Autônoma',
+        description: 'Clientes: EMR International e FCR Cursos e Treinamentos',
+    },
+    {
+        id: 'soujunior',
+        period: 'mar 2025 – nov 2025',
+        role: 'Desenvolvedora Full Stack voluntária',
+        org: 'SouJunior',
+        description: 'Portal de Vagas, projeto social open source',
+    },
+    {
+        id: 'cubos-academy-monitoria',
+        period: 'mar 2024 – ago 2024',
+        role: 'Monitora de Desenvolvimento',
+        org: 'Cubos Academy',
     },
     {
         id: 'clarke-energia',
         period: 'abr 2023 – fev 2025',
-        role: 'Desenvolvedora Full-Stack',
+        role: 'Desenvolvedora Full Stack',
         org: 'Clarke Energia',
     },
     {
@@ -78,9 +100,9 @@ export const EXPERIENCE: readonly TimelineEntry[] = [
     },
     {
         id: 'estacao-festas',
-        period: '2013–2020',
-        role: 'Empreendedora',
-        org: 'Estação Festas',
+        period: 'mai 2013 – jan 2020',
+        role: 'Proprietária e gestora',
+        org: 'Estação Festas Infantis',
         description: 'Decoração de festas infantis — negócio próprio',
     },
 ] as const;
@@ -101,7 +123,7 @@ export const EDUCATION: readonly EducationEntry[] = [
     {
         id: 'tecnico-informatica',
         course: 'Técnico em Informática',
-        institution: 'Colégio Instituto Batista Americano',
+        institution: 'Colégio do Instituto Batista Americano',
         period: '1997–2000',
     },
 ] as const;
@@ -109,7 +131,7 @@ export const EDUCATION: readonly EducationEntry[] = [
 export const COURSES: readonly CourseEntry[] = [
     {
         id: 'escola-da-nuvem-computacao-nuvem',
-        course: 'Computação em Nuvem (certificação AWS)',
+        course: 'Computação em Nuvem — AWS re/Start (300h)',
         institution: 'Escola da Nuvem',
         period: 'out 2026 – mar 2027 (cursando)',
     },
@@ -120,9 +142,9 @@ export const COURSES: readonly CourseEntry[] = [
         period: 'ago 2022 – mai 2023',
     },
     {
-        id: 'mmt-bootcamp-python-django',
-        course: 'Bootcamp Back-End Python e Django - Turma 2',
-        institution: 'Mais Mulheres em Tech',
+        id: 'womakerscode-bootcamp-python-django',
+        course: 'Bootcamp Back-End Python e Django (130h)',
+        institution: 'WoMakersCode',
         period: 'mai 2024',
     },
     {
@@ -138,15 +160,15 @@ export const COURSES: readonly CourseEntry[] = [
         period: 'out 2025',
     },
     {
-        id: 'mmt-html-css',
+        id: 'womakerscode-html-css',
         course: 'HTML 5 & CSS 3',
-        institution: 'Mais Mulheres em Tech',
+        institution: 'WoMakersCode',
         period: 'jan 2024',
     },
     {
-        id: 'mmt-github',
+        id: 'womakerscode-github',
         course: 'Desvendando o GitHub',
-        institution: 'Mais Mulheres em Tech',
+        institution: 'WoMakersCode',
         period: 'jan 2024',
     },
     {

@@ -16,7 +16,7 @@ describe('<AboutMe />', () => {
         expect(heading).toHaveAttribute('id', 'about-title');
     });
 
-    it('conta a trajetória (Cubos → Clarke → freelancer)', () => {
+    it('conta a trajetória (Cubos → Clarke → autônoma e voluntariado)', () => {
         render(<AboutMe />);
 
         // Cada uma aparece 2x agora: na prosa da bio e na timeline de
@@ -42,7 +42,9 @@ describe('<AboutMe />', () => {
         expect(screen.getByText(/python\/flask/i)).toBeInTheDocument();
         // "Estação Festas" e "2013–2020" também aparecem na timeline de
         // Experiência — por isso getAllByText, não getByText.
-        expect(screen.getAllByText('Estação Festas').length).toBeGreaterThan(0);
+        expect(
+            screen.getAllByText('Estação Festas Infantis').length,
+        ).toBeGreaterThan(0);
         expect(screen.getAllByText('2013–2020').length).toBeGreaterThan(0);
     });
 
@@ -66,8 +68,13 @@ describe('<AboutMe />', () => {
             document.querySelector('ol') as HTMLElement,
         );
         const items = getAllByRole('listitem');
-        expect(items[0]).toHaveTextContent('Freelancer');
-        expect(items.at(-1)).toHaveTextContent('Estação Festas');
+        expect(items[0]).toHaveTextContent('Faladoria');
+        expect(items.at(-1)).toHaveTextContent('Estação Festas Infantis');
+        // Voluntariado e monitoria entram na mesma linha do tempo que os
+        // empregos — currículo, LinkedIn e README contam a mesma história.
+        expect(items).toHaveLength(7);
+        expect(items[2]).toHaveTextContent('SouJunior');
+        expect(items[3]).toHaveTextContent('Monitora de Desenvolvimento');
     });
 
     it('mostra a formação acadêmica', () => {
@@ -82,7 +89,7 @@ describe('<AboutMe />', () => {
         ).toBeInTheDocument();
     });
 
-    it('mostra só os 2 cursos de mais peso, com botão pra expandir os outros 8', async () => {
+    it('mostra os 10 cursos: 2 no celular (com botão) e todos a partir de md', async () => {
         const user = userEvent.setup();
         render(<AboutMe />);
 
@@ -90,30 +97,44 @@ describe('<AboutMe />', () => {
             screen.getByRole('heading', { name: 'Cursos' }),
         ).toBeInTheDocument();
 
-        // 10 cursos de verdade (os testes técnicos da Coodesh — React, Node,
-        // JavaScript, Git, GitHub — não são cursos; removidos da lista,
-        // achado da revisão de portfólio de 2026-10-19) — só 2 visíveis até
-        // expandir (a coluna de Educação ganhou uma 3ª
-        // entrada — a faculdade em andamento —, então Cursos mostra menos
-        // por padrão pra continuar alinhada com a altura da coluna
-        // Experiência).
-        const lists = screen.getAllByRole('list');
-        const courseList = lists.find((list) =>
-            within(list).queryByText(/computação em nuvem/i),
-        ) as HTMLElement;
-        expect(courseList).toBeTruthy();
-        expect(within(courseList).getAllByRole('listitem')).toHaveLength(2);
-        expect(
-            within(courseList).getAllByRole('listitem')[0],
-        ).toHaveTextContent('Escola da Nuvem');
+        // "Curso Básico de Python" só existe na lista de cursos — "computação
+        // em nuvem" não serve de âncora: o card "Hoje" também cita o termo.
+        const courseList = screen
+            .getAllByRole('list')
+            .find((list) =>
+                within(list).queryByText('Curso Básico de Python'),
+            ) as HTMLElement;
+        const items = within(courseList).getAllByRole('listitem');
+        expect(items).toHaveLength(10);
+        expect(items[0]).toHaveTextContent('Escola da Nuvem');
 
+        // Ao lado da Experiência (md+), a lista inteira preenche a coluna; no
+        // celular, só os 2 primeiros até expandir. A troca é CSS (a página é
+        // pré-renderizada), então o teste confere as classes, não o layout.
+        expect(items[1]).not.toHaveClass('hidden');
+        for (const item of items.slice(2)) {
+            expect(item).toHaveClass('hidden', 'md:block');
+        }
         const expandButton = screen.getByRole('button', {
             name: 'Ver todos os cursos (10)',
         });
+        expect(expandButton).toHaveClass('md:hidden');
+
         await user.click(expandButton);
 
-        expect(within(courseList).getAllByRole('listitem')).toHaveLength(10);
-        expect(screen.getByText('Curso Básico de Python')).toBeInTheDocument();
+        for (const item of within(courseList).getAllByRole('listitem')) {
+            expect(item).not.toHaveClass('hidden');
+        }
+    });
+
+    it('lista os cursos da WoMakersCode pelo nome da empresa', () => {
+        render(<AboutMe />);
+
+        expect(
+            screen.getByText('Bootcamp Back-End Python e Django (130h)'),
+        ).toBeInTheDocument();
+        expect(screen.getAllByText(/^WoMakersCode — /)).toHaveLength(3);
+        expect(screen.queryByText(/mais mulheres em tech/i)).toBeNull();
     });
 
     it('mostra o fluxo de tecnologias com as 3 colunas', () => {
@@ -129,6 +150,21 @@ describe('<AboutMe />', () => {
             .getAllByRole('button')
             .filter((button) => !button.textContent?.includes('Ver todos'));
         expect(diagramButtons).toHaveLength(14);
+    });
+
+    it('no desktop (xl), mostra as ferramentas paradas embaixo do quadro, no lugar do carrossel', () => {
+        render(<AboutMe />);
+
+        const staticList = screen.getByRole('list', {
+            name: 'Outras ferramentas',
+        });
+        expect(within(staticList).getAllByRole('listitem')).toHaveLength(11);
+        expect(staticList.closest('.xl\\:block')).toHaveClass('hidden');
+
+        const carousel = screen.getByRole('list', {
+            name: 'Outras ferramentas do dia a dia',
+        });
+        expect(carousel.closest('.xl\\:hidden')).not.toBeNull();
     });
 
     it('mostra no carrossel tanto ferramentas com logo quanto práticas sem marca', () => {
