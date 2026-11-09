@@ -11,6 +11,14 @@ interface CourseListProps {
     entries: readonly CourseEntry[];
     /** Quantos cursos aparecem antes de precisar clicar em "ver todos". */
     initialCount?: number;
+    /**
+     * A partir de `md` (colunas lado a lado), mostra todos os cursos e esconde
+     * o botão: a lista preenche a altura da coluna vizinha em vez de deixar um
+     * vão. Feito com classes `md:` e não com `matchMedia`, porque a página é
+     * pré-renderizada — o primeiro render do cliente precisa ser igual ao do
+     * servidor.
+     */
+    expandedFromMd?: boolean;
 }
 
 /**
@@ -24,25 +32,40 @@ interface CourseListProps {
  * mobile que a gente já descartou pro Projetos (disputa de toque entre o
  * scroll da lista e o da página) — "mostrar mais" não tem esse problema.
  */
-export const CourseList = ({ entries, initialCount = 4 }: CourseListProps) => {
+export const CourseList = ({
+    entries,
+    initialCount = 4,
+    expandedFromMd = false,
+}: CourseListProps) => {
     const [expanded, setExpanded] = useState(false);
     const listId = useId();
-    const visible = expanded ? entries : entries.slice(0, initialCount);
     const hasMore = entries.length > initialCount;
+    const isCollapsedItem = (index: number) =>
+        !expanded && index >= initialCount;
 
     return (
         <>
             <ul id={listId} className="space-y-3">
-                {visible.map((entry) => (
-                    <li key={entry.id} className="text-sm">
-                        <p className="font-medium text-foreground">
-                            {entry.course}
-                        </p>
-                        <p className="text-muted-foreground">
-                            {entry.institution} — {entry.period}
-                        </p>
-                    </li>
-                ))}
+                {entries.map((entry, index) => {
+                    if (isCollapsedItem(index) && !expandedFromMd) return null;
+                    return (
+                        <li
+                            key={entry.id}
+                            className={
+                                isCollapsedItem(index)
+                                    ? 'hidden text-sm md:block'
+                                    : 'text-sm'
+                            }
+                        >
+                            <p className="font-medium text-foreground">
+                                {entry.course}
+                            </p>
+                            <p className="text-muted-foreground">
+                                {entry.institution} — {entry.period}
+                            </p>
+                        </li>
+                    );
+                })}
             </ul>
 
             {hasMore && (
@@ -51,7 +74,7 @@ export const CourseList = ({ entries, initialCount = 4 }: CourseListProps) => {
                     onClick={() => setExpanded((current) => !current)}
                     aria-expanded={expanded}
                     aria-controls={listId}
-                    className="mt-3 font-mono text-sm text-accent hover:underline"
+                    className={`mt-3 font-mono text-sm text-accent hover:underline ${expandedFromMd ? 'md:hidden' : ''}`}
                 >
                     {expanded
                         ? 'Mostrar menos'
