@@ -1,53 +1,11 @@
-import { type CSSProperties } from 'react';
-import { type SimpleIcon } from 'simple-icons';
+import { TechBadge, type TechBadgeItem } from '@components/atoms/tech-badge';
 
-import { brandHoverColor } from '@src/lib/brand-hover-color';
-
-export interface TechCarouselItem {
-    /** Sem ícone pra práticas/metodologias sem marca (ex.: "Clean Code") —
-     * ver comentário em about-me/index.tsx. */
-    icon?: SimpleIcon;
-    label: string;
-}
+export type TechCarouselItem = TechBadgeItem;
 
 interface TechCarouselProps {
     items: readonly TechCarouselItem[];
     /** Nome do grupo, anunciado por leitor de tela antes da lista. */
     label: string;
-}
-
-function CarouselBadge({
-    item,
-    hidden,
-}: {
-    item: TechCarouselItem;
-    /** Cópia decorativa (a segunda metade, usada só pra fechar o loop visual). */
-    hidden?: boolean;
-}) {
-    return (
-        <li
-            aria-hidden={hidden || undefined}
-            className="group flex shrink-0 items-center gap-2 rounded-full border border-border bg-surface px-3 py-1.5"
-        >
-            {item.icon && (
-                <svg
-                    aria-hidden="true"
-                    viewBox="0 0 24 24"
-                    className="h-4 w-4 shrink-0 fill-muted-foreground transition-colors duration-200 group-hover:fill-(--brand-hover)"
-                    style={
-                        {
-                            '--brand-hover': brandHoverColor(item.icon.hex),
-                        } as CSSProperties
-                    }
-                >
-                    <path d={item.icon.path} />
-                </svg>
-            )}
-            <span className="whitespace-nowrap font-mono text-xs text-muted-foreground">
-                {item.label}
-            </span>
-        </li>
-    );
 }
 
 /**
@@ -83,14 +41,10 @@ export const TechCarousel = ({ items, label }: TechCarouselProps) => {
                 className="marquee-track flex w-max gap-3"
             >
                 {items.map((item) => (
-                    <CarouselBadge key={item.label} item={item} />
+                    <TechBadge key={item.label} item={item} />
                 ))}
                 {items.map((item) => (
-                    <CarouselBadge
-                        key={`loop-${item.label}`}
-                        item={item}
-                        hidden
-                    />
+                    <TechBadge key={`loop-${item.label}`} item={item} hidden />
                 ))}
             </ul>
         </div>
